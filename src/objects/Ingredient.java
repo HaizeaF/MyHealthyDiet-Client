@@ -44,13 +44,15 @@ public class Ingredient implements Serializable {
      */
     private Boolean isInSeason;
     
-    public Ingredient(Integer ingredient_id, String ingredientName, FoodTypeEnum foodType,
-                      List<Plate> plates, Boolean isInSeason) {
+    private Float waterIndex;
+    
+    public Ingredient(Integer ingredient_id, String ingredientName, FoodTypeEnum foodType, List<Plate> plates, Boolean isInSeason, Float waterIndex) {
         this.ingredient_id = ingredient_id;
         this.ingredientName = ingredientName;
         this.foodType = foodType;
         this.plates = plates;
         this.isInSeason = isInSeason;
+        this.waterIndex = waterIndex;
     }
     
     public Ingredient() {
@@ -95,6 +97,16 @@ public class Ingredient implements Serializable {
     public void setIsInSeason(Boolean isInSeason) {
         this.isInSeason = isInSeason;
     }
+
+    public Float getWaterIndex() {
+        return waterIndex;
+    }
+
+    public void setWaterIndex(Float waterIndex) {
+        this.waterIndex = waterIndex;
+    }
+    
+    
     
     @Override
     public int hashCode() {
