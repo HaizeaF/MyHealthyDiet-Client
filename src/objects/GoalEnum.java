@@ -1,4 +1,4 @@
-package entities;
+package objects;
 
 /**
  * Diet goal types: increase, decrease or maintain type.

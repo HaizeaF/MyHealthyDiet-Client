@@ -7,6 +7,9 @@ package objects;
 
 import java.io.Serializable;
 import java.util.List;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -19,17 +22,17 @@ public class Tip implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    private Integer tip_id;
+    private SimpleIntegerProperty tip_id;
 
-    private String tipText;
+    private SimpleStringProperty tipText;
     
     private TipTypeEnum type;
     
-    private Diet diet;
+    private SimpleObjectProperty diet;
 
     public Tip(Integer tip_id, String tipText, TipTypeEnum type) {
-        this.tip_id = tip_id;
-        this.tipText = tipText;
+        this.tip_id = new SimpleIntegerProperty(tip_id);
+        this.tipText = new SimpleStringProperty(tipText);
         this.type = type;
     }
     
@@ -38,19 +41,19 @@ public class Tip implements Serializable {
 
 
     public void setTip_id(Integer tip_id) {
-        this.tip_id = tip_id;
+        this.tip_id.set(tip_id);
     }
 
     public Integer getTip_id() {
-        return tip_id;
+        return tip_id.get();
     }
 
     public void setTipText(String tipText) {
-        this.tipText = tipText;
+        this.tipText.set(tipText);
     }
 
     public String getTipText() {
-        return tipText;
+        return tipText.get();
     }
 
     public void setType(TipTypeEnum type) {
@@ -62,11 +65,11 @@ public class Tip implements Serializable {
     }
     
     public Diet getDiet() {
-        return diet;
+        return diet.get();
     }
 
     public void setDiet(Diet diet) {
-        this.diet = diet;
+        this.diet.set(diet);
     }
 
     

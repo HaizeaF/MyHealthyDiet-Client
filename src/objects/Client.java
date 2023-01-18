@@ -7,6 +7,9 @@ package objects;
 
 import java.util.Date;
 import java.util.List;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -19,9 +22,9 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Client extends User{
 
     private static final long serialVersionUID = 1L;
-    private Integer age;
+    private SimpleIntegerProperty age;
     
-    private Float height;
+    private SimpleFloatProperty height;
     
     private GenreEnum genre;
     
@@ -29,7 +32,7 @@ public class Client extends User{
     /**
      * @associates <{entities.Weight}>
      */
-    private List<Weight> weights;
+    private SimpleListProperty<Weight> weights;
 
 
     public Client(Integer user_id, String login, String email, String fullName, StatusEnum status,
@@ -37,11 +40,11 @@ public class Client extends User{
                   GenreEnum genre, GoalEnum goal, List<Weight> weights) {
         // TODO Implement this method
         super(user_id, login, email, fullName, status, privilege, password, lastPasswordChange);
-        this.age = age;
-        this.height = height;
+        this.age = new SimpleIntegerProperty(age);
+        this.height = new SimpleFloatProperty(height);
         this.genre = genre;
         this.goal = goal;
-        this.weights = weights;
+        this.weights = new SimpleListProperty<Weight>(weights);
     }
 
 
@@ -49,19 +52,19 @@ public class Client extends User{
     }
 
     public void setAge(Integer age) {
-        this.age = age;
+        this.age.set(age);
     }
 
     public Integer getAge() {
-        return age;
+        return age.get();
     }
 
     public void setHeight(Float height) {
-        this.height = height;
+        this.height.set(height);
     }
 
     public Float getHeight() {
-        return height;
+        return height.get();
     }
 
     public void setGenre(GenreEnum genre) {
@@ -81,11 +84,11 @@ public class Client extends User{
     }
 
     public void setWeights(List<Weight> weights) {
-        this.weights = weights;
+        this.weights.set(weights);
     }
     
     public List<Weight> getWeights() {
-        return weights;
+        return weights.get();
     }
 
     @Override
