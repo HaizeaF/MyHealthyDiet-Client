@@ -35,7 +35,7 @@ public class User implements Serializable {
 
     private SimpleStringProperty password;
     
-    private SimpleObjectProperty lastPasswordChange;
+    private SimpleObjectProperty<Date> lastPasswordChange;
 
     public User(Integer user_id, String login, String email, String fullName, StatusEnum status,
                 PrivilegeEnum privilege, String password, Date lastPasswordChange) {
@@ -46,7 +46,7 @@ public class User implements Serializable {
         this.status = new SimpleObjectProperty<>(status);
         this.privilege = new SimpleObjectProperty<>(privilege);
         this.password = new SimpleStringProperty(password);
-        this.lastPasswordChange = new SimpleObjectProperty(lastPasswordChange);
+        this.lastPasswordChange = new SimpleObjectProperty<>(lastPasswordChange);
     }
     
     public User() {
