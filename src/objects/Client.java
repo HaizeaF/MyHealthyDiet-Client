@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -45,7 +46,7 @@ public class Client extends User{
         this.height = new SimpleFloatProperty(height);
         this.genre = new SimpleObjectProperty<>(genre);
         this.goal = new SimpleObjectProperty<>(goal);
-        this.weights = new SimpleListProperty<Weight>(weights);
+        this.weights = new SimpleListProperty<>(FXCollections.observableList(weights));
     }
 
 
@@ -85,7 +86,7 @@ public class Client extends User{
     }
 
     public void setWeights(List<Weight> weights) {
-        this.weights.set(weights);
+        this.weights.set(FXCollections.observableList(weights));
     }
     
     public List<Weight> getWeights() {
