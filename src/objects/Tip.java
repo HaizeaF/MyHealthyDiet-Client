@@ -28,7 +28,7 @@ public class Tip implements Serializable {
     
     private SimpleObjectProperty<TipTypeEnum> type;
     
-    private SimpleObjectProperty diet;
+    private SimpleObjectProperty<Diet> diet;
 
     public Tip(Integer tip_id, String tipText, TipTypeEnum type, Diet diet) {
         this.tip_id = new SimpleIntegerProperty(tip_id);
