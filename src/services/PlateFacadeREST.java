@@ -25,7 +25,7 @@ public class PlateFacadeREST {
 
     public PlateFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entities.plate");
+        webTarget = client.target(BASE_URI).path("plate");
     }
 
     public void edit_XML(Object requestEntity) throws ClientErrorException {
