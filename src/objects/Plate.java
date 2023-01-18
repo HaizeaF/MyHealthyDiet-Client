@@ -80,11 +80,11 @@ public class Plate implements Serializable {
         this.carbohydrates = new SimpleFloatProperty(carbohydrates);
         this.lipids = new SimpleFloatProperty(lipids);
         this.proteins = new SimpleFloatProperty(proteins);
-        this.mealType = new SimpleObjectProperty<MealEnum>(mealType);
+        this.mealType = new SimpleObjectProperty<>(mealType);
         this.ingredients = new SimpleListProperty(ingredients);
         this.isVegetarian = new SimpleBooleanProperty(isVegetarian);
         this.diets = new SimpleListProperty(diets);
-        this.plateImg = new SimpleObjectProperty(plateImg);
+        this.plateImg = new SimpleObjectProperty<>(plateImg);
     }
 
     public Plate() {
