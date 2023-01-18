@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 
 /**
  * @author HaizeaF
@@ -81,9 +82,9 @@ public class Plate implements Serializable {
         this.lipids = new SimpleFloatProperty(lipids);
         this.proteins = new SimpleFloatProperty(proteins);
         this.mealType = new SimpleObjectProperty<>(mealType);
-        this.ingredients = new SimpleListProperty(ingredients);
+        this.ingredients = new SimpleListProperty(FXCollections.observableList(ingredients));
         this.isVegetarian = new SimpleBooleanProperty(isVegetarian);
-        this.diets = new SimpleListProperty(diets);
+        this.diets = new SimpleListProperty(FXCollections.observableList(diets));
         this.plateImg = new SimpleObjectProperty<>(plateImg);
     }
 
@@ -135,11 +136,11 @@ public class Plate implements Serializable {
     }
 
     public List<Diet> getDiets() {
-        return diets.get;
+        return diets.get();
     }
 
     public void setDiets(List<Diet> diets) {
-        this.diets.set(diets);
+        this.diets.set(FXCollections.observableList(diets));
     }
 
     public Float getLipids() {
@@ -163,7 +164,7 @@ public class Plate implements Serializable {
     }
 
     public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients.set(ingredients);
+        this.ingredients.set(FXCollections.observableList(ingredients));
     }
 
     public List<Ingredient> getIngredients() {

@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *@author Julen
@@ -86,8 +88,8 @@ public class Diet implements Serializable {
         this.lipids = new SimpleFloatProperty(calories);
         this.carbohydrates = new SimpleFloatProperty(calories);
         this.type = new SimpleObjectProperty(type);
-        this.plates = new SimpleListProperty(plates);
-        this.tips = new SimpleListProperty(plates);
+        this.plates = new SimpleListProperty(FXCollections.observableList(plates));
+        this.tips = new SimpleListProperty(FXCollections.observableList(tips));
         this.dietImg = new SimpleObjectProperty(dietImg);
     }
 
@@ -255,7 +257,7 @@ public class Diet implements Serializable {
      * @param tips the tips list to set of this diet.
      */
     public void setTips(List<Tip> tips) {
-        this.tips.set(tips);
+        this.tips.set(FXCollections.observableList(tips));
     }
 
     
@@ -264,7 +266,7 @@ public class Diet implements Serializable {
      * @param plates the list of plates to set for this.
      */
     public void setPlates(List<Plate> plates) {
-        this.plates.set(plates);
+        this.plates.set(FXCollections.observableList(plates));
     }
     
     /**
