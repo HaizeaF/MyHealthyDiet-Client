@@ -7,6 +7,9 @@ package objects;
 
 import java.io.Serializable;
 import java.util.Date;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -18,32 +21,32 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    private Integer user_id;
+    private SimpleIntegerProperty user_id;
 
-    private String login;
+    private SimpleStringProperty login;
 
-    private String email;
+    private SimpleStringProperty email;
 
-    private String fullName;
+    private SimpleStringProperty fullName;
     
-    private StatusEnum status;
+    private SimpleObjectProperty<StatusEnum> status;
     
-    private PrivilegeEnum privilege;
+    private SimpleObjectProperty<PrivilegeEnum> privilege;
 
-    private String password;
+    private SimpleStringProperty password;
     
-    private Date lastPasswordChange;
+    private SimpleObjectProperty<Date> lastPasswordChange;
 
     public User(Integer user_id, String login, String email, String fullName, StatusEnum status,
                 PrivilegeEnum privilege, String password, Date lastPasswordChange) {
-        this.user_id = user_id;
-        this.login = login;
-        this.email = email;
-        this.fullName = fullName;
-        this.status = status;
-        this.privilege = privilege;
-        this.password = password;
-        this.lastPasswordChange = lastPasswordChange;
+        this.user_id = new SimpleIntegerProperty(user_id);
+        this.login = new SimpleStringProperty(login);
+        this.email = new SimpleStringProperty(email);
+        this.fullName = new SimpleStringProperty(fullName);
+        this.status = new SimpleObjectProperty<>(status);
+        this.privilege = new SimpleObjectProperty<>(privilege);
+        this.password = new SimpleStringProperty(password);
+        this.lastPasswordChange = new SimpleObjectProperty<>(lastPasswordChange);
     }
     
     public User() {
@@ -51,67 +54,67 @@ public class User implements Serializable {
 
 
     public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+        this.user_id.set(user_id);
     }
 
     public Integer getUser_id() {
-        return user_id;
+        return user_id.get();
     }
 
     public void setLogin(String login) {
-        this.login = login;
+        this.login.set(login); 
     }
 
     public String getLogin() {
-        return login;
+        return login.get();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email.set(email);
     }
 
     public String getEmail() {
-        return email;
+        return email.get();
     }
 
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.fullName.set(fullName);
     }
 
     public String getFullName() {
-        return fullName;
+        return fullName.get();
     }
 
     public void setStatus(StatusEnum status) {
-        this.status = status;
+        this.status.set(status);
     }
 
     public StatusEnum getStatus() {
-        return status;
+        return status.get();
     }
 
     public void setPrivilege(PrivilegeEnum privilege) {
-        this.privilege = privilege;
+        this.privilege.set(privilege);
     }
 
     public PrivilegeEnum getPrivilege() {
-        return privilege;
+        return privilege.get();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password.set(password);
     }
 
     public String getPassword() {
-        return password;
+        return password.get();
     }
 
     public void setLastPasswordChange(Date lastPasswordChange) {
-        this.lastPasswordChange = lastPasswordChange;
+        this.lastPasswordChange.set(lastPasswordChange);
     }
 
     public Date getLastPasswordChange() {
-        return lastPasswordChange;
+        return (Date) lastPasswordChange.get();
     }
 
     @Override

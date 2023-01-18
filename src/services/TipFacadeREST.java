@@ -30,7 +30,7 @@ public class TipFacadeREST {
 
     public TipFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entities.tip");
+        webTarget = client.target(BASE_URI).path("tip");
     }
 
     public void edit_XML(Object requestEntity) throws ClientErrorException {

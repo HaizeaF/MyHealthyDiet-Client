@@ -30,7 +30,7 @@ public class UserFacadeREST {
 
     public UserFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entities.user");
+        webTarget = client.target(BASE_URI).path("user");
     }
 
     public <T> T logIn_XML(Class<T> responseType, String login, String password) throws ClientErrorException {
