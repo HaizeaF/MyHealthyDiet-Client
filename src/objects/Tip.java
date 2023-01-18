@@ -30,10 +30,11 @@ public class Tip implements Serializable {
     
     private SimpleObjectProperty diet;
 
-    public Tip(Integer tip_id, String tipText, TipTypeEnum type) {
+    public Tip(Integer tip_id, String tipText, TipTypeEnum type, Diet diet) {
         this.tip_id = new SimpleIntegerProperty(tip_id);
         this.tipText = new SimpleStringProperty(tipText);
         this.type = new SimpleObjectProperty<>(type);
+        this.diet = new SimpleObjectProperty<>(diet);
     }
     
     public Tip() {
