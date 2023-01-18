@@ -26,14 +26,14 @@ public class Tip implements Serializable {
 
     private SimpleStringProperty tipText;
     
-    private TipTypeEnum type;
+    private SimpleObjectProperty<TipTypeEnum> type;
     
     private SimpleObjectProperty diet;
 
     public Tip(Integer tip_id, String tipText, TipTypeEnum type) {
         this.tip_id = new SimpleIntegerProperty(tip_id);
         this.tipText = new SimpleStringProperty(tipText);
-        this.type = type;
+        this.type = new SimpleObjectProperty<>(type);
     }
     
     public Tip() {
@@ -57,11 +57,11 @@ public class Tip implements Serializable {
     }
 
     public void setType(TipTypeEnum type) {
-        this.type = type;
+        this.type.set(type);
     }
 
     public TipTypeEnum getType() {
-        return type;
+        return type.get();
     }
     
     public Diet getDiet() {

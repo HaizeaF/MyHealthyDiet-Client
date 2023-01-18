@@ -29,9 +29,9 @@ public class User implements Serializable {
 
     private SimpleStringProperty fullName;
     
-    private StatusEnum status;
+    private SimpleObjectProperty<StatusEnum> status;
     
-    private PrivilegeEnum privilege;
+    private SimpleObjectProperty<PrivilegeEnum> privilege;
 
     private SimpleStringProperty password;
     
@@ -43,8 +43,8 @@ public class User implements Serializable {
         this.login = new SimpleStringProperty(login);
         this.email = new SimpleStringProperty(email);
         this.fullName = new SimpleStringProperty(fullName);
-        this.status = status;
-        this.privilege = privilege;
+        this.status = new SimpleObjectProperty<>(status);
+        this.privilege = new SimpleObjectProperty<>(privilege);
         this.password = new SimpleStringProperty(password);
         this.lastPasswordChange = new SimpleObjectProperty(lastPasswordChange);
     }
@@ -86,19 +86,19 @@ public class User implements Serializable {
     }
 
     public void setStatus(StatusEnum status) {
-        this.status = status;
+        this.status.set(status);
     }
 
     public StatusEnum getStatus() {
-        return status;
+        return status.get();
     }
 
     public void setPrivilege(PrivilegeEnum privilege) {
-        this.privilege = privilege;
+        this.privilege.set(privilege);
     }
 
     public PrivilegeEnum getPrivilege() {
-        return privilege;
+        return privilege.get();
     }
 
     public void setPassword(String password) {

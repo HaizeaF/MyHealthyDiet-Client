@@ -10,6 +10,7 @@ import java.util.List;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -26,9 +27,9 @@ public class Client extends User{
     
     private SimpleFloatProperty height;
     
-    private GenreEnum genre;
+    private SimpleObjectProperty<GenreEnum> genre;
     
-    private GoalEnum goal;
+    private SimpleObjectProperty<GoalEnum> goal;
     /**
      * @associates <{entities.Weight}>
      */
@@ -42,8 +43,8 @@ public class Client extends User{
         super(user_id, login, email, fullName, status, privilege, password, lastPasswordChange);
         this.age = new SimpleIntegerProperty(age);
         this.height = new SimpleFloatProperty(height);
-        this.genre = genre;
-        this.goal = goal;
+        this.genre = new SimpleObjectProperty<>(genre);
+        this.goal = new SimpleObjectProperty<>(goal);
         this.weights = new SimpleListProperty<Weight>(weights);
     }
 
@@ -68,19 +69,19 @@ public class Client extends User{
     }
 
     public void setGenre(GenreEnum genre) {
-        this.genre = genre;
+        this.genre.set(genre);
     }
 
     public GenreEnum getGenre() {
-        return genre;
+        return genre.get();
     }
 
     public void setGoal(GoalEnum goal) {
-        this.goal = goal;
+        this.goal.set(goal);
     }
 
     public GoalEnum getGoal() {
-        return goal;
+        return goal.get();
     }
 
     public void setWeights(List<Weight> weights) {
