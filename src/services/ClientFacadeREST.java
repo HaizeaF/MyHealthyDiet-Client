@@ -30,7 +30,7 @@ public class ClientFacadeREST {
 
     public ClientFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entities.client");
+        webTarget = client.target(BASE_URI).path("client");
     }
 
     public <T> T findClientById_XML(Class<T> responseType, String id) throws ClientErrorException {
