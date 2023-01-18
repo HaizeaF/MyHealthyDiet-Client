@@ -73,7 +73,7 @@ public class Diet implements Serializable {
     /**
      * Img of the diet.
      */
-    private SimpleObjectProperty dietImg;
+    private SimpleObjectProperty<byte[]> dietImg;
 
     //CONSTRUCTORS
     public Diet(Integer diet_id, String dietName, String description, Float calories, Float proteins, Float lipids,
