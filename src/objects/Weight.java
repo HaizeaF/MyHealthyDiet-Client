@@ -41,36 +41,36 @@ public class Weight implements Serializable {
 
     }
 
-    public SimpleIntegerProperty getWeight_id() {
-        return weight_id;
+    public Integer getWeight_id() {
+        return weight_id.get();
     }
 
-    public void setWeight_id(SimpleIntegerProperty weight_id) {
-        this.weight_id = weight_id;
+    public void setWeight_id(Integer weight_id) {
+        this.weight_id.set(weight_id);
     }
 
-    public SimpleFloatProperty getWeight() {
-        return weight;
+    public Float getWeight() {
+        return weight.get();
     }
 
-    public void setWeight(SimpleFloatProperty weight) {
-        this.weight = weight;
+    public void setWeight(Float weight) {
+        this.weight.set(weight);
     }
 
-    public SimpleObjectProperty<Date> getDate() {
-        return date;
+    public Date getDate() {
+        return date.get();
     }
 
-    public void setDate(SimpleObjectProperty<Date> date) {
-        this.date = date;
+    public void setDate(Date date) {
+        this.date.set(date);
     }
 
-    public SimpleObjectProperty<Client> getClient() {
-        return client;
+    public Client getClient() {
+        return client.get();
     }
 
-    public void setClient(SimpleObjectProperty<Client> client) {
-        this.client = client;
+    public void setClient(Client client) {
+        this.client.set(client);
     }
 
     @Override

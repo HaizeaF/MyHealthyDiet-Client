@@ -6,12 +6,14 @@
 package objects;
 
 import java.io.Serializable;
+import java.util.List;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 
 /**
  *
@@ -61,52 +63,52 @@ public class Ingredient implements Serializable {
     public Ingredient() {
     }
 
-    public SimpleIntegerProperty getIngredient_id() {
-        return ingredient_id;
+    public Integer getIngredient_id() {
+        return ingredient_id.get();
     }
 
-    public void setIngredient_id(SimpleIntegerProperty ingredient_id) {
-        this.ingredient_id = ingredient_id;
+    public void setIngredient_id(Integer ingredient_id) {
+        this.ingredient_id.set(ingredient_id);
     }
 
-    public SimpleStringProperty getIngredientName() {
-        return ingredientName;
+    public String getIngredientName() {
+        return ingredientName.get();
     }
 
-    public void setIngredientName(SimpleStringProperty ingredientName) {
-        this.ingredientName = ingredientName;
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName.set(ingredientName);
     }
 
-    public SimpleObjectProperty<FoodTypeEnum> getFoodType() {
-        return foodType;
+    public FoodTypeEnum getFoodType() {
+        return foodType.get();
     }
 
-    public void setFoodType(SimpleObjectProperty<FoodTypeEnum> foodType) {
-        this.foodType = foodType;
+    public void setFoodType(FoodTypeEnum foodType) {
+        this.foodType.set(foodType);
     }
 
-    public SimpleListProperty<Plate> getPlates() {
-        return plates;
+    public List<Plate> getPlates() {
+        return plates.get();
     }
 
-    public void setPlates(SimpleListProperty<Plate> plates) {
-        this.plates = plates;
+    public void setPlates(List<Plate> plates) {
+        this.plates.set(FXCollections.observableList(plates));
     }
 
-    public SimpleBooleanProperty getIsInSeason() {
-        return isInSeason;
+    public Boolean getIsInSeason() {
+        return isInSeason.get();
     }
 
-    public void setIsInSeason(SimpleBooleanProperty isInSeason) {
-        this.isInSeason = isInSeason;
+    public void setIsInSeason(Boolean isInSeason) {
+        this.isInSeason.set(isInSeason);
     }
 
-    public SimpleFloatProperty getWaterIndex() {
-        return waterIndex;
+    public Float getWaterIndex() {
+        return waterIndex.get();
     }
 
-    public void setWaterIndex(SimpleFloatProperty waterIndex) {
-        this.waterIndex = waterIndex;
+    public void setWaterIndex(Float waterIndex) {
+        this.waterIndex.set(waterIndex);
     }
     
     
