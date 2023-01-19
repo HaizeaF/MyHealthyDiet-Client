@@ -7,9 +7,9 @@ package objects;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  *
@@ -18,20 +18,20 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Weight implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Integer weight_id;
+    private SimpleIntegerProperty weight_id;
     
     /**
      * Weight of the client in kg
      */
-    private Float weight;
+    private SimpleFloatProperty weight;
     
     /**
      * Date that the client saved his weight
      */   
-    private Date date;
-    private Client client;
+    private SimpleObjectProperty<Date> date;
+    private SimpleObjectProperty<Client> client;
 
-    public Weight(Float weight, Date date, Integer weight_id) {
+    public Weight(SimpleFloatProperty weight, SimpleObjectProperty<Date> date, SimpleIntegerProperty weight_id) {
         this.weight_id = weight_id;
         this.weight = weight;
         this.date = date;
@@ -40,36 +40,36 @@ public class Weight implements Serializable {
     public Weight() {
 
     }
-    
-    public void setWeight_id(Integer weight_id) {
-        this.weight_id = weight_id;
-    }
 
-    public Integer getWeight_id() {
+    public SimpleIntegerProperty getWeight_id() {
         return weight_id;
     }
 
-    public void setWeight(Float weight) {
-        this.weight = weight;
+    public void setWeight_id(SimpleIntegerProperty weight_id) {
+        this.weight_id = weight_id;
     }
 
-    public Float getWeight() {
+    public SimpleFloatProperty getWeight() {
         return weight;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setWeight(SimpleFloatProperty weight) {
+        this.weight = weight;
     }
 
-    public Date getDate() {
+    public SimpleObjectProperty<Date> getDate() {
         return date;
     }
 
-    public Client getClient() {
+    public void setDate(SimpleObjectProperty<Date> date) {
+        this.date = date;
+    }
+
+    public SimpleObjectProperty<Client> getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(SimpleObjectProperty<Client> client) {
         this.client = client;
     }
 

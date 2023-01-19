@@ -6,9 +6,12 @@
 package objects;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -22,31 +25,31 @@ public class Ingredient implements Serializable {
     /**
      * Id of the entity Ingredient
      */
-    private Integer ingredient_id;
+    private SimpleIntegerProperty ingredient_id;
     
     /**
      * Name of the ingredient
      */
-    private String ingredientName;
+    private SimpleStringProperty ingredientName;
     
     /**
      * Enumeration for the type of food
      */
-    private FoodTypeEnum foodType;
+    private SimpleObjectProperty<FoodTypeEnum> foodType;
     
     /**
      * List to join plate with ingredient
      */
-    private List<Plate> plates;
+    private SimpleListProperty<Plate> plates;
     
     /**
      * Boolean that shows if it is in season or if is not
      */
-    private Boolean isInSeason;
+    private SimpleBooleanProperty isInSeason;
     
-    private Float waterIndex;
+    private SimpleFloatProperty waterIndex;
     
-    public Ingredient(Integer ingredient_id, String ingredientName, FoodTypeEnum foodType, List<Plate> plates, Boolean isInSeason, Float waterIndex) {
+    public Ingredient(SimpleIntegerProperty ingredient_id, SimpleStringProperty ingredientName, SimpleObjectProperty<FoodTypeEnum> foodType, SimpleListProperty<Plate> plates, SimpleBooleanProperty isInSeason, SimpleFloatProperty waterIndex) {
         this.ingredient_id = ingredient_id;
         this.ingredientName = ingredientName;
         this.foodType = foodType;
@@ -58,54 +61,53 @@ public class Ingredient implements Serializable {
     public Ingredient() {
     }
 
-    public Integer getIngredient_id() {
+    public SimpleIntegerProperty getIngredient_id() {
         return ingredient_id;
     }
 
-    public void setIngredient_id(Integer ingredient_id) {
+    public void setIngredient_id(SimpleIntegerProperty ingredient_id) {
         this.ingredient_id = ingredient_id;
     }
 
-    public String getIngredientName() {
+    public SimpleStringProperty getIngredientName() {
         return ingredientName;
     }
 
-    public void setIngredientName(String ingredientName) {
+    public void setIngredientName(SimpleStringProperty ingredientName) {
         this.ingredientName = ingredientName;
     }
 
-    public FoodTypeEnum getFoodType() {
+    public SimpleObjectProperty<FoodTypeEnum> getFoodType() {
         return foodType;
     }
 
-    public void setFoodType(FoodTypeEnum foodType) {
+    public void setFoodType(SimpleObjectProperty<FoodTypeEnum> foodType) {
         this.foodType = foodType;
     }
 
-    public List<Plate> getPlates() {
+    public SimpleListProperty<Plate> getPlates() {
         return plates;
     }
 
-    public void setPlates(List<Plate> plates) {
+    public void setPlates(SimpleListProperty<Plate> plates) {
         this.plates = plates;
     }
 
-    public Boolean getIsInSeason() {
+    public SimpleBooleanProperty getIsInSeason() {
         return isInSeason;
     }
 
-    public void setIsInSeason(Boolean isInSeason) {
+    public void setIsInSeason(SimpleBooleanProperty isInSeason) {
         this.isInSeason = isInSeason;
     }
 
-    public Float getWaterIndex() {
+    public SimpleFloatProperty getWaterIndex() {
         return waterIndex;
     }
 
-    public void setWaterIndex(Float waterIndex) {
+    public void setWaterIndex(SimpleFloatProperty waterIndex) {
         this.waterIndex = waterIndex;
     }
-    
     
     
     @Override
