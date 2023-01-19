@@ -31,10 +31,10 @@ public class Weight implements Serializable {
     private SimpleObjectProperty<Date> date;
     private SimpleObjectProperty<Client> client;
 
-    public Weight(SimpleFloatProperty weight, SimpleObjectProperty<Date> date, SimpleIntegerProperty weight_id) {
-        this.weight_id = weight_id;
-        this.weight = weight;
-        this.date = date;
+    public Weight(Float weight, Date date, Client client) {
+        this.weight = new SimpleFloatProperty(weight);
+        this.date = new SimpleObjectProperty<>(date);
+        this.client = new SimpleObjectProperty<>(client);
     }
 
     public Weight() {

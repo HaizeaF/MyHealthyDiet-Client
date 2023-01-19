@@ -51,13 +51,12 @@ public class Ingredient implements Serializable {
     
     private SimpleFloatProperty waterIndex;
     
-    public Ingredient(SimpleIntegerProperty ingredient_id, SimpleStringProperty ingredientName, SimpleObjectProperty<FoodTypeEnum> foodType, SimpleListProperty<Plate> plates, SimpleBooleanProperty isInSeason, SimpleFloatProperty waterIndex) {
-        this.ingredient_id = ingredient_id;
-        this.ingredientName = ingredientName;
-        this.foodType = foodType;
-        this.plates = plates;
-        this.isInSeason = isInSeason;
-        this.waterIndex = waterIndex;
+    public Ingredient(String ingredientName, FoodTypeEnum foodType, List<Plate> plates, Boolean isInSeason, Float waterIndex) {
+        this.ingredientName = new SimpleStringProperty(ingredientName);
+        this.foodType = new SimpleObjectProperty<>(foodType);
+        this.plates = new SimpleListProperty(FXCollections.observableList(plates));
+        this.isInSeason = new SimpleBooleanProperty(isInSeason);
+        this.waterIndex = new SimpleFloatProperty(waterIndex);
     }
     
     public Ingredient() {
