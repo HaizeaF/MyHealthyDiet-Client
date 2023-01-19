@@ -7,9 +7,9 @@ package objects;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  *
@@ -18,59 +18,59 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Weight implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Integer weight_id;
+    private SimpleIntegerProperty weight_id;
     
     /**
      * Weight of the client in kg
      */
-    private Float weight;
+    private SimpleFloatProperty weight;
     
     /**
      * Date that the client saved his weight
      */   
-    private Date date;
-    private Client client;
+    private SimpleObjectProperty<Date> date;
+    private SimpleObjectProperty<Client> client;
 
-    public Weight(Float weight, Date date, Integer weight_id) {
-        this.weight_id = weight_id;
-        this.weight = weight;
-        this.date = date;
+    public Weight(Float weight, Date date, Client client) {
+        this.weight = new SimpleFloatProperty(weight);
+        this.date = new SimpleObjectProperty<>(date);
+        this.client = new SimpleObjectProperty<>(client);
     }
 
     public Weight() {
 
     }
-    
-    public void setWeight_id(Integer weight_id) {
-        this.weight_id = weight_id;
-    }
 
     public Integer getWeight_id() {
-        return weight_id;
+        return weight_id.get();
     }
 
-    public void setWeight(Float weight) {
-        this.weight = weight;
+    public void setWeight_id(Integer weight_id) {
+        this.weight_id.set(weight_id);
     }
 
     public Float getWeight() {
-        return weight;
+        return weight.get();
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setWeight(Float weight) {
+        this.weight.set(weight);
     }
 
     public Date getDate() {
-        return date;
+        return date.get();
+    }
+
+    public void setDate(Date date) {
+        this.date.set(date);
     }
 
     public Client getClient() {
-        return client;
+        return client.get();
     }
 
     public void setClient(Client client) {
-        this.client = client;
+        this.client.set(client);
     }
 
     @Override
