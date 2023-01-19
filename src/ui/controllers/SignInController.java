@@ -95,6 +95,7 @@ public class SignInController {
         // Comprueba si los botones son pulsados
         buttonShowHide.setOnAction(this::handleShowHide);
         //buttonSignUp.setOnAction(this::handleSignUp);
+        //buttonSignIn.setOnAction(this::handleSignIn);
         // Comprueba cuando el boton "x" para cerrar la ventana es pulsado
         stage.setOnCloseRequest(this::handleExitAction);
 
@@ -223,19 +224,23 @@ public class SignInController {
         }
         try {
             if (passwordField.getText().isEmpty() || textFieldPassword.getText().isEmpty()) {
-                //throw new InvalidPasswordValueException("Enter a password");
+                throw new /*InvalidPasswordValue*/Exception("Enter a password");
             }
             // Si el campo no está vacío comprobar que la contraseña tiene al menos 8 caracteres y que no hay espacios.
             // En caso de que no tenga 8 caracteres o contenga espacios en blanco cambiar el color de imagePassword y linePassword a rojo.
             if (passwordField.getText().contains(" ") || textFieldPassword.getText().contains(" ") || passwordField.getText().length() < 8 || textFieldPassword.getText().length() < 8) {
-                //throw new InvalidPasswordValueException("Password must be at least 8 characters long and must not contain blank spaces");
+                throw new /*InvalidPasswordValue*/Exception("Password must be at least 8 characters long and must not contain blank spaces");
             }
             passwordIcon.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
             //passwordLine.setStroke(Color.GRAY);
+            passwordField.setStyle("-fx-border-color: #ABB2B9;");
+            textFieldPassword.setStyle("-fx-border-color: #ABB2B9;");
             labelInvalidPassword.setText("");
         } catch (/*InvalidPasswordValue*/Exception ex) {
             passwordIcon.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
             //passwordLine.setStroke(Color.RED);
+            passwordField.setStyle("-fx-border-color: red;");
+            textFieldPassword.setStyle("-fx-border-color: red;");
             LOGGER.info(ex.getMessage());
             labelInvalidPassword.setText(ex.getMessage());
         }
@@ -284,10 +289,12 @@ public class SignInController {
                     }
                     userIcon.setImage(new Image(getClass().getResourceAsStream("/ui/resources/ic_user.png")));
                     //usernameLine.setStroke(Color.GRAY);
+                    textFieldUsername.setStyle("-fx-border-color: #ABB2B9;");
                     labelInvalidUser.setText("");
                 } catch (/*InvalidUserValue*/Exception ex) {
                     userIcon.setImage(new Image(getClass().getResourceAsStream("/ui/resources/ic_user_incorrect.png")));
                     //usernameLine.setStroke(Color.RED);
+                    textFieldUsername.setStyle("-fx-border-color: red;");
                     LOGGER.info(ex.getMessage());
                     labelInvalidUser.setText(ex.getMessage());
                 }
@@ -295,19 +302,23 @@ public class SignInController {
             if (!passwordField.isFocused() && !textFieldPassword.isFocused()) {
                 try {
                     if (passwordField.getText().isEmpty() || textFieldPassword.getText().isEmpty()) {
-                        //throw new InvalidPasswordValueException("Enter a password");
+                        throw new /*InvalidPasswordValue*/Exception("Enter a password");
                     }
                     // Si el campo no está vacío comprobar que la contraseña tiene al menos 8 caracteres y que no hay espacios.
                     // En caso de que no tenga 8 caracteres o contenga espacios en blanco cambiar el color de imagePassword y linePassword a rojo.
                     if (passwordField.getText().contains(" ") || textFieldPassword.getText().contains(" ") || passwordField.getText().length() < 8 || textFieldPassword.getText().length() < 8) {
-                        //throw new InvalidPasswordValueException("Password must be at least 8 characters long and must not contain blank spaces");
+                        throw new /*InvalidPasswordValue*/Exception("Password must be at least 8 characters long and must not contain blank spaces");
                     }
                     passwordIcon.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
                     //passwordLine.setStroke(Color.GRAY);
+                    passwordField.setStyle("-fx-border-color: #ABB2B9;");
+                    textFieldPassword.setStyle("-fx-border-color: #ABB2B9;");
                     labelInvalidPassword.setText("");
                 } catch (/*InvalidPasswordValue*/Exception ex) {
                     passwordIcon.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
                     //passwordLine.setStroke(Color.RED);
+                    passwordField.setStyle("-fx-border-color: red;");
+                    textFieldPassword.setStyle("-fx-border-color: red;");
                     LOGGER.info(ex.getMessage());
                     labelInvalidPassword.setText(ex.getMessage());
                 }
