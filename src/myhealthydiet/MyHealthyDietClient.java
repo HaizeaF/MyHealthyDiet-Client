@@ -6,12 +6,10 @@
 package myhealthydiet;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
+import ui.controllers.SignInController;
 
 /**
  *
@@ -20,25 +18,15 @@ import javafx.stage.Stage;
 public class MyHealthyDietClient extends Application {
     
     @Override
-    public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+    public void start(Stage stage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/SignInView.fxml"));
+        Parent root = (Parent) loader.load();
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        SignInController controller = ((SignInController) loader.getController());
         
-        Scene scene = new Scene(root, 300, 250);
+        controller.setStage(stage);
         
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        controller.initStage(root);
     }
 
     /**
