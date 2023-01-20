@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import objects.Ingredient;
 
 /**
@@ -29,13 +30,13 @@ public class IngredientFacadeREST implements IngredientInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private final ResourceBundle bundle = ResourceBundle.getBundle("URLCredentials");
+    private final ResourceBundle bundle = ResourceBundle.getBundle("files/URLCredentials");
     private final String BASE_URI = bundle.getString("BASE_URI");
     
 
     public IngredientFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("ingredient");
+        webTarget = client.target(BASE_URI).path("entities.ingredient");
     }
 
     @Override
@@ -77,7 +78,7 @@ public class IngredientFacadeREST implements IngredientInterface {
     }
 
     @Override
-    public <T> T findAll_XML(Class<T> responseType) throws WebApplicationException {
+    public <T> T findAll_XML(GenericType<T> responseType) throws WebApplicationException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }

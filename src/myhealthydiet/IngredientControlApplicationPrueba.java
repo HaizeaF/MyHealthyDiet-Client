@@ -3,31 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui.controllers;
+package myhealthydiet;
 
-import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
+import ui.controllers.IngredientControlVController;
 
 /**
  *
- * @author User
+ * @author Mikel
  */
 public class IngredientControlApplicationPrueba extends Application {
     
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/IngredientControlWindow.fxml"));
         Parent root = (Parent) loader.load();
-        
+
         IngredientControlVController controller = ((IngredientControlVController) loader.getController());
-        
+
         controller.setStage(stage);
-        
+
         controller.initStage(root);
-    
     }
 
     /**

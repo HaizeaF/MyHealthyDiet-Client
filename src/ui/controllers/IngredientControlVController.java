@@ -5,10 +5,15 @@
  */
 package ui.controllers;
 
-import java.io.IOException;
+import businessLogic.IngredientFactory;
+import businessLogic.IngredientInterface;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +21,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.core.GenericType;
+import objects.Ingredient;
 
 /**
  *
@@ -28,6 +43,71 @@ public class IngredientControlVController {
     
     private Stage stage;
     private static final Logger LOGGER = Logger.getLogger("IngredientControlVController");
+    
+    @FXML
+    private Pane paneIngredientWindow;
+    
+    @FXML
+    private Pane paneIngredientMenu;
+    
+    @FXML
+    private Label labelTitle;
+    
+    @FXML
+    private Button buttonTips;
+    
+    @FXML
+    private Button buttonPlates;
+    
+    @FXML
+    private Button buttonClients;
+    
+    @FXML
+    private Button buttonDiets;
+    
+    @FXML
+    private Button buttonIngredients;
+    
+    @FXML
+    private Button buttonLogout;
+    
+    @FXML
+    private TableView tableIngredient;
+    
+    @FXML
+    private TableColumn columnIngredientName;
+    
+    @FXML
+    private TableColumn columnFoodType;
+    
+    @FXML
+    private TableColumn columnIsInSeason;
+    
+    @FXML
+    private TableColumn columnWaterIndex;
+    
+    @FXML
+    private TextField textfieldSearchbar;
+    
+    @FXML
+    private Button buttonSearch;
+    
+    @FXML
+    private MenuButton buttonFilters;
+    
+    @FXML
+    private Pane paneButtons;
+    
+    @FXML
+    private Button buttonInsertRow;
+    
+    @FXML
+    private Button buttonHelp;
+    
+    @FXML
+    private Button buttonReport;
+    
+    private ObservableList<Ingredient> ingredientsData;
     
     public Stage getStage() {
         return stage;
@@ -55,11 +135,25 @@ public class IngredientControlVController {
             // La ventana no es redimensionable
             stage.setResizable(false);
             
-            
-            
             // Confirmar el cierre de la aplicación
             stage.setOnCloseRequest(this::handleExitAction);
 
+            // Cargar tabla de ingredientes
+            
+            columnIngredientName.setCellValueFactory(
+                    new PropertyValueFactory<>("ingredientName"));
+            columnFoodType.setCellValueFactory(
+                    new PropertyValueFactory<>("foodType"));
+            columnIsInSeason.setCellValueFactory(
+                    new PropertyValueFactory<>("isInSeason"));
+            columnWaterIndex.setCellValueFactory(
+                    new PropertyValueFactory<>("waterIndex"));
+            IngredientInterface client = IngredientFactory.getModel();
+            List<Ingredient> ingredients = client.findAll_XML(new GenericType<List<Ingredient>>() {});
+            ingredientsData=FXCollections.observableArrayList(ingredients);
+            
+            tableIngredient.setItems(ingredientsData);
+            
             // Enseña la ventana principal
             stage.show();
             LOGGER.info("Ingredient Control Window initialized");
@@ -90,30 +184,4 @@ public class IngredientControlVController {
             LOGGER.log(Level.SEVERE, msg);
         }
     }
-    /**
-     * This method closes the scenario and sends you to the SignIn via an alert by clicking a "LogOut" button.
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
-     */
-    @FXML
-    private void handleButtonLogOutAction(ActionEvent event) {
-        try {
-            Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to Log Out?");
-            a.showAndWait();
-            if (a.getResult().equals(ButtonType.OK)) {
-                stage.close();
-                LOGGER.info("Application window closed");
-                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/SignInView.fxml"));
-                Parent root = (Parent) loader.load();
-                IngredientControlVController controller = ((IngredientControlVController) loader.getController());
-                controller.setStage(new Stage());
-                controller.initStage(root);
-                LOGGER.info("SignIn window opened");
-            }
-        } catch (IOException ex) {
-            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
-            alert.show();
-            LOGGER.log(Level.SEVERE, ex.getMessage());
-        }
-    }
-
 }

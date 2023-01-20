@@ -7,6 +7,7 @@ package businessLogic;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import objects.Ingredient;
 
 /**
@@ -27,7 +28,7 @@ public interface IngredientInterface {
 
     public void create_JSON(Ingredient requestEntity) throws WebApplicationException;
 
-    public <T> T findAll_XML(Class<T> responseType) throws WebApplicationException;
+    public <T> T findAll_XML(GenericType<T> responseType) throws WebApplicationException;
 
     public <T> T findAll_JSON(Class<T> responseType) throws WebApplicationException;
 
