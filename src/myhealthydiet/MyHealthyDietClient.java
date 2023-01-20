@@ -13,7 +13,7 @@ import ui.controllers.SignInController;
 
 /**
  *
- * @author haize
+ * @author haize, sendoa
  */
 public class MyHealthyDietClient extends Application {
     
