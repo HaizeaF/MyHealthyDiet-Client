@@ -49,6 +49,8 @@ public class SignInController {
     @FXML
     private Button buttonSignUp;
     @FXML
+    private Button buttonForgotPassword;
+    @FXML
     private ToggleButton buttonShowHide;
     @FXML
     private ImageView imageViewButton;
@@ -94,6 +96,7 @@ public class SignInController {
 
         // BUTTONS //
         // Comprueba si los botones son pulsados
+        buttonForgotPassword.setOnAction(this::forgotPassword);
         buttonShowHide.setOnAction(this::handleShowHide);
         //buttonSignUp.setOnAction(this::handleSignUp);
         //buttonSignIn.setOnAction(this::handleSignIn);
@@ -131,6 +134,10 @@ public class SignInController {
             event.consume();
             ((TextField) event.getSource()).setText(((TextField) event.getSource()).getText().substring(0, 25));
         }
+    }
+    
+    private void forgotPassword(ActionEvent event){
+        
     }
 
     /**
