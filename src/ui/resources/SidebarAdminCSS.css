@@ -1,0 +1,97 @@
+#labelTitle {
+	-fx-graphic-text-gap: 10;
+}
+
+#buttonPlates {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+#buttonDiets {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+#buttonIngredients {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+#buttonTips {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+#buttonClients {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+#buttonLogout {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 125;
+	
+	-fx-padding: 0px 29px;
+}
+
+#buttonPlates:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonDiets:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonIngredients:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonTips:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonClients:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonLogout:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonPlates:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonDiets:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonIngredients:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonTips:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonClients:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonLogout:pressed {
+	-fx-background-color: #109192;
+}
+
+
+

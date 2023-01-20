@@ -8,7 +8,6 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /**
  *@author Julen
@@ -80,7 +79,6 @@ public class Diet implements Serializable {
     //CONSTRUCTORS
     public Diet(Integer diet_id, String dietName, String description, Float calories, Float proteins, Float lipids,
             GoalEnum type, Float carbohydrates, List<Plate> plates, List<Tip> tips, byte[] dietImg) {
-        this.diet_id = new SimpleIntegerProperty(diet_id);
         this.dietName = new SimpleStringProperty(dietName);
         this.description = new SimpleStringProperty(description);
         this.calories = new SimpleFloatProperty(calories);
