@@ -9,11 +9,13 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author HaizeaF
  * Class that contains the information of a plate.
  */
+@XmlRootElement
 public class Plate implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,11 +67,6 @@ public class Plate implements Serializable {
     private SimpleListProperty<Ingredient> ingredients;
     
     /**
-     * List of the diets the plate is on.
-     */
-    private SimpleListProperty<Diet> diets;
-    
-    /**
      * Image of the plate.
      */
     private SimpleObjectProperty<byte[]> plateImg;
@@ -84,11 +81,19 @@ public class Plate implements Serializable {
         this.mealType = new SimpleObjectProperty<>(mealType);
         this.ingredients = new SimpleListProperty(FXCollections.observableList(ingredients));
         this.isVegetarian = new SimpleBooleanProperty(isVegetarian);
-        this.diets = new SimpleListProperty(FXCollections.observableList(diets));
         this.plateImg = new SimpleObjectProperty<>(plateImg);
     }
 
     public Plate() {
+        this.plateName = new SimpleStringProperty();
+        this.calories = new SimpleFloatProperty();
+        this.carbohydrates = new SimpleFloatProperty();
+        this.lipids = new SimpleFloatProperty();
+        this.proteins = new SimpleFloatProperty();
+        this.mealType = new SimpleObjectProperty<>();
+        this.ingredients = new SimpleListProperty();
+        this.isVegetarian = new SimpleBooleanProperty();
+        this.plateImg = new SimpleObjectProperty<>();
     }
 
     public void setPlate_id(Integer plate_id) {
@@ -133,14 +138,6 @@ public class Plate implements Serializable {
 
     public void setIsVegetarian(Boolean isVegetarian) {
         this.isVegetarian.set(isVegetarian);
-    }
-
-    public List<Diet> getDiets() {
-        return diets.get();
-    }
-
-    public void setDiets(List<Diet> diets) {
-        this.diets.set(FXCollections.observableList(diets));
     }
 
     public Float getLipids() {
