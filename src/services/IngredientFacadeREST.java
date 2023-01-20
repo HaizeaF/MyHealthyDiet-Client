@@ -5,10 +5,12 @@
  */
 package services;
 
-import javax.ws.rs.ClientErrorException;
+import businessLogic.IngredientInterface;
+import java.util.ResourceBundle;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import objects.Ingredient;
 
 /**
  * Jersey REST client generated for REST resource:IngredientFacadeREST
@@ -21,115 +23,88 @@ import javax.ws.rs.client.WebTarget;
  *        client.close();
  * </pre>
  *
- * @author User
+ * @author Mikel
  */
-public class IngredientFacadeREST {
+public class IngredientFacadeREST implements IngredientInterface {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/MyHealthyDiet/webresources";
+    private final ResourceBundle bundle = ResourceBundle.getBundle("URLCredentials");
+    private final String BASE_URI = bundle.getString("BASE_URI");
+    
 
     public IngredientFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("ingredient");
     }
 
-    public void edit_XML(Object requestEntity) throws ClientErrorException {
-        try {
-            webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public void edit_XML(Ingredient requestEntity) throws WebApplicationException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),
+                Ingredient.class);
     }
 
-    public void edit_JSON(Object requestEntity) throws ClientErrorException {
-        try {
-            webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public void edit_JSON(Ingredient requestEntity) throws WebApplicationException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON),
+                Ingredient.class);
     }
 
-    public <T> T find_XML(Class<T> responseType, String id) throws ClientErrorException {
-        try {
-            WebTarget resource = webTarget;
-            resource = resource.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id}));
-            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public <T> T find_XML(Class<T> responseType, String id) throws WebApplicationException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T find_JSON(Class<T> responseType, String id) throws ClientErrorException {
-        try {
-            WebTarget resource = webTarget;
-            resource = resource.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id}));
-            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public <T> T find_JSON(Class<T> responseType, String id) throws WebApplicationException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public void create_XML(Object requestEntity) throws ClientErrorException {
-        try {
-            webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public void create_XML(Ingredient requestEntity) throws WebApplicationException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),
+                Ingredient.class);
     }
 
-    public void create_JSON(Object requestEntity) throws ClientErrorException {
-        try {
-            webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON));
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public void create_JSON(Ingredient requestEntity) throws WebApplicationException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_JSON),
+                Ingredient.class);
     }
 
-    public <T> T findAll_XML(Class<T> responseType) throws ClientErrorException {
-        try {
-            WebTarget resource = webTarget;
-            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public <T> T findAll_XML(Class<T> responseType) throws WebApplicationException {
+        WebTarget resource = webTarget;
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findAll_JSON(Class<T> responseType) throws ClientErrorException {
-        try {
-            WebTarget resource = webTarget;
-            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public <T> T findAll_JSON(Class<T> responseType) throws WebApplicationException {
+        WebTarget resource = webTarget;
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public void remove(String id) throws ClientErrorException {
-        try {
-            webTarget.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id})).request().delete();
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public void remove(String id) throws WebApplicationException {
+        webTarget.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id})).request().delete(Ingredient.class);
     }
 
-    public <T> T findIngredientsByName_XML(Class<T> responseType, String ingredientName) throws ClientErrorException {
-        try {
-            WebTarget resource = webTarget;
-            resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{ingredientName}));
-            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public <T> T findIngredientsByName_XML(Class<T> responseType, String ingredientName) throws WebApplicationException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{ingredientName}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findIngredientsByName_JSON(Class<T> responseType, String ingredientName) throws ClientErrorException {
-        try {
-            WebTarget resource = webTarget;
-            resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{ingredientName}));
-            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
-        } catch (ClientErrorException e) {
-            throw new WebApplicationException(e.getMessage());
-        }
+    @Override
+    public <T> T findIngredientsByName_JSON(Class<T> responseType, String ingredientName) throws WebApplicationException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{ingredientName}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     public void close() {
