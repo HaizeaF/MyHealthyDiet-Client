@@ -5,6 +5,7 @@
  */
 package services;
 
+import businessLogic.UserInterface;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -20,9 +21,9 @@ import javax.ws.rs.client.WebTarget;
  *        client.close();
  * </pre>
  *
- * @author 2dam
+ * @author Sendoa
  */
-public class UserFacadeREST {
+public class UserFacadeREST implements UserInterface{
 
     private WebTarget webTarget;
     private Client client;
@@ -33,16 +34,10 @@ public class UserFacadeREST {
         webTarget = client.target(BASE_URI).path("user");
     }
 
-    public <T> T logIn_XML(Class<T> responseType, String login, String password) throws ClientErrorException {
+    public <T> T logIn(Class<T> responseType, String login, String password) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{login, password}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
-    }
-
-    public <T> T logIn_JSON(Class<T> responseType, String login, String password) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}/{1}", new Object[]{login, password}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
 
     public void close() {

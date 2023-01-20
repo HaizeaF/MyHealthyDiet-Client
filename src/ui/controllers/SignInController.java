@@ -5,6 +5,8 @@
  */
 package ui.controllers;
 
+import businessLogic.UserFactory;
+import businessLogic.UserInterface;
 import exceptions.InvalidPasswordValueException;
 import exceptions.InvalidUserValueException;
 import java.util.logging.Level;
@@ -29,6 +31,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import objects.User;
+import cryptography.Asymmetric;
+import cryptography.HashMD5;
 
 /**
  *
@@ -99,7 +104,7 @@ public class SignInController {
         buttonForgotPassword.setOnAction(this::forgotPassword);
         buttonShowHide.setOnAction(this::handleShowHide);
         //buttonSignUp.setOnAction(this::handleSignUp);
-        //buttonSignIn.setOnAction(this::handleSignIn);
+        buttonSignIn.setOnAction(this::handleSignIn);
         // Comprueba cuando el boton "x" para cerrar la ventana es pulsado
         stage.setOnCloseRequest(this::handleExitAction);
 
@@ -167,7 +172,7 @@ public class SignInController {
      *
      * @param event an ActionEvent.ACTION event type for when the button is pressed
      */
-    /*@FXML
+    @FXML
     private void handleSignIn(ActionEvent event) {
         try {
             LOGGER.info("Signin in user");
@@ -179,25 +184,23 @@ public class SignInController {
             textErrorHandlerUsername(null);
             handleKeyReleasedPasswd(null);
             if (labelInvalidPassword.getText().equalsIgnoreCase("") && labelInvalidUser.getText().equalsIgnoreCase("")) {
-                Model model = DAOFactory.getModel();
-                User user = new User();
-                user.setLogin(textFieldUsername.getText());
-                user.setPassword(textFieldPassword.getText());
-                user = model.doSignIn(user);
-                stage.close();
+                UserInterface model = UserFactory.getModel();
+                byte[] passwordBytes = new Asymmetric().cipher(textFieldPassword.getText());
+                User user = model.logIn(User.class, textFieldUsername.getText(), HashMD5.hexadecimal(passwordBytes));
+                stage.close();/*
                 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/ApplicationView.fxml"));
                 Parent root = (Parent) loader.load();
                 ApplicationVController controller = ((ApplicationVController) loader.getController());
                 controller.setStage(new Stage());
                 controller.setUser(user);
-                controller.initStage(root);
+                controller.initStage(root);*/
             }
-        } catch (ConnectionErrorException | TimeOutException | MaxConnectionExceededException | InvalidUserException | IOException e) {
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.show();
             LOGGER.severe(e.getMessage());
         }
-    }*/
+    }
 
     /**
      * Check what state (pressed/not pressed) the password is in.
