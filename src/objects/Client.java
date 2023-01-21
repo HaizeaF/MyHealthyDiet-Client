@@ -37,11 +37,11 @@ public class Client extends User{
     private SimpleListProperty<Weight> weights;
 
 
-    public Client(Integer user_id, String login, String email, String fullName, StatusEnum status,
+    public Client(String login, String email, String fullName, StatusEnum status,
                   PrivilegeEnum privilege, String password, Date lastPasswordChange, Integer age, Float height, 
                   GenreEnum genre, GoalEnum goal, List<Weight> weights) {
         // TODO Implement this method
-        super(user_id, login, email, fullName, status, privilege, password, lastPasswordChange);
+        super(login, email, fullName, status, privilege, password, lastPasswordChange);
         this.age = new SimpleIntegerProperty(age);
         this.height = new SimpleFloatProperty(height);
         this.genre = new SimpleObjectProperty<>(genre);
@@ -51,6 +51,11 @@ public class Client extends User{
 
 
     public Client() {
+        this.age = new SimpleIntegerProperty();
+        this.height = new SimpleFloatProperty();
+        this.genre = new SimpleObjectProperty<>();
+        this.goal = new SimpleObjectProperty<>();
+        this.weights = new SimpleListProperty<>();
     }
 
     public void setAge(Integer age) {
