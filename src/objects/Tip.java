@@ -38,6 +38,10 @@ public class Tip implements Serializable {
     }
     
     public Tip() {
+        this.tip_id = new SimpleIntegerProperty();
+        this.tipText = new SimpleStringProperty();
+        this.type = new SimpleObjectProperty<>();
+        this.diet = new SimpleObjectProperty<>();
     }
 
 
