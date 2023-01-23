@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -116,6 +117,13 @@
             <TableColumn fx:id="columnIsInSeason" minWidth="0.0" prefWidth="223.0" text="isInSeason" />
             <TableColumn fx:id="columnWaterIndex" minWidth="0.0" prefWidth="241.0" text="waterIndex" />
         </columns>
+         <contextMenu>
+            <ContextMenu fx:id="contextMenu">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
       </TableView>
       <TextField fx:id="texfieldSearchbar" layoutX="394.0" layoutY="148.0" prefHeight="46.0" prefWidth="799.0" promptText="Type diet title" stylesheets="@../resources/DietsCSS.css">
          <font>

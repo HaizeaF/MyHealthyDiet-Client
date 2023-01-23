@@ -52,14 +52,14 @@ public class IngredientFacadeREST implements IngredientInterface {
     }
 
     @Override
-    public <T> T find_XML(Class<T> responseType, String id) throws WebApplicationException {
+    public <T> T find_XML(Class<T> responseType, Integer id) throws WebApplicationException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
     @Override
-    public <T> T find_JSON(Class<T> responseType, String id) throws WebApplicationException {
+    public <T> T find_JSON(Class<T> responseType, Integer id) throws WebApplicationException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
@@ -90,7 +90,7 @@ public class IngredientFacadeREST implements IngredientInterface {
     }
 
     @Override
-    public void remove(String id) throws WebApplicationException {
+    public void remove(Integer id) throws WebApplicationException {
         webTarget.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id})).request().delete(Ingredient.class);
     }
 

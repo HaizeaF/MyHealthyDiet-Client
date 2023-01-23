@@ -23,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TableColumn;
@@ -107,6 +108,9 @@ public class IngredientControlVController {
     @FXML
     private Button buttonReport;
     
+    @FXML
+    private ContextMenu contextMenu;
+    
     private ObservableList<Ingredient> ingredientsData;
     
     public Stage getStage() {
@@ -150,9 +154,12 @@ public class IngredientControlVController {
                     new PropertyValueFactory<>("waterIndex"));
             IngredientInterface client = IngredientFactory.getModel();
             List<Ingredient> ingredients = client.findAll_XML(new GenericType<List<Ingredient>>() {});
-            ingredientsData=FXCollections.observableArrayList(ingredients);
             
+            ingredientsData=FXCollections.observableArrayList(ingredients);
             tableIngredient.setItems(ingredientsData);
+            tableIngredient.setEditable(true);
+            
+            contextMenu.getItems().get(0).setOnAction(this::handleDeleteAction);
             
             // Enseña la ventana principal
             stage.show();
@@ -183,5 +190,27 @@ public class IngredientControlVController {
             alert.show();
             LOGGER.log(Level.SEVERE, msg);
         }
+    }
+    
+    private void handleDeleteAction(ActionEvent event) {
+        Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this Ingredient?");
+        a.showAndWait();
+        try{
+            if (a.getResult().equals(ButtonType.CANCEL)) {
+                event.consume();
+            } else {
+                Integer id = ((Ingredient)tableIngredient.getSelectionModel().getSelectedItem()).getIngredient_id();
+                IngredientFactory.getModel().remove(id);
+                
+                tableIngredient.getItems().remove(tableIngredient.getSelectionModel().getSelectedItem());
+                tableIngredient.refresh();
+            }
+        }catch (Exception e){
+            String msg = "Error closing the app: " + e.getMessage();
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, msg);
+        }
+            
     }
 }

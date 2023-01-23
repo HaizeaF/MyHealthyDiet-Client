@@ -20,9 +20,9 @@ public interface IngredientInterface {
 
     public void edit_JSON(Ingredient requestEntity) throws WebApplicationException;
 
-    public <T> T find_XML(Class<T> responseType, String id) throws WebApplicationException;
+    public <T> T find_XML(Class<T> responseType, Integer id) throws WebApplicationException;
 
-    public <T> T find_JSON(Class<T> responseType, String id) throws WebApplicationException;
+    public <T> T find_JSON(Class<T> responseType, Integer id) throws WebApplicationException;
 
     public void create_XML(Ingredient requestEntity) throws WebApplicationException;
 
@@ -32,7 +32,7 @@ public interface IngredientInterface {
 
     public <T> T findAll_JSON(GenericType<T> responseType) throws WebApplicationException;
 
-    public void remove(String id) throws WebApplicationException;
+    public void remove(Integer id) throws WebApplicationException;
 
     public <T> T findIngredientsByName_XML(Class<T> responseType, String ingredientName) throws WebApplicationException;
 
