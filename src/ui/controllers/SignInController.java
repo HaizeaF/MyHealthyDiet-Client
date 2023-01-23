@@ -197,6 +197,7 @@ public class SignInController {
             }
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            e.printStackTrace();
             alert.show();
             LOGGER.severe(e.getMessage());
         }
