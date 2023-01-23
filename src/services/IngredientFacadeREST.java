@@ -84,7 +84,7 @@ public class IngredientFacadeREST implements IngredientInterface {
     }
 
     @Override
-    public <T> T findAll_JSON(Class<T> responseType) throws WebApplicationException {
+    public <T> T findAll_JSON(GenericType<T> responseType) throws WebApplicationException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
     }
