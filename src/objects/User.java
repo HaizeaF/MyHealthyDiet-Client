@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Sendoa
  */
-@XmlRootElement
+@XmlRootElement(name="user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,8 +37,9 @@ public class User implements Serializable {
     
     private SimpleObjectProperty<Date> lastPasswordChange;
 
-    public User(String login, String email, String fullName, StatusEnum status,
+    public User(Integer user_id, String login, String email, String fullName, StatusEnum status,
                 PrivilegeEnum privilege, String password, Date lastPasswordChange) {
+        this.user_id = new SimpleIntegerProperty(user_id);
         this.login = new SimpleStringProperty(login);
         this.email = new SimpleStringProperty(email);
         this.fullName = new SimpleStringProperty(fullName);
@@ -49,6 +50,7 @@ public class User implements Serializable {
     }
     
     public User() {
+        this.user_id = new SimpleIntegerProperty();
         this.login = new SimpleStringProperty();
         this.email = new SimpleStringProperty();
         this.fullName = new SimpleStringProperty();

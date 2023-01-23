@@ -5,6 +5,7 @@
  */
 package objects;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import javafx.beans.property.SimpleFloatProperty;
@@ -20,8 +21,8 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Sendoa
  */
-@XmlRootElement
-public class Client extends User{
+@XmlRootElement(name="client")
+public class ClientOBJ extends User{
 
     private static final long serialVersionUID = 1L;
     private SimpleIntegerProperty age;
@@ -37,11 +38,11 @@ public class Client extends User{
     private SimpleListProperty<Weight> weights;
 
 
-    public Client(String login, String email, String fullName, StatusEnum status,
+    public ClientOBJ(Integer user_id, String login, String email, String fullName, StatusEnum status,
                   PrivilegeEnum privilege, String password, Date lastPasswordChange, Integer age, Float height, 
                   GenreEnum genre, GoalEnum goal, List<Weight> weights) {
         // TODO Implement this method
-        super(login, email, fullName, status, privilege, password, lastPasswordChange);
+        super(user_id, login, email, fullName, status, privilege, password, lastPasswordChange);
         this.age = new SimpleIntegerProperty(age);
         this.height = new SimpleFloatProperty(height);
         this.genre = new SimpleObjectProperty<>(genre);
@@ -50,11 +51,12 @@ public class Client extends User{
     }
 
 
-    public Client() {
-        this.age = new SimpleIntegerProperty();
-        this.height = new SimpleFloatProperty();
-        this.genre = new SimpleObjectProperty<>();
-        this.goal = new SimpleObjectProperty<>();
+    public ClientOBJ() {
+        super(0, "login", "example@mail.com", "Example Name", StatusEnum.DISABLED, PrivilegeEnum.USER, "abcd*1234", null);
+        this.age = new SimpleIntegerProperty(20);
+        this.height = new SimpleFloatProperty(Float.parseFloat("180"));
+        this.genre = new SimpleObjectProperty<>(GenreEnum.NON_BINARY);
+        this.goal = new SimpleObjectProperty<>(GoalEnum.MAINTAIN);
         this.weights = new SimpleListProperty<>();
     }
 
@@ -108,10 +110,10 @@ public class Client extends User{
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Client)) {
+        if (!(object instanceof ClientOBJ)) {
             return false;
         }
-        Client other = (Client) object;
+        ClientOBJ other = (ClientOBJ) object;
         if ((super.getUser_id() == null && other.getUser_id() != null) || (super.getUser_id() != null && !super.getUser_id().equals(other.getUser_id()))) {
             return false;
         }

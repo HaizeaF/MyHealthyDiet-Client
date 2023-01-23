@@ -10,6 +10,7 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import objects.ClientOBJ;
 
 /**
  * Jersey REST client generated for REST resource:ClientFacadeREST [client]<br>
@@ -46,12 +47,12 @@ public class ClientFacadeREST implements ClientInterface{
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public void editPassword(Object requestEntity) throws ClientErrorException {
-        webTarget.path("updatePassword").request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    public void editPassword(ClientOBJ requestEntity) throws ClientErrorException {
+        webTarget.path("updatePassword").request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), ClientOBJ.class);
     }
 
-    public void edit(Object requestEntity) throws ClientErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    public void edit(ClientOBJ requestEntity) throws ClientErrorException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), ClientOBJ.class);
     }
 
     public <T> T findClientByLogin(Class<T> responseType, String usrLogin) throws ClientErrorException {
@@ -60,8 +61,8 @@ public class ClientFacadeREST implements ClientInterface{
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public void create(Object requestEntity) throws ClientErrorException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    public void create(ClientOBJ requestEntity) throws ClientErrorException {
+        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), ClientOBJ.class);
     }
 
     public <T> T findClientBySearch(Class<T> responseType, String usrValue) throws ClientErrorException {
@@ -75,8 +76,8 @@ public class ClientFacadeREST implements ClientInterface{
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public void remove(String id) throws ClientErrorException {
-        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
+    public void remove(Integer id) throws ClientErrorException {
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete(ClientOBJ.class);
     }
 
     public void close() {

@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -27,7 +29,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
-import objects.Client;
+import objects.ClientOBJ;
 
 /**
  *
@@ -52,7 +54,7 @@ public class ClientControlWindow {
     @FXML
     private Button buttonReport;
     @FXML
-    private Button buttonReport1;
+    private Button buttonInsert;
     @FXML
     private Button buttonSearch;
     @FXML
@@ -85,8 +87,10 @@ public class ClientControlWindow {
     private TableColumn columnGoal;
     @FXML
     private TableColumn columnHeight;
+    @FXML
+    private ContextMenu menuTable;
     
-    private ObservableList<Client> clientsData;
+    private ObservableList<ClientOBJ> clientsData;
 
     public Stage getStage() {
         return stage;
@@ -107,6 +111,7 @@ public class ClientControlWindow {
         // Confirmar el cierre de la aplicación
         stage.setOnCloseRequest(this::handleExitAction);
         
+        // TABLE //
         tableClients.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         columnAge.setCellValueFactory(new PropertyValueFactory("age"));
@@ -120,9 +125,15 @@ public class ClientControlWindow {
         columnPasswrd.setCellValueFactory(new PropertyValueFactory("password"));
         columnStatus.setCellValueFactory(new PropertyValueFactory("status"));
         
-        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<Client>>() {}));
+        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {}));
         tableClients.setItems(clientsData);
-
+        tableClients.setEditable(true);
+        
+        menuTable.getItems().get(0).setOnAction(this::handleDeleteAction);
+        
+        // BUTTONS // 
+        buttonInsert.setOnAction(this::handleInsertAction);
+        
         stage.show();
         LOGGER.info("ClientController window initialized");
     }
@@ -142,6 +153,34 @@ public class ClientControlWindow {
             }
         } catch (Exception e) {
             String msg = "Error closing the app: " + e.getMessage();
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, msg);
+        }
+    }
+    
+    public void handleInsertAction(ActionEvent action){
+        ClientOBJ client = new ClientOBJ();
+        ClientFactory.getModel().create(client);
+        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
+        }));
+        tableClients.setItems(clientsData);
+        tableClients.refresh();
+    }
+    
+    public void handleDeleteAction(ActionEvent action){
+        Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure ypu want to delete this item?");
+        a.showAndWait();
+        try {
+            if (a.getResult().equals(ButtonType.CANCEL)) {
+                action.consume();
+            } else {
+                ClientFactory.getModel().remove(((ClientOBJ) tableClients.getSelectionModel().getSelectedItem()).getUser_id());
+                tableClients.getItems().remove(tableClients.getSelectionModel().getSelectedItem());
+                tableClients.refresh();
+            }
+        } catch (Exception e) {
+            String msg = "Error deleting the Client: " + e.getMessage();
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, msg);

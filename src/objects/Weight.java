@@ -29,9 +29,9 @@ public class Weight implements Serializable {
      * Date that the client saved his weight
      */   
     private SimpleObjectProperty<Date> date;
-    private SimpleObjectProperty<Client> client;
+    private SimpleObjectProperty<ClientOBJ> client;
 
-    public Weight(Float weight, Date date, Client client) {
+    public Weight(Float weight, Date date, ClientOBJ client) {
         this.weight = new SimpleFloatProperty(weight);
         this.date = new SimpleObjectProperty<>(date);
         this.client = new SimpleObjectProperty<>(client);
@@ -65,11 +65,11 @@ public class Weight implements Serializable {
         this.date.set(date);
     }
 
-    public Client getClient() {
+    public ClientOBJ getClient() {
         return client.get();
     }
 
-    public void setClient(Client client) {
+    public void setClient(ClientOBJ client) {
         this.client.set(client);
     }
 
