@@ -5,19 +5,53 @@
  */
 package ui.controllers;
 
+import exceptions.InvalidPasswordValueException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
  * @author Sendoa
  */
 public class PasswordChangeVController {
+
     private Stage stage;
     private static final Logger LOGGER = Logger.getLogger("PasswordChangeVController.class");
-    
+
+    @FXML
+    private PasswordField newPasswrdField;
+    @FXML
+    private PasswordField confNewPasswdField;
+    @FXML
+    private PasswordField passwrdField;
+    @FXML
+    private Label lblPasswrd;
+    @FXML
+    private Label lblNewPasswrd;
+    @FXML
+    private Label lblConfNewPasswrd;
+    @FXML
+    private ImageView imgNewPasswrd;
+    @FXML
+    private ImageView imgConfPassword;
+    @FXML
+    private ImageView imgPassword;
+
     public Stage getStage() {
         return stage;
     }
@@ -25,15 +59,100 @@ public class PasswordChangeVController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
-    public void initStage(Parent root){
+
+    public void initStage(Parent root) {
         Scene scene = new Scene(root);
 
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
-
-        stage.setTitle("SignIn");
+        stage.setTitle("Password Change");
         stage.setResizable(false);
-        
+
+        stage.setOnCloseRequest(this::handleExitAction);
+
+        // PASSWORD FIELDS EVENTS //
+        passwrdField.setOnKeyTyped(this::handleKeyPasswdLength);
+        confNewPasswdField.setOnKeyTyped(this::handleKeyPasswdLength);
+        newPasswrdField.setOnKeyTyped(this::handleKeyPasswdLength);
+        passwrdField.setOnKeyReleased(this::handleKeyPassword);
+        confNewPasswdField.setOnKeyReleased(this::handleKeyPassword);
+        newPasswrdField.setOnKeyReleased(this::handleKeyPassword);
+
         stage.show();
+    }
+
+    private void handleExitAction(WindowEvent event) {
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
+        a.showAndWait();
+        try {
+            if (a.getResult().equals(ButtonType.CANCEL)) {
+                event.consume();
+            } else {
+                stage.close();
+            }
+        } catch (Exception e) {
+            String msg = "Error closing the app: " + e.getMessage();
+            Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, msg);
+        }
+    }
+
+    private void handleKeyPasswdLength(KeyEvent event) {
+        if (((PasswordField) event.getSource()).getText().length() >= 25) {
+            event.consume();
+            ((PasswordField) event.getSource()).setText(((PasswordField) event.getSource()).getText().substring(0, 25));
+        }
+    }
+
+    private void handleKeyPassword(KeyEvent event) {
+        try {
+            if (event.equals(null)) {
+                if (passwrdField.getText().isEmpty() || newPasswrdField.getText().isEmpty() || confNewPasswdField.getText().isEmpty()) {
+                    throw new InvalidPasswordValueException("Enter a password");
+                }
+            } else {
+                if (((PasswordField) event.getSource()).getText().isEmpty()) {
+                    throw new InvalidPasswordValueException("Enter a password");
+                }
+            }
+
+            // Si el campo no está vacío comprobar que la contraseña tiene al menos 8 caracteres y que no hay espacios.
+            // En caso de que no tenga 8 caracteres o contenga espacios en blanco cambiar el color de la imagen y el textfield a rojo.
+            if (event.equals(null)) {
+                if (passwrdField.getText().contains(" ") || newPasswrdField.getText().contains(" ") || confNewPasswdField.getText().contains(" ") || passwrdField.getText().length() < 8 || newPasswrdField.getText().length() < 8 || confNewPasswdField.getText().length() < 8) {
+                    throw new InvalidPasswordValueException("Password must be at least 8 characters long \nand must not contain blank spaces");
+                }
+            } else {
+                if(((PasswordField) event.getSource()).getText().contains(" ") || ((PasswordField) event.getSource()).getText().length() < 8) {
+                    throw new InvalidPasswordValueException("Password must be at least 8 characters long \nand must not contain blank spaces");
+                }
+            }
+            ((PasswordField) event.getSource()).setStyle("-fx-border-color: #ABB2B9;");
+            if (((PasswordField) event.getSource()).equals(passwrdField)) {
+                lblPasswrd.setText("");
+                imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
+            } else if (((PasswordField) event.getSource()).equals(newPasswrdField)) {
+                lblNewPasswrd.setText("");
+                imgNewPasswrd.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
+            } else {
+                lblConfNewPasswrd.setText("");
+                imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
+            }
+        } catch (InvalidPasswordValueException ex) {
+            ((PasswordField) event.getSource()).setStyle("-fx-border-color: red;");
+            if (((PasswordField) event.getSource()).equals(passwrdField)) {
+                lblPasswrd.setText(ex.getMessage());
+                imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+            } else if (((PasswordField) event.getSource()).equals(newPasswrdField)) {
+                lblNewPasswrd.setText(ex.getMessage());
+                imgNewPasswrd.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+            } else {
+                lblConfNewPasswrd.setText(ex.getMessage());
+                imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+            }
+            LOGGER.info(ex.getMessage());
+        }
+
     }
 }

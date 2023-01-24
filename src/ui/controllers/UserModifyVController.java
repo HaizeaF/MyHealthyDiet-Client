@@ -6,14 +6,20 @@
 package ui.controllers;
 
 import exceptions.InvalidUserValueException;
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -22,6 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -150,8 +157,27 @@ public class UserModifyVController {
         buttonChangePasswrd.setOnAction(this::changePassword);
 
         // MENU BUTTONS //
+        stage.setOnCloseRequest(this::handleExitAction);
+
         stage.show();
         LOGGER.info("Modify window initialiced");
+    }
+
+    private void handleExitAction(WindowEvent event) {
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
+        a.showAndWait();
+        try {
+            if (a.getResult().equals(ButtonType.CANCEL)) {
+                event.consume();
+            } else {
+                Platform.exit();
+            }
+        } catch (Exception e) {
+            String msg = "Error closing the app: " + e.getMessage();
+            Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, msg);
+        }
     }
 
     /**
@@ -201,9 +227,16 @@ public class UserModifyVController {
     private void numberChanged(KeyEvent event) {
         buttonConfirm.setDisable(false);
         buttonCancel.setDisable(false);
-        if (((TextField) event.getSource()).getText().length() >= 3) {
-            event.consume();
-            ((TextField) event.getSource()).setText(((TextField) event.getSource()).getText().substring(0, 3));
+        if (((TextField) event.getSource()).equals(heightTextField)) {
+            if (heightTextField.getText().length() >= 3) {
+                event.consume();
+                ((TextField) event.getSource()).setText(((TextField) event.getSource()).getText().substring(0, 3));
+            }
+        } else {
+            if (ageTextField.getText().length() >= 2) {
+                event.consume();
+                ((TextField) event.getSource()).setText(((TextField) event.getSource()).getText().substring(0, 2));
+            }
         }
     }
 
@@ -216,6 +249,16 @@ public class UserModifyVController {
     }
 
     private void changePassword(ActionEvent event) {
-
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PasswordChange.fxml"));
+            Parent root = (Parent) loader.load();
+            PasswordChangeVController controller = ((PasswordChangeVController) loader.getController());
+            controller.setStage(new Stage());
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage());
+            alert.show();
+            LOGGER.info(ex.getMessage());
+        }
     }
 }
