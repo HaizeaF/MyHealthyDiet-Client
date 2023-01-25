@@ -41,7 +41,6 @@ public class ClientOBJ extends User{
     public ClientOBJ(Integer user_id, String login, String email, String fullName, StatusEnum status,
                   PrivilegeEnum privilege, String password, Date lastPasswordChange, Integer age, Float height, 
                   GenreEnum genre, GoalEnum goal, List<Weight> weights) {
-        // TODO Implement this method
         super(user_id, login, email, fullName, status, privilege, password, lastPasswordChange);
         this.age = new SimpleIntegerProperty(age);
         this.height = new SimpleFloatProperty(height);

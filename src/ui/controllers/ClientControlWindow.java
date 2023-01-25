@@ -6,6 +6,7 @@
 package ui.controllers;
 
 import businessLogic.ClientFactory;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,12 +25,21 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.converter.DateStringConverter;
+import javafx.util.converter.FloatStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import javax.ws.rs.core.GenericType;
 import objects.ClientOBJ;
+import objects.GenreEnum;
+import objects.GoalEnum;
+import objects.StatusEnum;
 
 /**
  *
@@ -89,7 +99,7 @@ public class ClientControlWindow {
     private TableColumn columnHeight;
     @FXML
     private ContextMenu menuTable;
-    
+
     private ObservableList<ClientOBJ> clientsData;
 
     public Stage getStage() {
@@ -110,10 +120,10 @@ public class ClientControlWindow {
 
         // Confirmar el cierre de la aplicación
         stage.setOnCloseRequest(this::handleExitAction);
-        
-        // TABLE //
+
+        // LOAD TABLE ITEMS //
         tableClients.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
+
         columnAge.setCellValueFactory(new PropertyValueFactory("age"));
         columnEmail.setCellValueFactory(new PropertyValueFactory("email"));
         columnGenre.setCellValueFactory(new PropertyValueFactory("genre"));
@@ -124,23 +134,84 @@ public class ClientControlWindow {
         columnPasswordChange.setCellValueFactory(new PropertyValueFactory("lastPasswordChange"));
         columnPasswrd.setCellValueFactory(new PropertyValueFactory("password"));
         columnStatus.setCellValueFactory(new PropertyValueFactory("status"));
-        
-        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {}));
+
+        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
+        }));
         tableClients.setItems(clientsData);
         tableClients.setEditable(true);
-        
+
+        // EDITABLE ITEMS //
+//        columnAge.setCellFactory(TextFieldTableCell.<ClientOBJ, Integer>forTableColumn(new IntegerStringConverter()));
+//        columnAge.setOnEditCommit((CellEditEvent<ClientOBJ, Integer> t) -> {
+//            ((ClientOBJ) t.getTableView().getItems().get(
+//                    t.getTablePosition().getRow())).setAge(t.getNewValue());
+//            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+//        });
+//
+//        columnEmail.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
+//        columnEmail.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
+//                    ((ClientOBJ) t.getTableView().getItems().get(
+//                            t.getTablePosition().getRow())).setEmail(t.getNewValue());
+//                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+//                });
+//
+//        columnGenre.setCellFactory(ComboBoxTableCell.<ClientOBJ, GenreEnum>forTableColumn(GenreEnum.values()));
+//        columnGenre.setOnEditCommit((CellEditEvent<ClientOBJ, GenreEnum> t) -> {
+//            ((ClientOBJ) t.getTableView().getItems().get(
+//                    t.getTablePosition().getRow())).setGenre(t.getNewValue());
+//            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+//        });
+//
+//        columnGoal.setCellFactory(ComboBoxTableCell.<ClientOBJ, GoalEnum>forTableColumn(GoalEnum.values()));
+//        columnGoal.setOnEditCommit((CellEditEvent<ClientOBJ, GoalEnum> t) -> {
+//            ((ClientOBJ) t.getTableView().getItems().get(
+//                    t.getTablePosition().getRow())).setGoal(t.getNewValue());
+//            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+//        });
+//
+//        columnHeight.setCellFactory(TextFieldTableCell.<ClientOBJ, Float>forTableColumn(new FloatStringConverter()));
+//        columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
+//                    ((ClientOBJ) t.getTableView().getItems().get(
+//                            t.getTablePosition().getRow())).setHeight(t.getNewValue());
+//                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+//                });
+//
+//        columnLogin.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
+//        columnLogin.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
+//                    ((ClientOBJ) t.getTableView().getItems().get(
+//                            t.getTablePosition().getRow())).setLogin(t.getNewValue());
+//                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+//                });
+//
+//        columnName.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
+//        columnName.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
+//                    ((ClientOBJ) t.getTableView().getItems().get(
+//                            t.getTablePosition().getRow())).setFullName(t.getNewValue());
+//                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+//                });
+//
+//        columnStatus.setCellFactory(ComboBoxTableCell.<ClientOBJ, StatusEnum>forTableColumn(StatusEnum.values()));
+//        columnStatus.setOnEditCommit((CellEditEvent<ClientOBJ, StatusEnum> t) -> {
+//            ((ClientOBJ) t.getTableView().getItems().get(
+//                    t.getTablePosition().getRow())).setStatus(t.getNewValue());
+//            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+//        });
+
+        // DELETE ITEMS
         menuTable.getItems().get(0).setOnAction(this::handleDeleteAction);
-        
-        // BUTTONS // 
+
+        // INSERT ITEMS // 
         buttonInsert.setOnAction(this::handleInsertAction);
-        
+
         stage.show();
         LOGGER.info("ClientController window initialized");
     }
 
     /**
      * This method close the application using an alert
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     private void handleExitAction(WindowEvent event) {
         Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
@@ -158,17 +229,17 @@ public class ClientControlWindow {
             LOGGER.log(Level.SEVERE, msg);
         }
     }
-    
-    public void handleInsertAction(ActionEvent action){
-        ClientOBJ client = new ClientOBJ();
+
+    public void handleInsertAction(ActionEvent action) {
+        ClientOBJ client = (ClientOBJ) new ClientOBJ();
         ClientFactory.getModel().create(client);
         clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
         }));
         tableClients.setItems(clientsData);
         tableClients.refresh();
     }
-    
-    public void handleDeleteAction(ActionEvent action){
+
+    public void handleDeleteAction(ActionEvent action) {
         Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure ypu want to delete this item?");
         a.showAndWait();
         try {
