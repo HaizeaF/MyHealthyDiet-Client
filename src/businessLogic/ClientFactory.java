@@ -12,10 +12,11 @@ import services.ClientFacadeREST;
  * @author Sendoa
  */
 public class ClientFactory {
+
     public static ClientInterface model;
-    
-    public static ClientInterface getModel(){
-        if(model==null){
+
+    public static ClientInterface getModel() {
+        if (model == null) {
             model = new ClientFacadeREST();
         }
         return model;
