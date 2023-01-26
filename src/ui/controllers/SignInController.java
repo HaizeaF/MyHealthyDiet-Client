@@ -187,13 +187,20 @@ public class SignInController {
                 UserInterface model = UserFactory.getModel();
                 byte[] passwordBytes = new Asymmetric().cipher(textFieldPassword.getText());
                 User user = model.logIn(User.class, textFieldUsername.getText(), HashMD5.hexadecimal(passwordBytes));
-                stage.close();/*
+                if (user != null) {
+                    LOGGER.info("Usuario encontrado");
+                } else {
+                    LOGGER.info("Usuario no encontrado");
+                }
+                stage.close();
+                /*
                 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/ApplicationView.fxml"));
                 Parent root = (Parent) loader.load();
                 ApplicationVController controller = ((ApplicationVController) loader.getController());
                 controller.setStage(new Stage());
                 controller.setUser(user);
-                controller.initStage(root);*/
+                controller.initStage(root);
+                */
             }
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
