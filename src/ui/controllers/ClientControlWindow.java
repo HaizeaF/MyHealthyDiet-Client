@@ -78,25 +78,25 @@ public class ClientControlWindow {
     @FXML
     private TableView tableClients;
     @FXML
-    private TableColumn columnEmail;
+    private TableColumn<ClientOBJ, String> columnEmail;
     @FXML
-    private TableColumn columnName;
+    private TableColumn<ClientOBJ, String> columnName;
     @FXML
     private TableColumn columnPasswordChange;
     @FXML
-    private TableColumn columnLogin;
+    private TableColumn<ClientOBJ, String> columnLogin;
     @FXML
     private TableColumn columnPasswrd;
     @FXML
-    private TableColumn columnStatus;
+    private TableColumn<ClientOBJ, StatusEnum> columnStatus;
     @FXML
-    private TableColumn columnAge;
+    private TableColumn<ClientOBJ, Integer> columnAge;
     @FXML
-    private TableColumn columnGenre;
+    private TableColumn<ClientOBJ, GenreEnum> columnGenre;
     @FXML
-    private TableColumn columnGoal;
+    private TableColumn<ClientOBJ, GoalEnum> columnGoal;
     @FXML
-    private TableColumn columnHeight;
+    private TableColumn<ClientOBJ, Float> columnHeight;
     @FXML
     private ContextMenu menuTable;
 
@@ -141,61 +141,61 @@ public class ClientControlWindow {
         tableClients.setEditable(true);
 
         // EDITABLE ITEMS //
-//        columnAge.setCellFactory(TextFieldTableCell.<ClientOBJ, Integer>forTableColumn(new IntegerStringConverter()));
-//        columnAge.setOnEditCommit((CellEditEvent<ClientOBJ, Integer> t) -> {
-//            ((ClientOBJ) t.getTableView().getItems().get(
-//                    t.getTablePosition().getRow())).setAge(t.getNewValue());
-//            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-//        });
-//
-//        columnEmail.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
-//        columnEmail.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
-//                    ((ClientOBJ) t.getTableView().getItems().get(
-//                            t.getTablePosition().getRow())).setEmail(t.getNewValue());
-//                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-//                });
-//
-//        columnGenre.setCellFactory(ComboBoxTableCell.<ClientOBJ, GenreEnum>forTableColumn(GenreEnum.values()));
-//        columnGenre.setOnEditCommit((CellEditEvent<ClientOBJ, GenreEnum> t) -> {
-//            ((ClientOBJ) t.getTableView().getItems().get(
-//                    t.getTablePosition().getRow())).setGenre(t.getNewValue());
-//            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-//        });
-//
-//        columnGoal.setCellFactory(ComboBoxTableCell.<ClientOBJ, GoalEnum>forTableColumn(GoalEnum.values()));
-//        columnGoal.setOnEditCommit((CellEditEvent<ClientOBJ, GoalEnum> t) -> {
-//            ((ClientOBJ) t.getTableView().getItems().get(
-//                    t.getTablePosition().getRow())).setGoal(t.getNewValue());
-//            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-//        });
-//
-//        columnHeight.setCellFactory(TextFieldTableCell.<ClientOBJ, Float>forTableColumn(new FloatStringConverter()));
-//        columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
-//                    ((ClientOBJ) t.getTableView().getItems().get(
-//                            t.getTablePosition().getRow())).setHeight(t.getNewValue());
-//                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-//                });
-//
-//        columnLogin.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
-//        columnLogin.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
-//                    ((ClientOBJ) t.getTableView().getItems().get(
-//                            t.getTablePosition().getRow())).setLogin(t.getNewValue());
-//                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-//                });
-//
-//        columnName.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
-//        columnName.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
-//                    ((ClientOBJ) t.getTableView().getItems().get(
-//                            t.getTablePosition().getRow())).setFullName(t.getNewValue());
-//                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-//                });
-//
-//        columnStatus.setCellFactory(ComboBoxTableCell.<ClientOBJ, StatusEnum>forTableColumn(StatusEnum.values()));
-//        columnStatus.setOnEditCommit((CellEditEvent<ClientOBJ, StatusEnum> t) -> {
-//            ((ClientOBJ) t.getTableView().getItems().get(
-//                    t.getTablePosition().getRow())).setStatus(t.getNewValue());
-//            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-//        });
+        columnAge.setCellFactory(TextFieldTableCell.<ClientOBJ, Integer>forTableColumn(new IntegerStringConverter()));
+        columnAge.setOnEditCommit((CellEditEvent<ClientOBJ, Integer> t) -> {
+            ((ClientOBJ) t.getTableView().getItems().get(
+                    t.getTablePosition().getRow())).setAge(t.getNewValue());
+            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+        });
+
+        columnEmail.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
+        columnEmail.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setEmail(t.getNewValue());
+                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                });
+
+        columnGenre.setCellFactory(ComboBoxTableCell.<ClientOBJ, GenreEnum>forTableColumn(GenreEnum.values()));
+        columnGenre.setOnEditCommit((CellEditEvent<ClientOBJ, GenreEnum> t) -> {
+            ((ClientOBJ) t.getTableView().getItems().get(
+                    t.getTablePosition().getRow())).setGenre(t.getNewValue());
+            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+        });
+
+        columnGoal.setCellFactory(ComboBoxTableCell.<ClientOBJ, GoalEnum>forTableColumn(GoalEnum.values()));
+        columnGoal.setOnEditCommit((CellEditEvent<ClientOBJ, GoalEnum> t) -> {
+            ((ClientOBJ) t.getTableView().getItems().get(
+                    t.getTablePosition().getRow())).setGoal(t.getNewValue());
+            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+        });
+
+        columnHeight.setCellFactory(TextFieldTableCell.<ClientOBJ, Float>forTableColumn(new FloatStringConverter()));
+        columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setHeight(t.getNewValue());
+                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                });
+
+        columnLogin.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
+        columnLogin.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setLogin(t.getNewValue());
+                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                });
+
+        columnName.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
+        columnName.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setFullName(t.getNewValue());
+                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                });
+
+        columnStatus.setCellFactory(ComboBoxTableCell.<ClientOBJ, StatusEnum>forTableColumn(StatusEnum.values()));
+        columnStatus.setOnEditCommit((CellEditEvent<ClientOBJ, StatusEnum> t) -> {
+            ((ClientOBJ) t.getTableView().getItems().get(
+                    t.getTablePosition().getRow())).setStatus(t.getNewValue());
+            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+        });
 
         // DELETE ITEMS
         menuTable.getItems().get(0).setOnAction(this::handleDeleteAction);
