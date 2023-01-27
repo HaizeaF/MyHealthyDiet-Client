@@ -1,6 +1,6 @@
 package businessLogic;
 
-import services.PlateFacadeREST;
+import services.PlateFacadeRESTClient;
 
 /**
  *
@@ -11,7 +11,7 @@ public class PlateFactory {
     
     public static PlateInterface getModel(){
         if(model==null){
-            model = new PlateFacadeREST();
+            model = new PlateFacadeRESTClient();
         }
         return model;
     }

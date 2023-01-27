@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3b0f320e-9ad6-4ccc-9324-544e07a21d55">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="79" uuid="93419c05-6ea3-4435-9aea-96392c55ddd9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" size="24"/>
+				</textElement>
+				<text><![CDATA[Plates Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="103" height="35" uuid="949f69e4-4bb1-4dbc-ac3c-de83243c5adf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std"/>
+				</textElement>
+				<text><![CDATA[NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="213" y="0" width="92" height="35" uuid="812516f7-be3b-4410-90c9-e0adc3e41e6d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std"/>
+				</textElement>
+				<text><![CDATA[CARBOHYDRATES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="0" width="55" height="35" uuid="7456ef56-9bca-43c6-abbe-8483f499126d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std"/>
+				</textElement>
+				<text><![CDATA[PROTEINS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="0" width="70" height="35" uuid="bc5bd0a6-9a2f-458c-8004-7f0b1c5cffad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std"/>
+				</textElement>
+				<text><![CDATA[VEGETARIAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="305" y="0" width="55" height="35" uuid="466f667c-38aa-43c9-bfda-cf13bcfc342e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std"/>
+				</textElement>
+				<text><![CDATA[LIPIDS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="158" y="0" width="55" height="35" uuid="8d36591e-1df9-4153-bee4-fb1df1d88668"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std"/>
+				</textElement>
+				<text><![CDATA[CALORIES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="103" y="0" width="55" height="35" uuid="fd0fa187-c788-4264-b532-8231324ffdb5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std"/>
+				</textElement>
+				<text><![CDATA[MEAL TYPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="485" y="0" width="70" height="35" uuid="64c2da0d-fb13-4c0e-8a3a-4ce2bae3a3c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std"/>
+				</textElement>
+				<text><![CDATA[INGREDIENTS]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="103" height="125" uuid="b7813c6a-a891-4890-bb76-a9ba31c5f40b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plate.plateName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="103" y="0" width="55" height="125" uuid="4548cc0e-a115-4919-9936-23a0219afd94"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plate.mealType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="0" width="55" height="125" uuid="9ee23efe-ffb9-4f12-b388-dd3ec6a5c014"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plate.calories}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="213" y="0" width="92" height="125" uuid="e0f2ce9b-8eb1-47e7-9cb0-438d92dfae7d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plate.carbohydrates}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="0" width="55" height="125" uuid="00a04c54-1621-4c71-99c0-688af04ae810"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plate.lipids}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="55" height="125" uuid="123356b7-ee06-4e18-8c7f-8735be73e60f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plate.proteins}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="415" y="0" width="70" height="125" uuid="1d4ad080-5bc7-422d-a848-eeddabf3fc3f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plate.isVegetarian}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="485" y="0" width="70" height="125" uuid="ca55f870-d015-4fc3-964f-ebc034f18b4c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plate.ingredients}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
