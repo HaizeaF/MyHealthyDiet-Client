@@ -11,6 +11,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import objects.ClientOBJ;
+import objects.StatusEnum;
 
 /**
  * Jersey REST client generated for REST resource:ClientFacadeREST [client]<br>
@@ -35,13 +36,13 @@ public class ClientFacadeREST implements ClientInterface{
         webTarget = client.target(BASE_URI).path("client");
     }
 
-    public <T> T findClientById(Class<T> responseType, String id) throws ClientErrorException {
+    public <T> T findClientById(GenericType<T> responseType, String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
-    public <T> T findClientByStatus(Class<T> responseType, String status) throws ClientErrorException {
+    public <T> T findClientByStatus(GenericType<T> responseType, String status) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("status/{0}", new Object[]{status}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -55,7 +56,7 @@ public class ClientFacadeREST implements ClientInterface{
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), ClientOBJ.class);
     }
 
-    public <T> T findClientByLogin(Class<T> responseType, String usrLogin) throws ClientErrorException {
+    public <T> T findClientByLogin(GenericType<T> responseType, String usrLogin) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("login/{0}", new Object[]{usrLogin}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -65,7 +66,7 @@ public class ClientFacadeREST implements ClientInterface{
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), ClientOBJ.class);
     }
 
-    public <T> T findClientBySearch(Class<T> responseType, String usrValue) throws ClientErrorException {
+    public <T> T findClientBySearch(GenericType<T> responseType, String usrValue) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("search/{0}", new Object[]{usrValue}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);

@@ -12,58 +12,58 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
 
 /**
  *
  * @author Sendoa
  */
-@XmlRootElement(name="client")
-public class ClientOBJ extends User{
+@XmlRootElement(name = "client")
+public class ClientOBJ extends User {
 
     private static final long serialVersionUID = 1L;
-    private SimpleIntegerProperty age;
-    
+    // Age is supposed to be an Integer, due to some errors I had with the table it had to be changed to String 
+    // The functionality with the Server is still the same
+    private SimpleStringProperty age;
+
     private SimpleFloatProperty height;
-    
+
     private SimpleObjectProperty<GenreEnum> genre;
-    
+
     private SimpleObjectProperty<GoalEnum> goal;
     /**
      * @associates <{entities.Weight}>
      */
     private SimpleListProperty<Weight> weights;
 
-
     public ClientOBJ(Integer user_id, String login, String email, String fullName, StatusEnum status,
-                  PrivilegeEnum privilege, String password, Date lastPasswordChange, Integer age, Float height, 
-                  GenreEnum genre, GoalEnum goal, List<Weight> weights) {
+            PrivilegeEnum privilege, String password, Date lastPasswordChange, String age, Float height,
+            GenreEnum genre, GoalEnum goal, List<Weight> weights) {
         super(user_id, login, email, fullName, status, privilege, password, lastPasswordChange);
-        this.age = new SimpleIntegerProperty(age);
+        this.age = new SimpleStringProperty(age);
         this.height = new SimpleFloatProperty(height);
         this.genre = new SimpleObjectProperty<>(genre);
         this.goal = new SimpleObjectProperty<>(goal);
         this.weights = new SimpleListProperty<>(FXCollections.observableList(weights));
     }
 
-
     public ClientOBJ() {
         super(0, "login", "example@mail.com", "Example Name", StatusEnum.DISABLED, PrivilegeEnum.USER, "abcd*1234", null);
-        this.age = new SimpleIntegerProperty(20);
-        this.height = new SimpleFloatProperty(Float.parseFloat("180"));
+        this.age = new SimpleStringProperty("20");
+        this.height = new SimpleFloatProperty(Float.parseFloat("1.80"));
         this.genre = new SimpleObjectProperty<>(GenreEnum.NON_BINARY);
         this.goal = new SimpleObjectProperty<>(GoalEnum.MAINTAIN);
         this.weights = new SimpleListProperty<>();
     }
 
-    public void setAge(Integer age) {
+    public void setAge(String age) {
         this.age.set(age);
     }
 
-    public Integer getAge() {
+    public String getAge() {
         return age.get();
     }
 
@@ -94,7 +94,7 @@ public class ClientOBJ extends User{
     public void setWeights(List<Weight> weights) {
         this.weights.set(FXCollections.observableList(weights));
     }
-    
+
     public List<Weight> getWeights() {
         return weights.get();
     }
@@ -123,5 +123,5 @@ public class ClientOBJ extends User{
     public String toString() {
         return super.toString();
     }
-    
+
 }
