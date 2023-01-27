@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Sendoa
  */
-@XmlRootElement
+@XmlRootElement(name="client")
 public class Client extends User{
 
     private static final long serialVersionUID = 1L;
