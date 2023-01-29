@@ -9,7 +9,7 @@ package exceptions;
  * @author Sendoa
  * Exception that is thrown when the username format is not correct
  */
-public class InvalidUserValueException extends Exception{
+public class InvalidUserValueException extends Exception {
     public InvalidUserValueException() {
         super();
     }
