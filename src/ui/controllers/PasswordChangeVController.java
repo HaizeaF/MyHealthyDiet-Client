@@ -5,7 +5,13 @@
  */
 package ui.controllers;
 
+import businessLogic.ClientFactory;
+import businessLogic.UserFactory;
 import exceptions.InvalidPasswordValueException;
+import java.security.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -125,7 +131,7 @@ public class PasswordChangeVController {
 
     private void handleKeyPassword(KeyEvent event) {
         try {
-            if (event.equals(null)) {
+            if (event == null) {
                 if (passwrdField.getText().isEmpty() || newPasswrdField.getText().isEmpty() || confNewPasswdField.getText().isEmpty()) {
                     throw new InvalidPasswordValueException("Enter a password");
                 }
@@ -137,7 +143,7 @@ public class PasswordChangeVController {
 
             // Si el campo no está vacío comprobar que la contraseña tiene al menos 8 caracteres y que no hay espacios.
             // En caso de que no tenga 8 caracteres o contenga espacios en blanco cambiar el color de la imagen y el textfield a rojo.
-            if (event.equals(null)) {
+            if (event == null) {
                 if (passwrdField.getText().contains(" ") || newPasswrdField.getText().contains(" ") || confNewPasswdField.getText().contains(" ") || passwrdField.getText().length() < 8 || newPasswrdField.getText().length() < 8 || confNewPasswdField.getText().length() < 8) {
                     throw new InvalidPasswordValueException("Password must be at least 8 characters long \nand must not contain blank spaces");
                 }
@@ -145,40 +151,70 @@ public class PasswordChangeVController {
                 if (((PasswordField) event.getSource()).getText().contains(" ") || ((PasswordField) event.getSource()).getText().length() < 8) {
                     throw new InvalidPasswordValueException("Password must be at least 8 characters long \nand must not contain blank spaces");
                 }
-            }
-            ((PasswordField) event.getSource()).setStyle("-fx-border-color: #ABB2B9;");
-            if (((PasswordField) event.getSource()).equals(passwrdField)) {
-                lblPasswrd.setText("");
-                imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
-            } else if (((PasswordField) event.getSource()).equals(newPasswrdField)) {
-                lblNewPasswrd.setText("");
-                imgNewPasswrd.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
-            } else {
-                lblConfNewPasswrd.setText("");
-                imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
+                ((PasswordField) event.getSource()).setStyle("-fx-border-color: #ABB2B9;");
+                if (((PasswordField) event.getSource()).equals(passwrdField)) {
+                    lblPasswrd.setText("");
+                    imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
+                } else if (((PasswordField) event.getSource()).equals(newPasswrdField)) {
+                    lblNewPasswrd.setText("");
+                    imgNewPasswrd.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
+                } else {
+                    lblConfNewPasswrd.setText("");
+                    imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password.png")));
+                }
             }
         } catch (InvalidPasswordValueException ex) {
-            ((PasswordField) event.getSource()).setStyle("-fx-border-color: red;");
-            if (((PasswordField) event.getSource()).equals(passwrdField)) {
+            if (event != null) {
+                ((PasswordField) event.getSource()).setStyle("-fx-border-color: red;");
+                if (((PasswordField) event.getSource()).equals(passwrdField)) {
+                    lblPasswrd.setText(ex.getMessage());
+                    imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+                } else if (((PasswordField) event.getSource()).equals(newPasswrdField)) {
+                    lblNewPasswrd.setText(ex.getMessage());
+                    imgNewPasswrd.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+                } else {
+                    lblConfNewPasswrd.setText(ex.getMessage());
+                    imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+                }
+            } else {
+                passwrdField.setStyle("-fx-border-color: red;");
                 lblPasswrd.setText(ex.getMessage());
                 imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
-            } else if (((PasswordField) event.getSource()).equals(newPasswrdField)) {
+                newPasswrdField.setStyle("-fx-border-color: red;");
                 lblNewPasswrd.setText(ex.getMessage());
                 imgNewPasswrd.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
-            } else {
+                confNewPasswdField.setStyle("-fx-border-color: red;");
                 lblConfNewPasswrd.setText(ex.getMessage());
                 imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
             }
+
             LOGGER.info(ex.getMessage());
         }
 
     }
-    
-    private void handleConfirm(ActionEvent event){
-        
+
+    private void handleConfirm(ActionEvent event) {
+        handleKeyPassword(null);
+        ClientOBJ client = UserFactory.getModel().logIn(ClientOBJ.class, this.client.getLogin(), passwrdField.getText());
+        if (client == null) {
+            lblPasswrd.setText("Password doesnt match");
+            passwrdField.setStyle("-fx-border-color: red;");
+            imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+        }
+        if (!newPasswrdField.getText().equals(confNewPasswdField.getText())) {
+            lblConfNewPasswrd.setText("Password doesnt match");
+            confNewPasswdField.setStyle("-fx-border-color: red;");
+            confNewPasswdField.setText("");
+            imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+        }
+        if (lblPasswrd.getText().isEmpty() && lblNewPasswrd.getText().isEmpty() && lblConfNewPasswrd.getText().isEmpty()) {
+            client.setPassword(newPasswrdField.getText());
+            client.setLastPasswordChange(new Date(System.currentTimeMillis()));
+            ClientFactory.getModel().edit(client);
+        }
     }
-    
-    private void handleCancel(ActionEvent event){
+
+    private void handleCancel(ActionEvent event) {
         stage.close();
     }
 }

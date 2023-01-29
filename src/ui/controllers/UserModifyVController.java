@@ -289,6 +289,7 @@ public class UserModifyVController {
             Parent root = (Parent) loader.load();
             PasswordChangeVController controller = ((PasswordChangeVController) loader.getController());
             controller.setStage(new Stage());
+            controller.setClient(client);
             controller.initStage(root);
         } catch (IOException ex) {
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage());
