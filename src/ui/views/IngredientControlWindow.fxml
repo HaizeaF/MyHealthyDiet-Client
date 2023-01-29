@@ -120,7 +120,7 @@
          <contextMenu>
             <ContextMenu fx:id="contextMenu">
               <items>
-                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
+                <MenuItem mnemonicParsing="false" text="Delete" />
               </items>
             </ContextMenu>
          </contextMenu>
@@ -142,15 +142,16 @@
       </Button>
       <MenuButton fx:id="menuButtonFilters" alignment="BASELINE_LEFT" contentDisplay="BOTTOM" layoutX="1213.0" layoutY="148.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="44.0" prefWidth="116.0" stylesheets="@../resources/DietsCSS.css" text="Filters" textFill="WHITE">
          <items>
-            <MenuItem fx:id="menuItemGoal" mnemonicParsing="false" text="Goal">
-               <graphic>
-                  <ImageView fx:id="imageGoal" fitHeight="34.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" style="-fx-graphic-text-gap: 100;">
-                     <image>
-                        <Image url="@../resources/filterInUse_icon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </MenuItem>
+            <MenuItem fx:id="menuItemVegetable" mnemonicParsing="false" text="Vegetable" />
+            <MenuItem fx:id="menuItemFruit" mnemonicParsing="false" text="Fruit" />
+            <MenuItem fx:id="menuItemNut" mnemonicParsing="false" text="Nut" />
+            <MenuItem fx:id="menuItemGrain" mnemonicParsing="false" text="Grain" />
+            <MenuItem fx:id="menuItemBean" mnemonicParsing="false" text="Bean" />
+            <MenuItem fx:id="menuItemMeat" mnemonicParsing="false" text="Meat" />
+            <MenuItem fx:id="menuItemPorultry" mnemonicParsing="false" text="Poultry" />
+            <MenuItem fx:id="menuItemFish" mnemonicParsing="false" text="Fish" />
+            <MenuItem fx:id="menuItemSeafood" mnemonicParsing="false" text="Seafood" />
+            <MenuItem fx:id="menuItemDairy" mnemonicParsing="false" text="Dairy" />
          </items>
          <font>
             <Font name="CircularStd-Book" size="18.0" />

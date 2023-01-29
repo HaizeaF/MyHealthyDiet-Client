@@ -51,6 +51,7 @@ public class Ingredient implements Serializable {
         this.foodType = new SimpleObjectProperty<>(foodType);
         this.isInSeason = new SimpleBooleanProperty(isInSeason);
         this.waterIndex = new SimpleFloatProperty(waterIndex);
+        
     }
     
     public Ingredient() {
@@ -87,6 +88,10 @@ public class Ingredient implements Serializable {
 
     public Boolean getIsInSeason() {
         return isInSeason.get();
+    }
+    
+    public SimpleBooleanProperty getIsInSeasonProperty() {
+        return this.isInSeason;
     }
 
     public void setIsInSeason(Boolean isInSeason) {

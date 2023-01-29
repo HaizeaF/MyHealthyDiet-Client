@@ -36,7 +36,7 @@ public class IngredientFacadeREST implements IngredientInterface {
 
     public IngredientFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entities.ingredient");
+        webTarget = client.target(BASE_URI).path("ingredient");
     }
 
     @Override
@@ -95,7 +95,7 @@ public class IngredientFacadeREST implements IngredientInterface {
     }
 
     @Override
-    public <T> T findIngredientsByName_XML(Class<T> responseType, String ingredientName) throws WebApplicationException {
+    public <T> T findIngredientsByName_XML(GenericType<T> responseType, String ingredientName) throws WebApplicationException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{ingredientName}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);

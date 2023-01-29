@@ -31,7 +31,7 @@ public class WeightFacadeREST {
 
     public WeightFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entities.weight");
+        webTarget = client.target(BASE_URI).path("weight");
     }
 
     public void removeWeight(String id) throws ClientErrorException {

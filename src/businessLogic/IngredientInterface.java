@@ -34,7 +34,7 @@ public interface IngredientInterface {
 
     public void remove(Integer id) throws WebApplicationException;
 
-    public <T> T findIngredientsByName_XML(Class<T> responseType, String ingredientName) throws WebApplicationException;
+    public <T> T findIngredientsByName_XML(GenericType<T> responseType, String ingredientName) throws WebApplicationException;
 
     public <T> T findIngredientsByName_JSON(Class<T> responseType, String ingredientName) throws WebApplicationException;
 }
