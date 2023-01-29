@@ -9,11 +9,13 @@ import exceptions.InvalidPasswordValueException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -23,6 +25,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import objects.ClientOBJ;
+import objects.User;
 
 /**
  *
@@ -51,6 +55,16 @@ public class PasswordChangeVController {
     private ImageView imgConfPassword;
     @FXML
     private ImageView imgPassword;
+    @FXML
+    private Button buttonConfirm;
+    @FXML
+    private Button buttonCancel;
+
+    private ClientOBJ client;
+
+    public void setClient(ClientOBJ client) {
+        this.client = client;
+    }
 
     public Stage getStage() {
         return stage;
@@ -77,6 +91,10 @@ public class PasswordChangeVController {
         passwrdField.setOnKeyReleased(this::handleKeyPassword);
         confNewPasswdField.setOnKeyReleased(this::handleKeyPassword);
         newPasswrdField.setOnKeyReleased(this::handleKeyPassword);
+
+        // BUTTON EVENTS //
+        buttonCancel.setOnAction(this::handleCancel);
+        buttonConfirm.setOnAction(this::handleConfirm);
 
         stage.show();
     }
@@ -124,7 +142,7 @@ public class PasswordChangeVController {
                     throw new InvalidPasswordValueException("Password must be at least 8 characters long \nand must not contain blank spaces");
                 }
             } else {
-                if(((PasswordField) event.getSource()).getText().contains(" ") || ((PasswordField) event.getSource()).getText().length() < 8) {
+                if (((PasswordField) event.getSource()).getText().contains(" ") || ((PasswordField) event.getSource()).getText().length() < 8) {
                     throw new InvalidPasswordValueException("Password must be at least 8 characters long \nand must not contain blank spaces");
                 }
             }
@@ -154,5 +172,13 @@ public class PasswordChangeVController {
             LOGGER.info(ex.getMessage());
         }
 
+    }
+    
+    private void handleConfirm(ActionEvent event){
+        
+    }
+    
+    private void handleCancel(ActionEvent event){
+        stage.close();
     }
 }

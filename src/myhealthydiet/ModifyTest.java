@@ -5,6 +5,7 @@
  */
 package myhealthydiet;
 
+import businessLogic.ClientFactory;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -15,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javax.ws.rs.core.GenericType;
+import objects.ClientOBJ;
 import ui.controllers.UserModifyVController;
 
 /**
@@ -32,6 +35,9 @@ public class ModifyTest extends Application {
 
         controller.setStage(stage);
 
+        ClientOBJ client = ClientFactory.getModel().findClientById(ClientOBJ.class, "6");
+        controller.setClient(client);
+        
         controller.initStage(root);
     }
 

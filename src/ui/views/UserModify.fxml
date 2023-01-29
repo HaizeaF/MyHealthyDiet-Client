@@ -117,7 +117,7 @@
       <TextField fx:id="userTextField" layoutX="590.0" layoutY="180.0" prefHeight="50.0" prefWidth="237.0" promptText="Username" stylesheets="@../resources/SignUpCSS.css" />
       <TextField fx:id="fullNameTextField" layoutX="853.0" layoutY="180.0" prefHeight="50.0" prefWidth="237.0" promptText="Full Name" stylesheets="@../resources/SignUpCSS.css" />
       <TextField fx:id="emailTextField" layoutX="590.0" layoutY="292.0" prefHeight="50.0" prefWidth="500.0" promptText="example@gmail.com" stylesheets="@../resources/SignUpCSS.css" />
-      <TextField fx:id="heightTextField" layoutX="590.0" layoutY="399.0" prefHeight="39.0" prefWidth="237.0" promptText="180" stylesheets="@../resources/SignUpCSS.css" />
+      <TextField fx:id="heightTextField" layoutX="590.0" layoutY="399.0" prefHeight="39.0" prefWidth="237.0" promptText="1.80" stylesheets="@../resources/SignUpCSS.css" />
       <TextField fx:id="ageTextField" layoutX="853.0" layoutY="399.0" prefHeight="39.0" prefWidth="237.0" promptText="20" stylesheets="@../resources/SignUpCSS.css" />
       <Label layoutX="590.0" layoutY="153.0" text="Your Username:">
          <font>

@@ -5,6 +5,7 @@
  */
 package ui.controllers;
 
+import objects.GenreEnum;
 import exceptions.InvalidUserValueException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -12,7 +13,9 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,13 +32,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import objects.GoalEnum;
+import objects.ClientOBJ;
+import objects.PrivilegeEnum;
+import objects.StatusEnum;
 
 /**
  *
  * @author Sendoa
  */
 public class UserModifyVController {
-
+    
     private Stage stage;
     private static final Logger LOGGER = Logger.getLogger("UserModifyVController.class");
     @FXML
@@ -92,32 +99,41 @@ public class UserModifyVController {
     private ImageView heightImg;
     @FXML
     private ImageView ageImg;
-
+    
+    private ClientOBJ client;
+    
     public Stage getStage() {
         return stage;
     }
-
+    
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
+    
+    public void setClient(ClientOBJ client){
+        this.client = client;
+    }
+    
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
-
+        
         stage.setScene(scene);
-
+        
         stage.setTitle("UserModify");
         stage.setResizable(false);
 
         // USERNAME TEXT FIELD //
         userTextField.setOnKeyTyped(this::textChanged);
         userTextField.setOnKeyReleased(this::usernameValid);
+        userTextField.setText(client.getLogin());
 
         // FULL NAME TEXT FIELD //
         fullNameTextField.setOnKeyTyped(this::textChanged);
+        fullNameTextField.setText(client.getFullName());
 
         // EMAIL TEXT FIELD //
         emailTextField.setOnKeyTyped(this::textChanged);
+        emailTextField.setText(client.getEmail());
 
         // HEIGHT TEXT FIELD //
         heightTextField.setOnKeyTyped(this::numberChanged);
@@ -125,11 +141,12 @@ public class UserModifyVController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                     String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    heightTextField.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+                if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                    heightTextField.setText(oldValue);
+               }
             }
         });
+        heightTextField.setText(String.valueOf(client.getHeight()));
 
         // AGE TEXT FIELD //
         ageTextField.setOnKeyTyped(this::numberChanged);
@@ -142,9 +159,18 @@ public class UserModifyVController {
                 }
             }
         });
+        ageTextField.setText(String.valueOf(client.getAge()));
 
         // GENRE COMBO BOX //
+        genreComboBox.setItems(FXCollections.observableArrayList(GenreEnum.values()));
+        genreComboBox.setOnAction(this::handleComboBox);
+        genreComboBox.setValue(client.getGenre());
+
         // GOAL COMBO BOX //
+        goalComboBox.setItems(FXCollections.observableArrayList(GoalEnum.values()));
+        goalComboBox.setOnAction(this::handleComboBox);
+        goalComboBox.setValue(client.getGoal());
+
         // BUTTON CONFIRM //
         buttonConfirm.setDisable(true);
         buttonConfirm.setOnAction(this::confirmChanges);
@@ -158,11 +184,12 @@ public class UserModifyVController {
 
         // MENU BUTTONS //
         stage.setOnCloseRequest(this::handleExitAction);
-
+        
         stage.show();
+        
         LOGGER.info("Modify window initialiced");
     }
-
+    
     private void handleExitAction(WindowEvent event) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
         a.showAndWait();
@@ -203,7 +230,7 @@ public class UserModifyVController {
             }
         }
     }
-
+    
     private void usernameValid(KeyEvent event) {
         try {
             if (userTextField.getText().isEmpty()) {
@@ -223,14 +250,14 @@ public class UserModifyVController {
             lblUsername.setText(e.getMessage());
         }
     }
-
+    
     private void numberChanged(KeyEvent event) {
         buttonConfirm.setDisable(false);
         buttonCancel.setDisable(false);
         if (((TextField) event.getSource()).equals(heightTextField)) {
-            if (heightTextField.getText().length() >= 3) {
+            if (heightTextField.getText().length() >= 4) {
                 event.consume();
-                ((TextField) event.getSource()).setText(((TextField) event.getSource()).getText().substring(0, 3));
+                ((TextField) event.getSource()).setText(((TextField) event.getSource()).getText().substring(0, 4));
             }
         } else {
             if (ageTextField.getText().length() >= 2) {
@@ -239,15 +266,23 @@ public class UserModifyVController {
             }
         }
     }
-
+    
     private void confirmChanges(ActionEvent event) {
-
+        //ClientOBJ cliente = new ClientOBJ(null, userTextField.getText(), emailTextField.getText(), fullNameTextField.getText(), StatusEnum.ENABLED, PrivilegeEnum.USER, password, lastPasswordChange, age, Float.NaN, GenreEnum.MALE, GoalEnum.INCREASE, weights)
     }
-
+    
     private void cancelChanges(ActionEvent event) {
-
+        userTextField.setText(client.getLogin());
+        fullNameTextField.setText(client.getFullName());
+        emailTextField.setText(client.getEmail());
+        heightTextField.setText(String.valueOf(client.getHeight()));
+        ageTextField.setText(String.valueOf(client.getAge()));
+        genreComboBox.setValue(client.getGenre());
+        goalComboBox.setValue(client.getGoal());
+        buttonConfirm.setDisable(true);
+        buttonCancel.setDisable(true);
     }
-
+    
     private void changePassword(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PasswordChange.fxml"));
@@ -260,5 +295,10 @@ public class UserModifyVController {
             alert.show();
             LOGGER.info(ex.getMessage());
         }
+    }
+    
+    private void handleComboBox(Event event){
+        buttonConfirm.setDisable(false);
+        buttonCancel.setDisable(false);
     }
 }
