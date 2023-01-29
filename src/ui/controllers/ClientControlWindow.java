@@ -7,6 +7,7 @@ package ui.controllers;
 
 import businessLogic.ClientFactory;
 import cellFactories.FloatEditingCellClient;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -35,6 +37,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -173,9 +176,18 @@ public class ClientControlWindow {
 
         columnEmail.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnEmail.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
-            ((ClientOBJ) t.getTableView().getItems().get(
-                    t.getTablePosition().getRow())).setEmail(t.getNewValue());
-            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+            if (t.getNewValue().length() >= 25) {
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setEmail(t.getNewValue());
+                ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+            } else {
+                Alert alert = new Alert(AlertType.ERROR, "El email debe tener menos de 50 caracteres");
+                alert.show();
+                LOGGER.log(Level.SEVERE, "El email debe tener menos de 50 caracteres");
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setAge(t.getOldValue());
+                tableClients.refresh();
+            }
         });
 
         columnGenre.setCellFactory(ComboBoxTableCell.<ClientOBJ, GenreEnum>forTableColumn(GenreEnum.values()));
@@ -191,9 +203,8 @@ public class ClientControlWindow {
                     t.getTablePosition().getRow())).setGoal(t.getNewValue());
             ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
         });
-        
-        Callback<TableColumn<ClientOBJ, Float>, 
-            TableCell<ClientOBJ, Float>> cellFactory
+
+        Callback<TableColumn<ClientOBJ, Float>, TableCell<ClientOBJ, Float>> cellFactory
                 = (TableColumn<ClientOBJ, Float> p) -> new FloatEditingCellClient();
         columnHeight.setCellFactory(cellFactory);
         columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
@@ -228,6 +239,8 @@ public class ClientControlWindow {
 
         // INSERT ITEMS // 
         buttonInsert.setOnAction(this::handleInsertAction);
+
+        buttonHelp.setOnAction(this::handleHelpAction);
 
         stage.show();
         LOGGER.info("ClientController window initialized");
@@ -345,5 +358,17 @@ public class ClientControlWindow {
         }, StatusEnum.DISABLED.toString()));
         tableClients.setItems(clientsData);
         tableClients.refresh();
+    }
+
+    public void handleHelpAction(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/views/ClientControlHelp.fxml"));
+            Parent root = (Parent) loader.load();
+            ClientControlHelp clientControlHelp = ((ClientControlHelp) loader.getController());
+            //Initializes and shows help stage
+            clientControlHelp.initAndShowStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(ClientControlWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
