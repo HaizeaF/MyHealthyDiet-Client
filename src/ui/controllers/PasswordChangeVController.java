@@ -10,6 +10,7 @@ import businessLogic.UserFactory;
 import businessLogic.UserInterface;
 import cryptography.Asymmetric;
 import cryptography.HashMD5;
+import static cryptography.HashMD5.hashText;
 import exceptions.InvalidPasswordValueException;
 import java.security.Timestamp;
 import java.time.Instant;
@@ -201,14 +202,8 @@ public class PasswordChangeVController {
     private void handleConfirm(ActionEvent event) {
         handleKeyPassword(null);
         try {
-            UserInterface model = UserFactory.getModel();
             byte[] passwordBytes = new Asymmetric().cipher(passwrdField.getText());
             ClientOBJ client = UserFactory.getModel().logIn(ClientOBJ.class, this.client.getLogin(), HashMD5.hexadecimal(passwordBytes));
-            if (client == null) {
-                lblPasswrd.setText("Password doesnt match");
-                passwrdField.setStyle("-fx-border-color: red;");
-                imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
-            }
             if (!newPasswrdField.getText().equals(confNewPasswdField.getText())) {
                 lblConfNewPasswrd.setText("Password doesnt match");
                 confNewPasswdField.setStyle("-fx-border-color: red;");
@@ -220,6 +215,9 @@ public class PasswordChangeVController {
                 client.setPassword(HashMD5.hexadecimal(newPasswordBytes));
                 client.setLastPasswordChange(new Date(System.currentTimeMillis()));
                 ClientFactory.getModel().edit(client);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Password changed succesfully", ButtonType.OK);
+                alert.showAndWait();
+                stage.close();
             }
         } catch (InternalServerErrorException ex) {
             lblPasswrd.setText("Password doesnt match");
