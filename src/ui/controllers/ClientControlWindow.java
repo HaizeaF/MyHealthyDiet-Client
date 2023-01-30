@@ -7,8 +7,11 @@ package ui.controllers;
 
 import businessLogic.ClientFactory;
 import cellFactories.FloatEditingCellClient;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -42,6 +45,13 @@ import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.FloatStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import javax.ws.rs.core.GenericType;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import objects.ClientOBJ;
 import objects.GenreEnum;
 import objects.GoalEnum;
@@ -191,9 +201,8 @@ public class ClientControlWindow {
                     t.getTablePosition().getRow())).setGoal(t.getNewValue());
             ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
         });
-        
-        Callback<TableColumn<ClientOBJ, Float>, 
-            TableCell<ClientOBJ, Float>> cellFactory
+
+        Callback<TableColumn<ClientOBJ, Float>, TableCell<ClientOBJ, Float>> cellFactory
                 = (TableColumn<ClientOBJ, Float> p) -> new FloatEditingCellClient();
         columnHeight.setCellFactory(cellFactory);
         columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
@@ -263,7 +272,7 @@ public class ClientControlWindow {
      * @param action an ActionEvent.ACTION event type for when the button is
      * pressed
      */
-    public void handleInsertAction(ActionEvent action) {
+    private void handleInsertAction(ActionEvent action) {
         ClientOBJ client = (ClientOBJ) new ClientOBJ();
         ClientFactory.getModel().create(client);
         clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
@@ -278,7 +287,7 @@ public class ClientControlWindow {
      * @param action an ActionEvent.ACTION event type for when the button is
      * pressed
      */
-    public void handleDeleteAction(ActionEvent action) {
+    private void handleDeleteAction(ActionEvent action) {
         Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure ypu want to delete this item?");
         a.showAndWait();
         try {
@@ -304,7 +313,7 @@ public class ClientControlWindow {
      * @param action an ActionEvent.ACTION event type for when the button is
      * pressed
      */
-    public void handleSearchAction(ActionEvent action) {
+    private void handleSearchAction(ActionEvent action) {
         LOGGER.info("Searhing for clients");
         if (!texfieldSearchbar.getText().isEmpty()) {
             clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientBySearch(new GenericType<List<ClientOBJ>>() {
@@ -325,7 +334,7 @@ public class ClientControlWindow {
      * @param action an ActionEvent.ACTION event type for when the button is
      * pressed
      */
-    public void handleFilterEnabled(ActionEvent action) {
+    private void handleFilterEnabled(ActionEvent action) {
         LOGGER.info("Searhing for enabled clients");
         clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientByStatus(new GenericType<List<ClientOBJ>>() {
         }, StatusEnum.ENABLED.toString()));
@@ -339,11 +348,27 @@ public class ClientControlWindow {
      * @param action an ActionEvent.ACTION event type for when the button is
      * pressed
      */
-    public void handleFilterDisabled(ActionEvent action) {
+    private void handleFilterDisabled(ActionEvent action) {
         LOGGER.info("Searhing for disabled clients");
         clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientByStatus(new GenericType<List<ClientOBJ>>() {
         }, StatusEnum.DISABLED.toString()));
         tableClients.setItems(clientsData);
         tableClients.refresh();
+    }
+
+    private void handleButtonReportAction(ActionEvent event) {
+        try {
+            JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/DietReport.jrxml");
+            JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<ClientOBJ>) this.tableClients.getItems());
+            Map<String, Object> parameters = new HashMap<>();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataItems);
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            jasperViewer.setVisible(true);
+        } catch (JRException ex) {
+            String msg = "Error trying to open report:\n" + ex.getMessage();
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, "DietsControlVController: Error opening report, {0}", ex.getMessage());
+        }
     }
 }

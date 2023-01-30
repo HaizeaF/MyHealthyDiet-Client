@@ -100,7 +100,7 @@
 				<text><![CDATA[GENRE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="506" y="0" width="46" height="23" uuid="83fe47bc-3306-49d5-804a-34a103615977"/>
+				<reportElement x="783" y="0" width="77" height="23" uuid="83fe47bc-3306-49d5-804a-34a103615977"/>
 				<textElement textAlignment="Center">
 					<font size="15"/>
 				</textElement>
