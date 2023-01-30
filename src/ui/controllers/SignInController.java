@@ -5,6 +5,7 @@
  */
 package ui.controllers;
 
+import businessLogic.ClientFactory;
 import businessLogic.UserFactory;
 import businessLogic.UserInterface;
 import exceptions.InvalidPasswordValueException;
@@ -34,6 +35,7 @@ import javafx.stage.WindowEvent;
 import objects.User;
 import cryptography.Asymmetric;
 import cryptography.HashMD5;
+import objects.ClientOBJ;
 
 /**
  *
@@ -186,21 +188,14 @@ public class SignInController {
             if (labelInvalidPassword.getText().equalsIgnoreCase("") && labelInvalidUser.getText().equalsIgnoreCase("")) {
                 UserInterface model = UserFactory.getModel();
                 byte[] passwordBytes = new Asymmetric().cipher(textFieldPassword.getText());
-                User user = model.logIn(User.class, textFieldUsername.getText(), HashMD5.hexadecimal(passwordBytes));
-                if (user != null) {
-                    LOGGER.info("Usuario encontrado");
+                User user = model.logIn(ClientOBJ.class, textFieldUsername.getText(), HashMD5.hexadecimal(passwordBytes));
+                if (user instanceof ClientOBJ) {
+                    ClientOBJ client = (ClientOBJ) user;
+                    LOGGER.info("Cliente encontrado");
                 } else {
-                    LOGGER.info("Usuario no encontrado");
+                    LOGGER.info("Usuario encontrado");
                 }
                 stage.close();
-                /*
-                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/ApplicationView.fxml"));
-                Parent root = (Parent) loader.load();
-                ApplicationVController controller = ((ApplicationVController) loader.getController());
-                controller.setStage(new Stage());
-                controller.setUser(user);
-                controller.initStage(root);
-                */
             }
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());

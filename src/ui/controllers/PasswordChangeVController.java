@@ -7,6 +7,9 @@ package ui.controllers;
 
 import businessLogic.ClientFactory;
 import businessLogic.UserFactory;
+import businessLogic.UserInterface;
+import cryptography.Asymmetric;
+import cryptography.HashMD5;
 import exceptions.InvalidPasswordValueException;
 import java.security.Timestamp;
 import java.time.Instant;
@@ -31,6 +34,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.InternalServerErrorException;
 import objects.ClientOBJ;
 import objects.User;
 
@@ -195,22 +200,31 @@ public class PasswordChangeVController {
 
     private void handleConfirm(ActionEvent event) {
         handleKeyPassword(null);
-        ClientOBJ client = UserFactory.getModel().logIn(ClientOBJ.class, this.client.getLogin(), passwrdField.getText());
-        if (client == null) {
+        try {
+            UserInterface model = UserFactory.getModel();
+            byte[] passwordBytes = new Asymmetric().cipher(passwrdField.getText());
+            ClientOBJ client = UserFactory.getModel().logIn(ClientOBJ.class, this.client.getLogin(), HashMD5.hexadecimal(passwordBytes));
+            if (client == null) {
+                lblPasswrd.setText("Password doesnt match");
+                passwrdField.setStyle("-fx-border-color: red;");
+                imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+            }
+            if (!newPasswrdField.getText().equals(confNewPasswdField.getText())) {
+                lblConfNewPasswrd.setText("Password doesnt match");
+                confNewPasswdField.setStyle("-fx-border-color: red;");
+                confNewPasswdField.setText("");
+                imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
+            }
+            if (lblPasswrd.getText().isEmpty() && lblNewPasswrd.getText().isEmpty() && lblConfNewPasswrd.getText().isEmpty()) {
+                byte[] newPasswordBytes = new Asymmetric().cipher(newPasswrdField.getText());
+                client.setPassword(HashMD5.hexadecimal(newPasswordBytes));
+                client.setLastPasswordChange(new Date(System.currentTimeMillis()));
+                ClientFactory.getModel().edit(client);
+            }
+        } catch (InternalServerErrorException ex) {
             lblPasswrd.setText("Password doesnt match");
             passwrdField.setStyle("-fx-border-color: red;");
             imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
-        }
-        if (!newPasswrdField.getText().equals(confNewPasswdField.getText())) {
-            lblConfNewPasswrd.setText("Password doesnt match");
-            confNewPasswdField.setStyle("-fx-border-color: red;");
-            confNewPasswdField.setText("");
-            imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
-        }
-        if (lblPasswrd.getText().isEmpty() && lblNewPasswrd.getText().isEmpty() && lblConfNewPasswrd.getText().isEmpty()) {
-            client.setPassword(newPasswrdField.getText());
-            client.setLastPasswordChange(new Date(System.currentTimeMillis()));
-            ClientFactory.getModel().edit(client);
         }
     }
 
