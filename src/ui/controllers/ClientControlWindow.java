@@ -7,11 +7,8 @@ package ui.controllers;
 
 import businessLogic.ClientFactory;
 import cellFactories.FloatEditingCellClient;
-<<<<<<< HEAD
 import java.util.Collection;
-=======
 import java.io.IOException;
->>>>>>> 5579695e12e4839735280d8c125412498ff94d28
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -254,6 +251,8 @@ public class ClientControlWindow {
         buttonInsert.setOnAction(this::handleInsertAction);
 
         buttonHelp.setOnAction(this::handleHelpAction);
+        
+        buttonReport.setOnAction(this::handleButtonReportAction);
 
         stage.show();
         LOGGER.info("ClientController window initialized");
@@ -375,7 +374,7 @@ public class ClientControlWindow {
 
     private void handleButtonReportAction(ActionEvent event) {
         try {
-            JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/DietReport.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/ClientsReport.jrxml");
             JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<ClientOBJ>) this.tableClients.getItems());
             Map<String, Object> parameters = new HashMap<>();
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataItems);
