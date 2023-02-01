@@ -1,7 +1,7 @@
 package cellFactories;
 
 import businessLogic.PlateFactory;
-import exceptions.BussinessLogicException;
+import exceptions.BusinessLogicException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,7 +43,7 @@ public class ImageButtonCell extends TableCell<Plate, byte[]> {
                     PlateFactory.getModel().edit_XML(plate);
                      Alert alert = new Alert(Alert.AlertType.INFORMATION, "Image added correctly.");
                     alert.show();
-                } catch (IOException | BussinessLogicException ex) {
+                } catch (IOException | BusinessLogicException ex) {
                     String msg = "Error saving the image: " + ex.getMessage();
                     Alert alert = new Alert(Alert.AlertType.ERROR, msg);
                     alert.show();

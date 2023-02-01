@@ -6,7 +6,7 @@ import businessLogic.PlateInterface;
 import cellFactories.FloatStringFormatter;
 import cellFactories.ImageButtonCell;
 import cellFactories.IngredientsButtonCell;
-import exceptions.BussinessLogicException;
+import exceptions.BusinessLogicException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -156,8 +156,7 @@ public class PlateControlVController {
         // The cells of tableColumnName, tableColumnCalories, tableColumnCarbohydrates, tableColumnLipids and tableColumnProteins are TextField and will have the value formatted based on location.
         tableColumnName.setCellFactory(TextFieldTableCell.<Plate>forTableColumn());
         // Checks that the text entered does not exceed 50 characters. In case it is higher it shows a pop-up window with the text: "Maximum characters (50) for the name of the plate exceeded." In case it is not higher it sends a request to the server to update the plate with the entered data. If there is an error with the server, a popup window is shown informing about it.
-        tableColumnName.setOnEditCommit(
-                (CellEditEvent<Plate, String> t) -> {
+        tableColumnName.setOnEditCommit((CellEditEvent<Plate, String> t) -> {
                     try {
                         if (t.getNewValue().length() <= 50) {
                             ((Plate) t.getTableView().getItems().get(
@@ -169,7 +168,7 @@ public class PlateControlVController {
                             Alert alert = new Alert(AlertType.ERROR, "Maximum characters (50) for the plate of the ingredient exceeded.");
                             alert.show();
                         }
-                    } catch (BussinessLogicException ex) {
+                    } catch (BusinessLogicException ex) {
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                         alert.show();
@@ -191,7 +190,7 @@ public class PlateControlVController {
                             Alert alert = new Alert(AlertType.ERROR, "Only number with a maximum of 4 digits allowed.");
                             alert.show();
                         }
-                    } catch (BussinessLogicException ex) {
+                    } catch (BusinessLogicException ex) {
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                         alert.show();
@@ -213,7 +212,7 @@ public class PlateControlVController {
                             Alert alert = new Alert(AlertType.ERROR, "Only number with a maximum of 4 digits allowed.");
                             alert.show();
                         }
-                    } catch (BussinessLogicException ex) {
+                    } catch (BusinessLogicException ex) {
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                         alert.show();
@@ -235,7 +234,7 @@ public class PlateControlVController {
                             Alert alert = new Alert(AlertType.ERROR, "Only number with a maximum of 4 digits allowed.");
                             alert.show();
                         }
-                    } catch (BussinessLogicException ex) {
+                    } catch (BusinessLogicException ex) {
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                         alert.show();
@@ -257,7 +256,7 @@ public class PlateControlVController {
                             Alert alert = new Alert(AlertType.ERROR, "Only number with a maximum of 4 digits allowed.");
                             alert.show();
                         }
-                    } catch (BussinessLogicException ex) {
+                    } catch (BusinessLogicException ex) {
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                         alert.show();
@@ -273,7 +272,7 @@ public class PlateControlVController {
                         ((Plate) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())).setMealType(t.getNewValue());
                         plateModel.edit_XML((Plate) t.getTableView().getSelectionModel().getSelectedItem());
-                    } catch (BussinessLogicException ex) {
+                    } catch (BusinessLogicException ex) {
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                         alert.show();
@@ -334,7 +333,7 @@ public class PlateControlVController {
             loadData();
             tableViewPlates.setItems(platesData);
             tableViewPlates.refresh();
-        } catch (BussinessLogicException ex) {
+        } catch (BusinessLogicException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage());
             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
@@ -360,7 +359,7 @@ public class PlateControlVController {
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, msg);
-        } catch (BussinessLogicException ex) {
+        } catch (BusinessLogicException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage());
             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
@@ -488,7 +487,7 @@ public class PlateControlVController {
                 tableViewPlates.setItems(FXCollections.observableList(filteredPlates));
                 tableViewPlates.refresh();
             }
-        } catch (BussinessLogicException ex) {
+        } catch (BusinessLogicException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage());
             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
@@ -558,7 +557,7 @@ public class PlateControlVController {
                     try {
                         filteredPlates = plateModel.findPlatesByMealType_XML(new GenericType<List<Plate>>() {
                         }, comboBoxMeal.getValue().toString());
-                    } catch (BussinessLogicException ex) {
+                    } catch (BusinessLogicException ex) {
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert2 = new Alert(AlertType.ERROR, ex.getMessage());
                         alert2.show();
@@ -641,7 +640,7 @@ public class PlateControlVController {
                     plate -> plate.getVegetarianProperty().addListener((observable, oldValue, newValue) -> {
                         try {
                             plateModel.edit_XML(plate);
-                        } catch (BussinessLogicException ex) {
+                        } catch (BusinessLogicException ex) {
                             LOGGER.log(Level.SEVERE, ex.getMessage());
                             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                             alert.show();
@@ -650,7 +649,7 @@ public class PlateControlVController {
             );
             // Se carga una lista para filtrar los platos
             filteredPlates = new ArrayList<>(platesData);
-        } catch (BussinessLogicException ex) {
+        } catch (BusinessLogicException ex) {
             String msg = "An error occurred while connecting to the server. Try again later.";
             LOGGER.log(Level.SEVERE, msg);
             Alert alert = new Alert(AlertType.ERROR, msg);
