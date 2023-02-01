@@ -35,7 +35,7 @@ public class ModifyTest extends Application {
 
         controller.setStage(stage);
 
-        ClientOBJ client = ClientFactory.getModel().findClientById(ClientOBJ.class, "7");
+        ClientOBJ client = ClientFactory.getModel().findClientById(ClientOBJ.class, "6");
         controller.setClient(client);
         
         controller.initStage(root);
