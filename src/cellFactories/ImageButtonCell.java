@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cellFactories;
 
 import businessLogic.PlateFactory;
+import exceptions.BussinessLogicException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.stage.FileChooser;
@@ -29,11 +26,13 @@ public class ImageButtonCell extends TableCell<Plate, byte[]> {
     private static final Logger LOGGER = Logger.getLogger(ImageButtonCell.class.getName());
 
     public ImageButtonCell(Stage stage) {
+        // Open a fileChooser to choose an image. 
         FileChooser.ExtensionFilter imageFilter
                 = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(imageFilter);
         fileChooser.setTitle("Select Image");
+        // Sends a request to the server to update the plate with the entered data. If there is any error with the server a popup window is shown informing about it.
         cellButton.setOnAction((ActionEvent t) -> {
             File image = fileChooser.showOpenDialog(stage);
             if (image != null) {
@@ -42,8 +41,13 @@ public class ImageButtonCell extends TableCell<Plate, byte[]> {
                     Plate plate = (Plate) getTableRow().getItem();
                     plate.setPlateImg(imgBytes);
                     PlateFactory.getModel().edit_XML(plate);
-                } catch (IOException ex) {
-                    Logger.getLogger(ImageButtonCell.class.getName()).log(Level.SEVERE, null, ex);
+                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Image added correctly.");
+                    alert.show();
+                } catch (IOException | BussinessLogicException ex) {
+                    String msg = "Error saving the image: " + ex.getMessage();
+                    Alert alert = new Alert(Alert.AlertType.ERROR, msg);
+                    alert.show();
+                    LOGGER.log(Level.SEVERE, msg);
                 }
             }
 

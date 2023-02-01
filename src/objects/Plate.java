@@ -132,7 +132,7 @@ public class Plate implements Serializable {
         this.lipids.set(lipids);
     }
 
-    public SimpleBooleanProperty vegetarianProperty() {
+    public SimpleBooleanProperty getVegetarianProperty() {
         return isVegetarian;
     }
 

@@ -19,7 +19,7 @@ public class PlateControlVPrueba extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PlateControlWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PlateControlView.fxml"));
         Parent root = (Parent) loader.load();
 
         PlateControlVController controller = ((PlateControlVController) loader.getController());

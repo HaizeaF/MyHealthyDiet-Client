@@ -1,6 +1,8 @@
 package cellFactories;
 
-import java.util.regex.Pattern;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 import objects.Plate;
@@ -12,7 +14,7 @@ import objects.Plate;
 public class FloatEditingCell extends TableCell<Plate, Float> {
 
     private final TextField textField = new TextField();
-    private final Pattern floatPattern = Pattern.compile("\\d*\\.\\d+");
+    private final DecimalFormat df = (DecimalFormat)NumberFormat.getNumberInstance(Locale.getDefault());
     
     public FloatEditingCell() {
         textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
@@ -25,11 +27,7 @@ public class FloatEditingCell extends TableCell<Plate, Float> {
 
     private void processEdit() {
         String text = textField.getText();
-        if (floatPattern.matcher(text).matches()) {
-            commitEdit(Float.parseFloat(text));
-        } else {
-            cancelEdit();
-        }
+        commitEdit(Float.parseFloat(text));
     }
 
     // Se llama al método al iniciar la edición de una celda (doble click o F2).
@@ -61,7 +59,7 @@ public class FloatEditingCell extends TableCell<Plate, Float> {
             setGraphic(null);
         // En caso de que la celda no esté vacía se mostrará el valor en el String y se pondrá a nulo el elemento gráfico.
         } else {
-            setText(value.toString());
+            setText(df.format(value));
             setGraphic(null);
         }
     }

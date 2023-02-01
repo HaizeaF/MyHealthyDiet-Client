@@ -21,7 +21,7 @@ import ui.controllers.PlateControlVController;
  */
 public class IngredientsButtonCell extends TableCell<Plate, List<Ingredient>> {
 
-    final Button cellButton = new Button("See plates");
+    final Button cellButton = new Button("See ingredients");
     private static final Logger LOGGER = Logger.getLogger(IngredientsButtonCell.class.getName());
 
     public IngredientsButtonCell(Stage stage) {
