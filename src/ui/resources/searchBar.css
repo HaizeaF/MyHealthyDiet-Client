@@ -1,8 +1,0 @@
-.text-field{
-    -fx-background-color: #FFFFFF;
-    -fx-background-position: 10px;
-    -fx-border-color:  transparent;
-    -fx-background-radius: 25px;
-    -fx-padding:  0px 20px 0px 40px;
-    -fx-effect: dropshadow(three-pass-box, #9e9e9e, 10, 0, 0, 0);
-}
