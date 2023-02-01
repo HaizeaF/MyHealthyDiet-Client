@@ -12,7 +12,7 @@ import javafx.util.StringConverter;
 
 /**
  *
- * @author JulenB
+ * @author haize
  */
 public class FloatStringFormatter extends StringConverter<Float> {
 
@@ -36,4 +36,3 @@ public class FloatStringFormatter extends StringConverter<Float> {
         }
     }
 }
-
