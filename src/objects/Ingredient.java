@@ -6,20 +6,18 @@
 package objects;
 
 import java.io.Serializable;
-import java.util.List;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Mikel
  */
-
+@XmlRootElement(name="ingredient")
 public class Ingredient implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,10 +37,6 @@ public class Ingredient implements Serializable {
      */
     private SimpleObjectProperty<FoodTypeEnum> foodType;
     
-    /**
-     * List to join plate with ingredient
-     */
-    private SimpleListProperty<Plate> plates;
     
     /**
      * Boolean that shows if it is in season or if is not
@@ -51,15 +45,21 @@ public class Ingredient implements Serializable {
     
     private SimpleFloatProperty waterIndex;
     
-    public Ingredient(String ingredientName, FoodTypeEnum foodType, List<Plate> plates, Boolean isInSeason, Float waterIndex) {
+    public Ingredient(Integer ingredient_id, String ingredientName, FoodTypeEnum foodType, Boolean isInSeason, Float waterIndex) {
+        this.ingredient_id = new SimpleIntegerProperty(ingredient_id);
         this.ingredientName = new SimpleStringProperty(ingredientName);
         this.foodType = new SimpleObjectProperty<>(foodType);
-        this.plates = new SimpleListProperty(FXCollections.observableList(plates));
         this.isInSeason = new SimpleBooleanProperty(isInSeason);
         this.waterIndex = new SimpleFloatProperty(waterIndex);
+        
     }
     
     public Ingredient() {
+        this.ingredient_id = new SimpleIntegerProperty();
+        this.ingredientName = new SimpleStringProperty();
+        this.foodType = new SimpleObjectProperty<>();
+        this.isInSeason = new SimpleBooleanProperty();
+        this.waterIndex = new SimpleFloatProperty();
     }
 
     public Integer getIngredient_id() {
@@ -86,16 +86,12 @@ public class Ingredient implements Serializable {
         this.foodType.set(foodType);
     }
 
-    public List<Plate> getPlates() {
-        return plates.get();
-    }
-
-    public void setPlates(List<Plate> plates) {
-        this.plates.set(FXCollections.observableList(plates));
-    }
-
     public Boolean getIsInSeason() {
         return isInSeason.get();
+    }
+    
+    public SimpleBooleanProperty getIsInSeasonProperty() {
+        return this.isInSeason;
     }
 
     public void setIsInSeason(Boolean isInSeason) {
@@ -133,7 +129,7 @@ public class Ingredient implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString();
+        return this.ingredientName.toString();
     }
     
 }

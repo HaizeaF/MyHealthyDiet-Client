@@ -1,0 +1,65 @@
+#labelTitle {
+	-fx-graphic-text-gap: 10;
+}
+
+#buttonOverview {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+#buttonPlates {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+#buttonDiets {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+#buttonUser {
+	-fx-background-color:  #15B7B9;
+	-fx-mark-color: #15B7B9;
+}
+
+#buttonOverview:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}	
+
+#buttonPlates:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonDiets:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonUser:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonOverview:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonPlates:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonDiets:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonUser:pressed {
+	-fx-background-color: #109192;
+}
+
+
+
