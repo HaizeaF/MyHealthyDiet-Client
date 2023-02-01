@@ -52,6 +52,6 @@ public class IngredientHelpController {
         WebEngine webEngine = webView.getEngine();
         //Load help page.
         webEngine.load(getClass()
-                .getResource("/ui/views/helpIngredient.html").toExternalForm());
+                .getResource("/ui/views/HelpIngredient.html").toExternalForm());
     }
 }

@@ -7,15 +7,15 @@ package ui.controllers;
 
 import businessLogic.IngredientFactory;
 import businessLogic.IngredientInterface;
-import cellFactories.FloatEditingCellIngredient;
+import cellFactories.FloatStringFormatterIngredient;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,17 +41,24 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import javafx.util.converter.FloatStringConverter;
 import javax.ws.rs.core.GenericType;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import objects.FoodTypeEnum;
 import objects.Ingredient;
 
@@ -183,10 +190,11 @@ public class IngredientControlVController {
     
     public void initStage(Parent root) {
         try {
-            Locale locale = Locale.getDefault();
-            String lang = locale.getDisplayLanguage();
-            String country = locale.getDisplayCountry();
-            NumberFormat.getPercentInstance(Locale.getDefault());
+            NumberFormat nf2 = NumberFormat.getNumberInstance(Locale.US);
+            nf2.setMaximumFractionDigits(2);
+            nf2.setMinimumFractionDigits(2);
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.getDefault());
+            DecimalFormat df = (DecimalFormat)nf;
             IngredientInterface ingredientModel = IngredientFactory.getModel();
             // Crea una escena asociada al root
             Scene scene = new Scene(root);
@@ -212,13 +220,17 @@ public class IngredientControlVController {
             menuItemDairy.setOnAction(this::handleFilterAction);
             menuItemBean.setOnAction(this::handleFilterAction);
             
-            // 
+            // Ventana de informacion de ayuda.
             buttonHelp.setOnAction(this::handleHelpWindowAction);
             
             // Crear un ingrediente
             buttonInsertRow.setOnAction(this::handleCreateAction);
             
             buttonSearch.setOnAction(this::handleSearchAction);
+            
+            //
+            
+            buttonReport.setOnAction(this::handleButtonReportAction);
             
             //tableIngredient.getSelectionModel().selectedItemProperty().addListener(this::handleTableSelectionChanged);
             
@@ -261,21 +273,17 @@ public class IngredientControlVController {
             
             columnWaterIndex.setCellValueFactory(
                     new PropertyValueFactory<>("waterIndex"));
-            Callback<TableColumn<Ingredient, Float>, TableCell<Ingredient, Float>> cellFloatFactory
-                = (TableColumn<Ingredient, Float> p) -> new FloatEditingCellIngredient();
-            columnWaterIndex.setCellFactory(cellFloatFactory);
+            columnWaterIndex.setCellFactory(TextFieldTableCell.<Ingredient, Float>forTableColumn(new FloatStringFormatterIngredient()));
             columnWaterIndex.setOnEditCommit(
                 (CellEditEvent<Ingredient, Float> t) -> {
                     if(t.getNewValue()<=100 && t.getNewValue()>=0){
                         ((Ingredient) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())).setWaterIndex(t.getNewValue());
                     }else{
-                        ((Ingredient) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())).setWaterIndex(t.getNewValue());
                         if(t.getNewValue()>100){
                             Alert alert = new Alert(AlertType.ERROR, "Maximum number is 100, you cannot exceed it.");
                             alert.show();
-                        }else{
+                        }else if (t.getNewValue()<0){
                             Alert alert = new Alert(AlertType.ERROR, "Minimum  number is 0, you cannot put less than the minimum.");
                             alert.show();
                         }
@@ -367,7 +375,23 @@ public class IngredientControlVController {
         }
     }
     
-    public void handleSearchAction(ActionEvent action) {
+    private void handleButtonReportAction(ActionEvent event) {
+        try {
+            JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/IngredientReport.jrxml");
+            JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<Ingredient>) this.tableIngredient.getItems());
+            Map<String, Object> parameters = new HashMap<>();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataItems);
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
+            jasperViewer.setVisible(true);
+        } catch (JRException ex) {
+            String msg =("Error trying to open report:\n" + ex.getMessage());
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, "DietsControlVController: Error opening report, {0}", ex.getMessage());
+        }
+    }
+    
+    private void handleSearchAction(ActionEvent action) {
         LOGGER.info("Searhing for clients");
         if (!(texfieldSearchbar.getText()).isEmpty()) {
             ingredientsData = FXCollections.observableArrayList(IngredientFactory.getModel().findIngredientsByName_XML(new GenericType<List<Ingredient>>() {
@@ -382,7 +406,7 @@ public class IngredientControlVController {
         }
     }
     
-    public void handleFilterAction(Event event){
+    private void handleFilterAction(Event event){
         MenuItem newMenuItem = ((MenuItem)event.getSource());
         String foodTypeSelected = newMenuItem.getText();
         menuItemVegetable.getText();
@@ -398,7 +422,7 @@ public class IngredientControlVController {
         tableIngredient.refresh();
     }
     
-    public void handleHelpWindowAction(Event event){
+    private void handleHelpWindowAction(Event event){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/helpIngredient.fxml"));
             Parent root = (Parent) loader.load();
@@ -409,7 +433,7 @@ public class IngredientControlVController {
         }
     }
     
-    public void cargarTablaIngredientesUnPlato(ObservableList<Ingredient> ingredients){
+    private void cargarTablaIngredientesUnPlato(ObservableList<Ingredient> ingredients){
         if(ingredients!=null)
             tableIngredient.setItems(ingredients);
     }
