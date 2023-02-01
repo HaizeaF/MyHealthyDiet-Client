@@ -371,7 +371,7 @@ public class ClientControlWindow {
      * pressed
      */
     private void handleDeleteAction(ActionEvent action) {
-        Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure ypu want to delete this item?");
+        Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this item?");
         a.showAndWait();
         try {
             if (a.getResult().equals(ButtonType.CANCEL)) {

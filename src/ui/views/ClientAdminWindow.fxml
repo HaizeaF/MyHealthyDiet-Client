@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.ClientControlWindow">
+<Pane fx:id="paneClientAdmin" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.ClientControlWindow">
    <children>
       <Pane prefHeight="768.0" prefWidth="336.0" style="-fx-background-color: #15B7B9;;">
          <children>
@@ -148,7 +148,7 @@
          <contextMenu>
             <ContextMenu fx:id="menuTable">
               <items>
-                <MenuItem mnemonicParsing="false" text="Delete" />
+                <MenuItem fx:id="menuItemDelete" mnemonicParsing="false" text="Delete" />
               </items>
             </ContextMenu>
          </contextMenu>
