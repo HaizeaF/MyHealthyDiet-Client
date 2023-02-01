@@ -9,8 +9,11 @@ import businessLogic.ClientFactory;
 import cellFactories.FloatStringFormatter;
 import cryptography.Asymmetric;
 import cryptography.HashMD5;
+import exceptions.BusinessLogicException;
 import java.util.Collection;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -170,9 +173,18 @@ public class ClientControlWindow {
         columnPasswrd.setCellValueFactory(new PropertyValueFactory("password"));
         columnStatus.setCellValueFactory(new PropertyValueFactory("status"));
 
-        // load all the clients and place them in the table
-        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
-        }));
+        stage.show();
+        
+        try {
+            // load all the clients and place them in the table
+            clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
+            }));
+        } catch (BusinessLogicException ex) {
+            Alert alert = new Alert(AlertType.ERROR, "Data could not be loaded");
+            alert.show();
+            LOGGER.log(Level.SEVERE, ex.getMessage());
+            tableClients.refresh();
+        }
         tableClients.setItems(clientsData);
         tableClients.setEditable(true);
 
@@ -188,7 +200,7 @@ public class ClientControlWindow {
                 ((ClientOBJ) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())).setAge(t.getNewValue());
                 ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException | BusinessLogicException ex) {
                 Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                 alert.show();
                 LOGGER.log(Level.SEVERE, ex.getMessage());
@@ -201,9 +213,18 @@ public class ClientControlWindow {
         columnEmail.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnEmail.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
             if (t.getNewValue().length() >= 50 || validateEmail(t.getNewValue())) {
-                ((ClientOBJ) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setEmail(t.getNewValue());
-                ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                try {
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setEmail(t.getNewValue());
+                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                } catch (BusinessLogicException ex) {
+                    Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                    alert.show();
+                    LOGGER.log(Level.SEVERE, ex.getMessage());
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setEmail(t.getOldValue());
+                    tableClients.refresh();
+                }
             } else {
                 Alert alert = new Alert(AlertType.ERROR, "The email must have a correct pattern and less than 50 characters.");
                 alert.show();
@@ -216,23 +237,50 @@ public class ClientControlWindow {
 
         columnGenre.setCellFactory(ComboBoxTableCell.<ClientOBJ, GenreEnum>forTableColumn(GenreEnum.values()));
         columnGenre.setOnEditCommit((CellEditEvent<ClientOBJ, GenreEnum> t) -> {
-            ((ClientOBJ) t.getTableView().getItems().get(
-                    t.getTablePosition().getRow())).setGenre(t.getNewValue());
-            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+            try {
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setGenre(t.getNewValue());
+                ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+            } catch (BusinessLogicException ex) {
+                Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                alert.show();
+                LOGGER.log(Level.SEVERE, ex.getMessage());
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setGenre(t.getOldValue());
+                tableClients.refresh();
+            }
         });
 
         columnGoal.setCellFactory(ComboBoxTableCell.<ClientOBJ, GoalEnum>forTableColumn(GoalEnum.values()));
         columnGoal.setOnEditCommit((CellEditEvent<ClientOBJ, GoalEnum> t) -> {
-            ((ClientOBJ) t.getTableView().getItems().get(
-                    t.getTablePosition().getRow())).setGoal(t.getNewValue());
-            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+            try {
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setGoal(t.getNewValue());
+                ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+            } catch (BusinessLogicException ex) {
+                Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                alert.show();
+                LOGGER.log(Level.SEVERE, ex.getMessage());
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setGoal(t.getOldValue());
+                tableClients.refresh();
+            }
         });
 
         columnHeight.setCellFactory(TextFieldTableCell.<ClientOBJ, Float>forTableColumn(new FloatStringFormatter()));
         columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
-            ((ClientOBJ) t.getTableView().getItems().get(
-                    t.getTablePosition().getRow())).setHeight(t.getNewValue());
-            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+            try {
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setHeight(t.getNewValue());
+                ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+            } catch (BusinessLogicException ex) {
+                Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                alert.show();
+                LOGGER.log(Level.SEVERE, ex.getMessage());
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setHeight(t.getOldValue());
+                tableClients.refresh();
+            }
         });
 
         columnLogin.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
@@ -255,9 +303,18 @@ public class ClientControlWindow {
                             t.getTablePosition().getRow())).setLogin(t.getOldValue());
                     tableClients.refresh();
                 } else {
-                    ((ClientOBJ) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())).setLogin(t.getNewValue());
-                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                    try {
+                        ((ClientOBJ) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setLogin(t.getNewValue());
+                        ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                    } catch (BusinessLogicException ex1) {
+                        Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                        alert.show();
+                        LOGGER.log(Level.SEVERE, ex.getMessage());
+                        ((ClientOBJ) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setLogin(t.getOldValue());
+                        tableClients.refresh();
+                    }
                 }
             }
         }
@@ -274,9 +331,18 @@ public class ClientControlWindow {
                                 t.getTablePosition().getRow())).setLogin(t.getOldValue());
                         tableClients.refresh();
                     } else {
-                        ((ClientOBJ) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())).setFullName(t.getNewValue());
-                        ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                        try {
+                            ((ClientOBJ) t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow())).setFullName(t.getNewValue());
+                            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                        } catch (BusinessLogicException ex) {
+                            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                            alert.show();
+                            LOGGER.log(Level.SEVERE, ex.getMessage());
+                            ((ClientOBJ) t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow())).setFullName(t.getOldValue());
+                            tableClients.refresh();
+                        }
                     }
                 }
         );
@@ -284,9 +350,18 @@ public class ClientControlWindow {
         columnStatus.setCellFactory(ComboBoxTableCell.<ClientOBJ, StatusEnum>forTableColumn(StatusEnum.values()));
         columnStatus.setOnEditCommit(
                 (CellEditEvent<ClientOBJ, StatusEnum> t) -> {
-                    ((ClientOBJ) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())).setStatus(t.getNewValue());
-                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                    try {
+                        ((ClientOBJ) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setStatus(t.getNewValue());
+                        ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                    } catch (BusinessLogicException ex) {
+                        Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                        alert.show();
+                        LOGGER.log(Level.SEVERE, ex.getMessage());
+                        ((ClientOBJ) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setStatus(t.getOldValue());
+                        tableClients.refresh();
+                    }
                 }
         );
 
@@ -303,7 +378,7 @@ public class ClientControlWindow {
         }
         );
 
-        // DELETE ITEMS
+        // DELETE ITEMS //
         menuTable.getItems()
                 .get(0).setOnAction(this::handleDeleteAction);
 
@@ -311,14 +386,14 @@ public class ClientControlWindow {
         buttonInsert.setOnAction(
                 this::handleInsertAction);
 
+        // HELP BUTTON //
         buttonHelp.setOnAction(
                 this::handleHelpAction);
 
+        // REPORT BUTTON //
         buttonReport.setOnAction(
                 this::handleButtonReportAction);
-
-        stage.show();
-
+        
         LOGGER.info(
                 "ClientController window initialized");
     }
@@ -354,14 +429,21 @@ public class ClientControlWindow {
      * pressed
      */
     private void handleInsertAction(ActionEvent action) {
-        ClientOBJ client = new ClientOBJ();
-        byte[] passwordBytes = new Asymmetric().cipher("abcd*1234");
-        client.setPassword(HashMD5.hexadecimal(passwordBytes));
-        ClientFactory.getModel().create(client);
-        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
-        }));
-        tableClients.setItems(clientsData);
-        tableClients.refresh();
+        try {
+            ClientOBJ client = new ClientOBJ();
+            byte[] passwordBytes = new Asymmetric().cipher("abcd*1234");
+            client.setPassword(HashMD5.hexadecimal(passwordBytes));
+            ClientFactory.getModel().create(client);
+            clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
+            }));
+            tableClients.setItems(clientsData);
+            tableClients.refresh();
+        } catch (BusinessLogicException ex) {
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            alert.show();
+            LOGGER.log(Level.SEVERE, ex.getMessage());
+            tableClients.refresh();
+        }
     }
 
     /**
@@ -398,15 +480,22 @@ public class ClientControlWindow {
      */
     private void handleSearchAction(ActionEvent action) {
         LOGGER.info("Searhing for clients");
-        if (!texfieldSearchbar.getText().isEmpty()) {
-            clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientBySearch(new GenericType<List<ClientOBJ>>() {
-            }, texfieldSearchbar.getText()));
-            tableClients.setItems(clientsData);
-            tableClients.refresh();
-        } else {
-            clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
-            }));
-            tableClients.setItems(clientsData);
+        try {
+            if (!texfieldSearchbar.getText().isEmpty()) {
+                clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientBySearch(new GenericType<List<ClientOBJ>>() {
+                }, texfieldSearchbar.getText()));
+                tableClients.setItems(clientsData);
+                tableClients.refresh();
+            } else {
+                clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
+                }));
+                tableClients.setItems(clientsData);
+                tableClients.refresh();
+            }
+        } catch (BusinessLogicException ex) {
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            alert.show();
+            LOGGER.log(Level.SEVERE, ex.getMessage());
             tableClients.refresh();
         }
     }
@@ -418,11 +507,18 @@ public class ClientControlWindow {
      * pressed
      */
     private void handleFilterEnabled(ActionEvent action) {
-        LOGGER.info("Searhing for enabled clients");
-        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientByStatus(new GenericType<List<ClientOBJ>>() {
-        }, StatusEnum.ENABLED.toString()));
-        tableClients.setItems(clientsData);
-        tableClients.refresh();
+        try {
+            LOGGER.info("Searhing for enabled clients");
+            clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientByStatus(new GenericType<List<ClientOBJ>>() {
+            }, StatusEnum.ENABLED.toString()));
+            tableClients.setItems(clientsData);
+            tableClients.refresh();
+        } catch (BusinessLogicException ex) {
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            alert.show();
+            LOGGER.log(Level.SEVERE, ex.getMessage());
+            tableClients.refresh();
+        }
     }
 
     /**
@@ -432,11 +528,18 @@ public class ClientControlWindow {
      * pressed
      */
     private void handleFilterDisabled(ActionEvent action) {
-        LOGGER.info("Searhing for disabled clients");
-        clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientByStatus(new GenericType<List<ClientOBJ>>() {
-        }, StatusEnum.DISABLED.toString()));
-        tableClients.setItems(clientsData);
-        tableClients.refresh();
+        try {
+            LOGGER.info("Searhing for disabled clients");
+            clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findClientByStatus(new GenericType<List<ClientOBJ>>() {
+            }, StatusEnum.DISABLED.toString()));
+            tableClients.setItems(clientsData);
+            tableClients.refresh();
+        } catch (BusinessLogicException ex) {
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            alert.show();
+            LOGGER.log(Level.SEVERE, ex.getMessage());
+            tableClients.refresh();
+        }
     }
 
     private void handleButtonReportAction(ActionEvent event) {
