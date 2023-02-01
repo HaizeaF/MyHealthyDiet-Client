@@ -120,7 +120,7 @@
          <contextMenu>
             <ContextMenu fx:id="contextMenu">
               <items>
-                <MenuItem mnemonicParsing="false" text="Delete" />
+                <MenuItem fx:id="menuItemDelete" mnemonicParsing="false" text="Delete" />
               </items>
             </ContextMenu>
          </contextMenu>

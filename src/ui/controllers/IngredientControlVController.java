@@ -153,6 +153,9 @@ public class IngredientControlVController {
     private MenuItem menuItemDairy;
     
     @FXML
+    private MenuItem menuItemDelete;
+    
+    @FXML
     private Pane paneButtons;
     
     @FXML
@@ -276,21 +279,29 @@ public class IngredientControlVController {
             columnWaterIndex.setCellFactory(TextFieldTableCell.<Ingredient, Float>forTableColumn(new FloatStringFormatterIngredient()));
             columnWaterIndex.setOnEditCommit(
                 (CellEditEvent<Ingredient, Float> t) -> {
-                    if(t.getNewValue()<=100 && t.getNewValue()>=0){
-                        ((Ingredient) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())).setWaterIndex(t.getNewValue());
-                    }else{
-                        if(t.getNewValue()>100){
-                            Alert alert = new Alert(AlertType.ERROR, "Maximum number is 100, you cannot exceed it.");
-                            alert.show();
-                        }else if (t.getNewValue()<0){
-                            Alert alert = new Alert(AlertType.ERROR, "Minimum  number is 0, you cannot put less than the minimum.");
-                            alert.show();
+                    try{
+                        if(t.getNewValue()<=100 && t.getNewValue()>=0){
+                            ((Ingredient) t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow())).setWaterIndex(t.getNewValue());
+                        }else{
+                            if(t.getNewValue()>100){
+                                Alert alert = new Alert(AlertType.ERROR, "Maximum number is 100, you cannot exceed it.");
+                                alert.show();
+                            }else if (t.getNewValue()<0){
+                                Alert alert = new Alert(AlertType.ERROR, "Minimum  number is 0, you cannot put less than the minimum.");
+                                alert.show();
+                            }
                         }
+                    ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
+                    tableIngredient.refresh();
+                    } catch(Exception e){
+                        String msg = "Error, this value is not compatible";
+                        Alert alert = new Alert(AlertType.ERROR, msg);
+                        alert.show();
+                        LOGGER.log(Level.SEVERE, msg);
                     }
-                ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
-                tableIngredient.refresh();
-            });
+                }
+            );
             
             List<Ingredient> ingredients = ingredientModel.findAll_XML(new GenericType<List<Ingredient>>() {});
             //Set handler to update ObservableList properties. Applicable if cell is edited
