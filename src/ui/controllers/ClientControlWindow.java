@@ -7,15 +7,23 @@ package ui.controllers;
 
 import businessLogic.ClientFactory;
 import cellFactories.FloatEditingCellClient;
+import cryptography.Asymmetric;
+import cryptography.HashMD5;
 import java.util.Collection;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -243,7 +251,39 @@ public class ClientControlWindow {
                     t.getTablePosition().getRow())).setStatus(t.getNewValue());
             ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
         });
+        
+        // FORMAT CELLS //
+        /*
+        columnPasswordChange.setCellValueFactory(new PropertyValueFactory<>("lastPasswordChange"));
+        columnPasswordChange.setCellFactory(column -> {
+            TableCell<ClientOBJ, Date> cell = new TableCell<ClientOBJ, Date>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                    } else {
+                        this.setText(format.format(item));
+
+                    }
+                }
+            };
+
+            return cell;
+        });
+        */
+        columnPasswordChange.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<ClientOBJ, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ClientOBJ, String> item) {
+                SimpleStringProperty property = new SimpleStringProperty();
+                property.setValue(formatDate((item.getValue()).getLastPasswordChange()).toString());
+                return property;
+            }
+        });
+        
         // DELETE ITEMS
         menuTable.getItems().get(0).setOnAction(this::handleDeleteAction);
 
@@ -290,6 +330,8 @@ public class ClientControlWindow {
      */
     private void handleInsertAction(ActionEvent action) {
         ClientOBJ client = (ClientOBJ) new ClientOBJ();
+        byte[] passwordBytes = new Asymmetric().cipher("abcd*1234");
+        client.setPassword(HashMD5.hexadecimal(passwordBytes));
         ClientFactory.getModel().create(client);
         clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
         }));
@@ -398,5 +440,21 @@ public class ClientControlWindow {
         } catch (IOException ex) {
             Logger.getLogger(ClientControlWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public LocalDate formatDate(Date dateToFormat) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        convertToLocalDateViaInstant(dateToFormat);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        //return sdf.format(dateToFormat);
+        LocalDate localDate = LocalDate.parse(sdf.format(dateToFormat), formatter);
+        LOGGER.info(localDate.toString());
+        return localDate;
+    }
+    
+    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 }

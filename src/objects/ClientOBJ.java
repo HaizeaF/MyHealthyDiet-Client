@@ -5,6 +5,7 @@
  */
 package objects;
 
+import cryptography.Asymmetric;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
