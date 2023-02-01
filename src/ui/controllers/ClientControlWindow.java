@@ -6,7 +6,7 @@
 package ui.controllers;
 
 import businessLogic.ClientFactory;
-import cellFactories.FloatEditingCellClient;
+import cellFactories.FloatStringFormatter;
 import cryptography.Asymmetric;
 import cryptography.HashMD5;
 import java.util.Collection;
@@ -22,6 +22,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -131,6 +133,10 @@ public class ClientControlWindow {
 
     private ObservableList<ClientOBJ> clientsData;
 
+    private static final String EMAIL_REGEX = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
+
+    private static final Pattern PATTERN = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
+
     public Stage getStage() {
         return stage;
     }
@@ -194,16 +200,16 @@ public class ClientControlWindow {
 
         columnEmail.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnEmail.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
-            if (t.getNewValue().length() >= 25) {
+            if (t.getNewValue().length() >= 50 || validateEmail(t.getNewValue())) {
                 ((ClientOBJ) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())).setEmail(t.getNewValue());
                 ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
             } else {
-                Alert alert = new Alert(AlertType.ERROR, "El email debe tener menos de 50 caracteres");
+                Alert alert = new Alert(AlertType.ERROR, "The email must have a correct pattern and less than 50 characters.");
                 alert.show();
-                LOGGER.log(Level.SEVERE, "El email debe tener menos de 50 caracteres");
+                LOGGER.log(Level.SEVERE, "The email must have a correct pattern and less than 50 characters.");
                 ((ClientOBJ) t.getTableView().getItems().get(
-                        t.getTablePosition().getRow())).setAge(t.getOldValue());
+                        t.getTablePosition().getRow())).setEmail(t.getOldValue());
                 tableClients.refresh();
             }
         });
@@ -222,9 +228,7 @@ public class ClientControlWindow {
             ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
         });
 
-        Callback<TableColumn<ClientOBJ, Float>, TableCell<ClientOBJ, Float>> cellFactory
-                = (TableColumn<ClientOBJ, Float> p) -> new FloatEditingCellClient();
-        columnHeight.setCellFactory(cellFactory);
+        columnHeight.setCellFactory(TextFieldTableCell.<ClientOBJ, Float>forTableColumn(new FloatStringFormatter()));
         columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
             ((ClientOBJ) t.getTableView().getItems().get(
                     t.getTablePosition().getRow())).setHeight(t.getNewValue());
@@ -233,69 +237,90 @@ public class ClientControlWindow {
 
         columnLogin.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnLogin.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
-            ((ClientOBJ) t.getTableView().getItems().get(
-                    t.getTablePosition().getRow())).setLogin(t.getNewValue());
-            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-        });
+            try {
+                ClientOBJ cliente = ClientFactory.getModel().findClientByLogin(new GenericType<ClientOBJ>() {
+                }, t.getNewValue());
+                Alert alert = new Alert(AlertType.ERROR, "The entered login already exists");
+                alert.show();
+                LOGGER.log(Level.SEVERE, "The entered login already exists");
+                ((ClientOBJ) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setLogin(t.getOldValue());
+                tableClients.refresh();
+            } catch (Exception ex) {
+                if (t.getNewValue().length() >= 25) {
+                    Alert alert = new Alert(AlertType.ERROR, "The login must be less than 25 characters.");
+                    alert.show();
+                    LOGGER.log(Level.SEVERE, "The login must be less than 25 characters.");
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setLogin(t.getOldValue());
+                    tableClients.refresh();
+                } else {
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setLogin(t.getNewValue());
+                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                }
+            }
+        }
+        );
 
         columnName.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
-        columnName.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
-            ((ClientOBJ) t.getTableView().getItems().get(
-                    t.getTablePosition().getRow())).setFullName(t.getNewValue());
-            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-        });
-
-        columnStatus.setCellFactory(ComboBoxTableCell.<ClientOBJ, StatusEnum>forTableColumn(StatusEnum.values()));
-        columnStatus.setOnEditCommit((CellEditEvent<ClientOBJ, StatusEnum> t) -> {
-            ((ClientOBJ) t.getTableView().getItems().get(
-                    t.getTablePosition().getRow())).setStatus(t.getNewValue());
-            ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-        });
-        
-        // FORMAT CELLS //
-        /*
-        columnPasswordChange.setCellValueFactory(new PropertyValueFactory<>("lastPasswordChange"));
-        columnPasswordChange.setCellFactory(column -> {
-            TableCell<ClientOBJ, Date> cell = new TableCell<ClientOBJ, Date>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-
-                @Override
-                protected void updateItem(Date item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
+        columnName.setOnEditCommit(
+                (CellEditEvent<ClientOBJ, String> t) -> {
+                    if (t.getNewValue().length() >= 25) {
+                        Alert alert = new Alert(AlertType.ERROR, "The name must be less than 25 characters.");
+                        alert.show();
+                        LOGGER.log(Level.SEVERE, "The name must be less than 25 characters.");
+                        ((ClientOBJ) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setLogin(t.getOldValue());
+                        tableClients.refresh();
                     } else {
-                        this.setText(format.format(item));
-
+                        ((ClientOBJ) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setFullName(t.getNewValue());
+                        ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
                     }
                 }
-            };
+        );
 
-            return cell;
-        });
-        */
+        columnStatus.setCellFactory(ComboBoxTableCell.<ClientOBJ, StatusEnum>forTableColumn(StatusEnum.values()));
+        columnStatus.setOnEditCommit(
+                (CellEditEvent<ClientOBJ, StatusEnum> t) -> {
+                    ((ClientOBJ) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setStatus(t.getNewValue());
+                    ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                }
+        );
+
+        // FORMAT CELLS //
         columnPasswordChange.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<ClientOBJ, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ClientOBJ, String> item) {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ClientOBJ, String> item
+            ) {
                 SimpleStringProperty property = new SimpleStringProperty();
                 property.setValue(formatDate((item.getValue()).getLastPasswordChange()).toString());
                 return property;
             }
-        });
-        
+        }
+        );
+
         // DELETE ITEMS
-        menuTable.getItems().get(0).setOnAction(this::handleDeleteAction);
+        menuTable.getItems()
+                .get(0).setOnAction(this::handleDeleteAction);
 
         // INSERT ITEMS // 
-        buttonInsert.setOnAction(this::handleInsertAction);
+        buttonInsert.setOnAction(
+                this::handleInsertAction);
 
-        buttonHelp.setOnAction(this::handleHelpAction);
-        
-        buttonReport.setOnAction(this::handleButtonReportAction);
+        buttonHelp.setOnAction(
+                this::handleHelpAction);
+
+        buttonReport.setOnAction(
+                this::handleButtonReportAction);
 
         stage.show();
-        LOGGER.info("ClientController window initialized");
+
+        LOGGER.info(
+                "ClientController window initialized");
     }
 
     /**
@@ -329,7 +354,7 @@ public class ClientControlWindow {
      * pressed
      */
     private void handleInsertAction(ActionEvent action) {
-        ClientOBJ client = (ClientOBJ) new ClientOBJ();
+        ClientOBJ client = new ClientOBJ();
         byte[] passwordBytes = new Asymmetric().cipher("abcd*1234");
         client.setPassword(HashMD5.hexadecimal(passwordBytes));
         ClientFactory.getModel().create(client);
@@ -437,11 +462,13 @@ public class ClientControlWindow {
             ClientControlHelp clientControlHelp = ((ClientControlHelp) loader.getController());
             //Initializes and shows help stage
             clientControlHelp.initAndShowStage(root);
+
         } catch (IOException ex) {
-            Logger.getLogger(ClientControlWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientControlWindow.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public LocalDate formatDate(Date dateToFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         convertToLocalDateViaInstant(dateToFormat);
@@ -451,10 +478,15 @@ public class ClientControlWindow {
         LOGGER.info(localDate.toString());
         return localDate;
     }
-    
+
     public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
+    }
+
+    public static boolean validateEmail(String email) {
+        Matcher matcher = PATTERN.matcher(email);
+        return matcher.matches();
     }
 }

@@ -6,6 +6,7 @@
 package services;
 
 import businessLogic.ClientInterface;
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -29,7 +30,8 @@ public class ClientFacadeREST implements ClientInterface{
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/MyHealthyDiet/webresources";
+    private final ResourceBundle bundle = ResourceBundle.getBundle("files.URLCredentials");
+    private final String BASE_URI = bundle.getString("BASE_URI");
 
     public ClientFacadeREST() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
