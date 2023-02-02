@@ -5,18 +5,25 @@
  */
 package ui.controllers;
 
+import exceptions.BusinessLogicException;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import objects.Tip;
 
 /**
  *
@@ -58,12 +65,21 @@ public class TipsControlVController {
     @FXML
     private Button buttonLogout;
 
+    private ObservableList<Tip> dietsData = null;
+    
+//    @FXML
+//    private TableView tableTips;
+    
     public Stage getStage() {
         return stage;
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+    
+    public void setData(ObservableList<Tip> dietsData) {
+        this.dietsData = dietsData;
     }
 
     public void initStage(Parent root) {
@@ -84,7 +100,19 @@ public class TipsControlVController {
         buttonClients.setOnAction(this::handleButtonClientsAction);
 
         buttonLogout.setOnAction(this::handleLogOutAction);
-
+        
+//        if (dietsData == null) {
+//                dietsData = FXCollections.observableArrayList();
+//                List<Tip> tips = tipModel.findAll_XML(new GenericType<List<Tip>>() {
+//                });
+//                //Set handler to update ObservableList properties. Applicable if cell is edited
+//
+//                for (int i = 0; i < tips.size(); i++) {
+//                    dietsData.add(tips.get(i));
+//                }
+//            }
+//        tableIngredient.setItems(dietsData);
+//        tableIngredient.setEditable(true);
         stage.show();
     }
 

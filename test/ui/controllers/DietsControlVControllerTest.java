@@ -98,13 +98,13 @@ public class DietsControlVControllerTest extends ApplicationTest {
         buttonSearch = lookup("#buttonSearch").query();
 
         clickOn(texfieldSearchbar);
-        write("Dieta M");
+        write("Diet Volu");
 
         clickOn(buttonSearch);
 
         dataList = new ArrayList<>(tableViewDiets.getItems());
         for (Diet diet : dataList) {
-            assertTrue(diet.getDietName().contains("Dieta M"));
+            assertTrue(diet.getDietName().contains("Diet Volu"));
         }
 
     }
@@ -120,15 +120,15 @@ public class DietsControlVControllerTest extends ApplicationTest {
         buttonSearch = lookup("#buttonSearch").query();
 
         clickOn(texfieldSearchbar);
-        eraseText(7);
+        eraseText(9);
 
         clickOn(texfieldSearchbar);
-        write("Dieta V");
+        write("Meditarranean");
         push(KeyCode.ENTER);
 
         dataList = new ArrayList<>(tableViewDiets.getItems());
         for (Diet diet : dataList) {
-            assertTrue(diet.getDietName().contains("Dieta V"));
+            assertTrue(diet.getDietName().contains("Meditarranean"));
         }
 
     }
@@ -141,10 +141,10 @@ public class DietsControlVControllerTest extends ApplicationTest {
         List<Diet> dataList;
         buttonFilters = lookup("#buttonFilters").query();
         texfieldSearchbar = lookup("#texfieldSearchbar").query();
-        
+
         clickOn(texfieldSearchbar);
-        eraseText(7);
-                
+        eraseText(13);
+
         push(KeyCode.ENTER);
 
         clickOn(buttonFilters);
@@ -159,6 +159,8 @@ public class DietsControlVControllerTest extends ApplicationTest {
             assertTrue(diet.getType() == GoalEnum.MAINTAIN);
         }
 
+        clickOn(texfieldSearchbar);
+        push(KeyCode.ENTER);
     }
 
     /**
@@ -166,10 +168,6 @@ public class DietsControlVControllerTest extends ApplicationTest {
      */
     @Test
     public void testE_HandleCreateAction() {
-        texfieldSearchbar = lookup("#texfieldSearchbar").query();
-        clickOn(texfieldSearchbar);
-        eraseText(7);
-        push(KeyCode.ENTER);
 
         Integer count = tableViewDiets.getItems().size();
 
@@ -242,9 +240,6 @@ public class DietsControlVControllerTest extends ApplicationTest {
         clickOn(tableColumnCarbohydrates);
         doubleClickOn(tableColumnType);
         push(KeyCode.DOWN);
-        clickOn(tableColumnCarbohydrates);
-        doubleClickOn(tableColumnType);
-        push(KeyCode.DOWN);
 
         Diet modifiedDiet = (Diet) tableViewDiets.getSelectionModel().getSelectedItem();
 
@@ -255,15 +250,6 @@ public class DietsControlVControllerTest extends ApplicationTest {
         assertNotEquals("The lipids has been modified", lipids, modifiedDiet.getLipids());
         assertNotEquals("The carbohydrates has been modified", carbohydrates, modifiedDiet.getCarbohydrates());
         assertNotEquals("The goal has been modified", goal, modifiedDiet.getType());
-
-//        clickOn(tableColumnPlates);
-//        panePlates = lookup("#panePlates").query();
-//        assertThat(panePlates, isVisible());
-//        clickOn(buttonDiets);
-//        assertThat(paneDiets, isVisible());
-//        clickOn(tableColumnTips);
-//        paneTipsAdmin = lookup("#paneTipsAdmin").query();
-//        assertThat(paneTipsAdmin, isVisible());
     }
 
     /**

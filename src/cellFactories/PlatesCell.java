@@ -42,7 +42,7 @@ public class PlatesCell extends TableCell<Diet, List<Plate>> {
      *
      * @param stage The current stage of the app.
      */
-    public PlatesCell(Stage stage, TableView dietsData) {
+    public PlatesCell(Stage stage) {
         //When the button is pressed, it is going to move you to another window.
         button.setOnAction((ActionEvent t) -> {
             try {
@@ -52,7 +52,7 @@ public class PlatesCell extends TableCell<Diet, List<Plate>> {
                 PlateControlVController controller = ((PlateControlVController) loader.getController());
 
                 controller.setStage(stage);
-                Diet diet = (Diet) dietsData.getSelectionModel().getSelectedItem();
+                Diet diet = (Diet) getTableRow().getItem();
                 controller.setData((ObservableList<Plate>) diet.getPlates());
 
                 //The actual stage is closed and the new one is initialized.
@@ -63,11 +63,6 @@ public class PlatesCell extends TableCell<Diet, List<Plate>> {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Failed loading Plates window", ButtonType.OK);
                 alert.showAndWait();
                 LOGGER.log(Level.SEVERE, "PlatesCell: Load of PlateControlWindow failed, {0}", ex.getMessage());
-            } catch (NullPointerException ex) {
-                //If the isn´t any row selected, shows you an error alert.
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Please select a row before trying to see its plates", ButtonType.OK);
-                alert.showAndWait();
-                LOGGER.log(Level.SEVERE, "PlatesCell: Row to selected, {0}", ex.getMessage());
             }
         });
     }

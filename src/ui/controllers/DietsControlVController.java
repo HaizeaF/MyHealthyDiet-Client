@@ -230,9 +230,9 @@ public class DietsControlVController {
             }));
             //Set data from dietsData into tableView.
             tableViewDiets.setItems(dietsData);
-            
+
             Callback<TableColumn<Diet, List<Plate>>, TableCell<Diet, List<Plate>>> cellPlatesFactory
-                    = (TableColumn<Diet, List<Plate>> p) -> new PlatesCell(stage, tableViewDiets);
+                    = (TableColumn<Diet, List<Plate>> p) -> new PlatesCell(stage);
             Callback<TableColumn<Diet, List<Tip>>, TableCell<Diet, List<Tip>>> cellTipsFactory
                     = (TableColumn<Diet, List<Tip>> p) -> new TipsCell(stage);
             Callback<TableColumn<Diet, byte[]>, TableCell<Diet, byte[]>> buttonImgListCell
@@ -501,9 +501,9 @@ public class DietsControlVController {
                             DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
                         } catch (BusinessLogicException ex) {
                             GoalEnum ge = GoalEnum.DECREASE;
-                            if(comboBox.getValue().equals("MAINTAIN")){
+                            if (comboBox.getValue().equals("MAINTAIN")) {
                                 ge = GoalEnum.MAINTAIN;
-                            }else if(comboBox.getValue().equals("INCREASE")){
+                            } else if (comboBox.getValue().equals("INCREASE")) {
                                 ge = GoalEnum.INCREASE;
                             }
                             ((Diet) t.getTableView().getItems().get(
@@ -640,14 +640,14 @@ public class DietsControlVController {
             Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to Log Out?");
             a.showAndWait();
             if (a.getResult().equals(ButtonType.OK)) {
-                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/SignInView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/SignInView.fxml"));
                 Parent root = (Parent) loader.load();
 
-//                SignInVController controller = ((SignInVController) loader.getController());
-//                controller.setStage(new Stage());
+                SignInController controller = ((SignInController) loader.getController());
+                controller.setStage(stage);
                 stage.close();
                 LOGGER.info("DietsControlVController: Diet Management window closed");
-//                controller.initStage(root);
+                controller.initStage(root);
             }
             if (a.getResult().equals(ButtonType.CANCEL)) {
                 event.consume();
@@ -940,7 +940,7 @@ public class DietsControlVController {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/TipsControlWindow.fxml"));
             Parent root = (Parent) loader.load();
 
-            DietsControlVController controller = ((DietsControlVController) loader.getController());
+            TipsControlVController controller = ((TipsControlVController) loader.getController());
 
             controller.setStage(stage);
             stage.close();
