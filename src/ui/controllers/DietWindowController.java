@@ -148,7 +148,7 @@ public class DietWindowController {
     private final Random random = new Random();
 
     Diet diet = new Diet();
-    
+
     ClientOBJ client = new ClientOBJ();
 
     public Stage getStage() {
@@ -162,8 +162,8 @@ public class DietWindowController {
     public void setDiet(Diet diet) {
         this.diet = diet;
     }
-    
-    public void setClient(ClientOBJ client){
+
+    public void setClient(ClientOBJ client) {
         this.client = client;
     }
 
@@ -173,71 +173,56 @@ public class DietWindowController {
      * @param root
      */
     public void initStage(Parent root) {
-        try {
-            Scene scene = new Scene(root); //If any error occurs initializing the window, show an alert.
-            //Set stage properties
-            stage.setScene(scene);
-            stage.setTitle("Diet");
-            stage.setResizable(false);
-
-            //ACTIONS FOR CONTROLS
-            stage.setOnCloseRequest(this::handleExitAction);
-            menuItemLogout.setOnAction(this::handleLogOutAction);
-            menuItemProfile.setOnAction(this::handleModifyAction);
-            buttonHelp.setOnAction(this::handleButtonHelpAction);
-            buttonOverview.setOnAction(this::handleButtonOverviewAction);
-            buttonPlates.setOnAction(this::handleButtonPlatesAction);
-            buttonDiets.setOnAction(this::handleButtonDietsAction);
-
-            //Create an observable list for diets table.
-            dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
-            }));
-            diet = dietsData.get(0);
-
-            //DIET PARAMS SET
-            userInitial.setText(client.getFullName().substring(0,1));
-            buttonUser.setText("          " + client.getFullName());
-            labelDietName.setText(diet.getDietName());
-            labelDesc.setText(diet.getDescription());
-            labelType.setText(diet.getType().toString());
-            labelCalories.setText(diet.getCalories().toString());
-            labelCarbohydrates.setText(diet.getCarbohydrates().toString());
-            labelLipids.setText(diet.getLipids().toString());
-            labelProteins.setText(diet.getProteins().toString());
-            if (diet.getTips() == null) {
+        Scene scene = new Scene(root); //If any error occurs initializing the window, show an alert.
+        //Set stage properties
+        stage.setScene(scene);
+        stage.setTitle("Diet");
+        stage.setResizable(false);
+        //ACTIONS FOR CONTROLS
+        stage.setOnCloseRequest(this::handleExitAction);
+        menuItemLogout.setOnAction(this::handleLogOutAction);
+        menuItemProfile.setOnAction(this::handleModifyAction);
+        buttonHelp.setOnAction(this::handleButtonHelpAction);
+        buttonOverview.setOnAction(this::handleButtonOverviewAction);
+        buttonPlates.setOnAction(this::handleButtonPlatesAction);
+        buttonDiets.setOnAction(this::handleButtonDietsAction);
+        //DIET PARAMS SET
+        userInitial.setText(client.getFullName().substring(0, 1));
+        buttonUser.setText("          " + client.getFullName());
+        labelDietName.setText(diet.getDietName());
+        labelDesc.setText(diet.getDescription());
+        labelType.setText(diet.getType().toString());
+        labelCalories.setText(diet.getCalories().toString());
+        labelCarbohydrates.setText(diet.getCarbohydrates().toString());
+        labelLipids.setText(diet.getLipids().toString());
+        labelProteins.setText(diet.getProteins().toString());
+        if (diet.getTips() == null) {
+            labelTip.setText("A tip");
+        } else {
+            Integer randomNumber = random.nextInt(diet.getTips().size());
+            if (randomNumber == 0) {
                 labelTip.setText("A tip");
             } else {
-                Integer randomNumber = random.nextInt(diet.getTips().size());
-                if (randomNumber == 0) {
-                    labelTip.setText("A tip");
-                } else {
-                    labelTip.setText(diet.getTips().get(randomNumber).getTipText());
-                }
+                labelTip.setText(diet.getTips().get(randomNumber).getTipText());
             }
-            if (diet.getPlates() == null) {
-                labelNoDiets.setVisible(true);
-            } else {
-                listPlates.setItems((ObservableList<Plate>) diet.getPlates());
-
-            }
-
-            byte[] imgBytes = diet.getDietImg();
-            Image image = null;
-            if (imgBytes != null) {
-                image = new Image(new ByteArrayInputStream(imgBytes));
-            }else{
-                imgDiet = new ImageView();
-            }
-            imgDiet.setImage(image);
-
-            //Show window.
-            stage.show();
-            LOGGER.log(Level.INFO, "DietWindowController: Window initialized");
-        } catch (BusinessLogicException ex) {
-            //If any error occurs initializing the window, show an alert.
-            showErrorAlert("Window can not be loaded, " + ex.getMessage());
-            LOGGER.log(Level.SEVERE, "DietWindowController: Error initializing window, {0}", ex.getMessage());
         }
+        if (diet.getPlates() == null) {
+            labelNoDiets.setVisible(true);
+        } else {
+            listPlates.setItems((ObservableList<Plate>) diet.getPlates());
+
+        }
+        byte[] imgBytes = diet.getDietImg();
+        Image image = null;
+        if (imgBytes != null) {
+            image = new Image(new ByteArrayInputStream(imgBytes));
+        } else {
+            imgDiet = new ImageView();
+        }
+        imgDiet.setImage(image);
+        //Show window.
+        stage.show();
+        LOGGER.log(Level.INFO, "DietWindowController: Window initialized");
 
     }
 

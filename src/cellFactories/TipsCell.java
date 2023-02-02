@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import objects.Diet;
 import objects.Tip;
 import ui.controllers.DietsControlVController;
+import ui.controllers.TipsControlVController;
 
 /**
  * This class inserts a button in the Tips cell of the table from the
@@ -47,9 +49,12 @@ public class TipsCell extends TableCell<Diet, List<Tip>> {
                 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/TipsControlWindow.fxml"));
                 Parent root = (Parent) loader.load();
 
-                DietsControlVController controller = ((DietsControlVController) loader.getController());
+                TipsControlVController controller = ((TipsControlVController) loader.getController());
 
                 controller.setStage(stage);
+                controller.setStage(stage);
+                Diet diet = (Diet) getTableRow().getItem();
+                controller.setData((ObservableList<Tip>) diet.getTips());
                 //The actual stage is closed and the new one is initialized.
                 stage.close();
                 controller.initStage(root);
