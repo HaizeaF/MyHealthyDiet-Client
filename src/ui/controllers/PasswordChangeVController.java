@@ -11,6 +11,7 @@ import businessLogic.UserInterface;
 import cryptography.Asymmetric;
 import cryptography.HashMD5;
 import static cryptography.HashMD5.hashText;
+import exceptions.BusinessLogicException;
 import exceptions.InvalidPasswordValueException;
 import java.security.Timestamp;
 import java.time.Instant;
@@ -219,7 +220,7 @@ public class PasswordChangeVController {
                 alert.showAndWait();
                 stage.close();
             }
-        } catch (InternalServerErrorException ex) {
+        } catch (BusinessLogicException ex) {
             lblPasswrd.setText("Password doesnt match");
             passwrdField.setStyle("-fx-border-color: red;");
             imgPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));

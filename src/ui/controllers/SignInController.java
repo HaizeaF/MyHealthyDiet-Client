@@ -35,6 +35,7 @@ import javafx.stage.WindowEvent;
 import objects.User;
 import cryptography.Asymmetric;
 import cryptography.HashMD5;
+import exceptions.BusinessLogicException;
 import objects.ClientOBJ;
 
 /**
@@ -197,7 +198,7 @@ public class SignInController {
                 }
                 stage.close();
             }
-        } catch (Exception e) {
+        } catch (BusinessLogicException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             e.printStackTrace();
             alert.show();

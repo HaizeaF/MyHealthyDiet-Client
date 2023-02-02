@@ -5,6 +5,7 @@
  */
 package businessLogic;
 
+import exceptions.BusinessLogicException;
 import javax.ws.rs.ClientErrorException;
 
 /**
@@ -13,5 +14,5 @@ import javax.ws.rs.ClientErrorException;
  */
 public interface UserInterface {
     
-    public <T> T logIn(Class<T> responseType, String login, String password) throws ClientErrorException;
+    public <T> T logIn(Class<T> responseType, String login, String password) throws BusinessLogicException;
 }

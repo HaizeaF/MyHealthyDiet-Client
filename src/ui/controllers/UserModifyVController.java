@@ -6,6 +6,7 @@
 package ui.controllers;
 
 import businessLogic.ClientFactory;
+import exceptions.BusinessLogicException;
 import objects.GenreEnum;
 import exceptions.InvalidUserValueException;
 import java.io.IOException;
@@ -270,13 +271,19 @@ public class UserModifyVController {
     }
     
     private void confirmChanges(ActionEvent event) {
-        ClientOBJ cliente = new ClientOBJ(this.client.getUser_id(), userTextField.getText(), emailTextField.getText(), fullNameTextField.getText(), StatusEnum.ENABLED, PrivilegeEnum.USER, null, new Date(System.currentTimeMillis()), ageTextField.getText(), Float.parseFloat(heightTextField.getText()), (GenreEnum) genreComboBox.getSelectionModel().getSelectedItem(), (GoalEnum) goalComboBox.getSelectionModel().getSelectedItem());
-        ClientFactory.getModel().edit(cliente);
-        Alert alert = new Alert(Alert.AlertType.ERROR, "Data updated succesfully");
-        alert.show();
-        LOGGER.info("Client updated");
-        buttonCancel.setDisable(true);
-        buttonConfirm.setDisable(true);
+        try {
+            ClientOBJ cliente = new ClientOBJ(this.client.getUser_id(), userTextField.getText(), emailTextField.getText(), fullNameTextField.getText(), StatusEnum.ENABLED, PrivilegeEnum.USER, null, new Date(System.currentTimeMillis()), ageTextField.getText(), Float.parseFloat(heightTextField.getText()), (GenreEnum) genreComboBox.getSelectionModel().getSelectedItem(), (GoalEnum) goalComboBox.getSelectionModel().getSelectedItem());
+            ClientFactory.getModel().edit(cliente);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Data updated succesfully");
+            alert.show();
+            LOGGER.info("Client updated");
+            buttonCancel.setDisable(true);
+            buttonConfirm.setDisable(true);
+        } catch (BusinessLogicException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage());
+            alert.show();
+            LOGGER.log(Level.SEVERE, ex.getMessage());
+        }
     }
     
     private void cancelChanges(ActionEvent event) {
