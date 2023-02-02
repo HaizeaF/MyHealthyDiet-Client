@@ -7,6 +7,7 @@ import cellFactories.FloatStringFormatter;
 import cellFactories.ImageButtonCell;
 import cellFactories.IngredientsButtonCell;
 import exceptions.BusinessLogicException;
+import exceptions.BussinessLogicException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -544,45 +545,49 @@ public class PlateControlVController {
         alert.showAndWait().ifPresent(response -> {
             // If you click Cancel the popup window disappears. If you click Accept the pop-up window disappears and checks for plates matching the filters.
             if (response == ButtonType.OK) {
-                textFieldSearchBar.setText("");
-                ObservableList<Ingredient> ingredients = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>>() {
-                }));
-                filteredPlates = new ArrayList<>(platesData);
-                HashMap<Integer, Ingredient> ingredientMap = new HashMap<>();
-                ingredients.forEach((ingredient) -> {
-                    ingredientMap.put(ingredient.getIngredient_id(), ingredient);
-                });
-
-                if (!comboBoxMeal.getSelectionModel().isEmpty()) {
-                    try {
-                        filteredPlates = plateModel.findPlatesByMealType_XML(new GenericType<List<Plate>>() {
-                        }, comboBoxMeal.getValue().toString());
-                    } catch (BusinessLogicException ex) {
-                        LOGGER.log(Level.SEVERE, ex.getMessage());
-                        Alert alert2 = new Alert(AlertType.ERROR, ex.getMessage());
-                        alert2.show();
+                try {
+                    textFieldSearchBar.setText("");
+                    ObservableList<Ingredient> ingredients = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>>() {
+                    }));
+                    filteredPlates = new ArrayList<>(platesData);
+                    HashMap<Integer, Ingredient> ingredientMap = new HashMap<>();
+                    ingredients.forEach((ingredient) -> {
+                        ingredientMap.put(ingredient.getIngredient_id(), ingredient);
+                    });
+                    
+                    if (!comboBoxMeal.getSelectionModel().isEmpty()) {
+                        try {
+                            filteredPlates = plateModel.findPlatesByMealType_XML(new GenericType<List<Plate>>() {
+                            }, comboBoxMeal.getValue().toString());
+                        } catch (BussinessLogicException ex) {
+                            LOGGER.log(Level.SEVERE, ex.getMessage());
+                            Alert alert2 = new Alert(AlertType.ERROR, ex.getMessage());
+                            alert2.show();
+                        }
                     }
-                }
-                if (checkBox.isSelected()) {
-                    filteredPlates = filteredPlates.stream().filter((Plate plate) -> plate.getIsVegetarian()).collect(Collectors.toList());
-                }
-                if (!comboBoxIngredients.getSelectionModel().isEmpty() && !ingredients.isEmpty()) {
-                    final List<Ingredient> platesDataIngredients = ingredients.stream().filter((Ingredient ingredient) -> ingredient.getFoodType() == comboBoxIngredients.getValue()).collect(Collectors.toList());
-                    filteredPlates.removeIf(p -> !p.getIngredients().stream().anyMatch(i -> platesDataIngredients.contains(ingredientMap.get(i.getIngredient_id()))));
-                } else if (!comboBoxIngredients.getSelectionModel().isEmpty() && ingredients.isEmpty()) {
-                    filteredPlates.clear();
-                }
-                // If they do not exist, a pop-up window is displayed with the text: "There are no plates with those parameters".
-                if (filteredPlates.isEmpty()) {
-                    loadData();
-                    String msg = "There are no matching plates with the filters.";
-                    Alert alert2 = new Alert(AlertType.INFORMATION, msg);
-                    alert2.show();
-                    LOGGER.log(Level.SEVERE, msg);
-                } else {
-                    // If they do exist, the table is reloaded with the plates whose data match the chosen parameters.
-                    tableViewPlates.setItems(FXCollections.observableList(filteredPlates));
-                    tableViewPlates.refresh();
+                    if (checkBox.isSelected()) {
+                        filteredPlates = filteredPlates.stream().filter((Plate plate) -> plate.getIsVegetarian()).collect(Collectors.toList());
+                    }
+                    if (!comboBoxIngredients.getSelectionModel().isEmpty() && !ingredients.isEmpty()) {
+                        final List<Ingredient> platesDataIngredients = ingredients.stream().filter((Ingredient ingredient) -> ingredient.getFoodType() == comboBoxIngredients.getValue()).collect(Collectors.toList());
+                        filteredPlates.removeIf(p -> !p.getIngredients().stream().anyMatch(i -> platesDataIngredients.contains(ingredientMap.get(i.getIngredient_id()))));
+                    } else if (!comboBoxIngredients.getSelectionModel().isEmpty() && ingredients.isEmpty()) {
+                        filteredPlates.clear();
+                    }
+                    // If they do not exist, a pop-up window is displayed with the text: "There are no plates with those parameters".
+                    if (filteredPlates.isEmpty()) {
+                        loadData();
+                        String msg = "There are no matching plates with the filters.";
+                        Alert alert2 = new Alert(AlertType.INFORMATION, msg);
+                        alert2.show();
+                        LOGGER.log(Level.SEVERE, msg);
+                    } else {
+                        // If they do exist, the table is reloaded with the plates whose data match the chosen parameters.
+                        tableViewPlates.setItems(FXCollections.observableList(filteredPlates));
+                        tableViewPlates.refresh();
+                    }
+                } catch (BusinessLogicException ex) {
+                    Logger.getLogger(PlateControlVController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
