@@ -6,10 +6,10 @@
 package services;
 
 import businessLogic.IngredientInterface;
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import exceptions.BusinessLogicException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -35,6 +35,8 @@ public class IngredientFacadeREST implements IngredientInterface {
     private Client client;
     private final ResourceBundle bundle = ResourceBundle.getBundle("files/URLCredentials");
     private final String BASE_URI = bundle.getString("BASE_URI");
+    
+    private static final Logger LOGGER = Logger.getLogger("IngredientFacadeREST");
     
     /**
      * Constructor of the restfull ingredient.
