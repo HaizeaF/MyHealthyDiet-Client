@@ -3,26 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package myhealthydiet;
+package main;
 
+import java.io.IOException;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import ui.controllers.SignInController;
+import ui.controllers.ClientControlWindow;
 
 /**
  *
- * @author haize, sendoa
+ * @author Sendoa
  */
-public class MyHealthyDietClient extends Application {
+public class ClientControlTest extends Application {
     
     @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/SignInView.fxml"));
+    public void start(Stage stage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientAdminWindow.fxml"));
         Parent root = (Parent) loader.load();
         
-        SignInController controller = ((SignInController) loader.getController());
+        ClientControlWindow controller = ((ClientControlWindow) loader.getController());
         
         controller.setStage(stage);
         

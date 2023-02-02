@@ -5,18 +5,18 @@
  */
 package businessLogic;
 
-import services.IngredientFacadeREST;
+import services.UserFacadeREST;
 
 /**
- * Ingredient factory of the ingredient restful
- * @author Mikel
+ *
+ * @author Sendoa
  */
-public class IngredientFactory {
-    private static IngredientInterface model;
+public class UserFactory {
+    public static UserInterface model;
     
-    public static IngredientInterface getModel(){
+    public static UserInterface getModel(){
         if(model==null){
-            model = new IngredientFacadeREST();
+            model = new UserFacadeREST();
         }
         return model;
     }

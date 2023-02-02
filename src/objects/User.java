@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Sendoa
  */
-@XmlRootElement
+@XmlRootElement(name="user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +50,14 @@ public class User implements Serializable {
     }
     
     public User() {
+        this.user_id = new SimpleIntegerProperty();
+        this.login = new SimpleStringProperty();
+        this.email = new SimpleStringProperty();
+        this.fullName = new SimpleStringProperty();
+        this.status = new SimpleObjectProperty<>();
+        this.privilege = new SimpleObjectProperty<>();
+        this.password = new SimpleStringProperty();
+        this.lastPasswordChange = new SimpleObjectProperty<>();
     }
 
 

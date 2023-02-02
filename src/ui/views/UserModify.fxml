@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.UserModifyVController">
+   <children>
+      <Pane prefHeight="768.0" prefWidth="336.0" style="-fx-background-color: #15B7B9;;">
+         <children>
+            <Label fx:id="labelTitle" focusTraversable="false" layoutX="28.0" layoutY="39.0" stylesheets="@../resources/SidebarCSS.css" text="MyHealthyDiet" textFill="WHITE">
+               <font>
+                  <Font name="CircularStd-Book" size="25.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="138.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/icono_grande.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <Button fx:id="buttonOverview" alignment="BASELINE_LEFT" defaultButton="true" layoutY="189.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="336.0" stylesheets="@../resources/SidebarCSS.css" text="Overview" textFill="WHITE">
+               <font>
+                  <Font name="Circular Std Regular" size="20.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/overview_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Label fx:id="labelMenu" alignment="CENTER" layoutX="29.0" layoutY="157.0" prefHeight="26.0" prefWidth="47.0" text="MENU" textFill="WHITE">
+               <font>
+                  <Font name="CircularStd-Medium" size="13.0" />
+               </font>
+            </Label>
+            <Button fx:id="buttonPlates" alignment="BASELINE_LEFT" defaultButton="true" layoutY="263.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="336.0" stylesheets="@../resources/SidebarCSS.css" text="Plates" textFill="WHITE">
+               <font>
+                  <Font name="Circular Std Regular" size="20.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="44.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/plates_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="buttonDiets" alignment="BASELINE_LEFT" defaultButton="true" layoutY="337.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="336.0" stylesheets="@../resources/SidebarCSS.css" text="Diets" textFill="WHITE">
+               <font>
+                  <Font name="Circular Std Regular" size="20.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="44.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/diets_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Line endX="210.5" layoutX="101.0" layoutY="668.0" startX="-76.5" stroke="WHITE" />
+            <MenuButton fx:id="buttonUser" alignment="BASELINE_LEFT" contentDisplay="TEXT_ONLY" layoutX="21.0" layoutY="686.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" popupSide="RIGHT" prefHeight="63.0" prefWidth="295.0" stylesheets="@../resources/SidebarCSS.css" text="          Usuario" textFill="WHITE">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Profile">
+                     <graphic>
+                        <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/user_icon2.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" text="Log out">
+                     <graphic>
+                        <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/logout2_icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+               </items>
+               <font>
+                  <Font name="CircularStd-Book" size="20.0" />
+               </font>
+            </MenuButton>
+            <ImageView fitHeight="34.0" fitWidth="30.0" layoutX="283.0" layoutY="704.0" pickOnBounds="true" preserveRatio="true" style="-fx-graphic-text-gap: 100;">
+               <image>
+                  <Image url="@../resources/user_arrow_icon.png" />
+               </image>
+            </ImageView>
+            <Label contentDisplay="CENTER" layoutX="26.0" layoutY="688.0" text="U" textFill="WHITE">
+               <font>
+                  <Font name="CircularStd-Bold" size="22.5" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="58.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/user_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+         </children>
+      </Pane>
+      <TextField fx:id="userTextField" layoutX="590.0" layoutY="180.0" prefHeight="50.0" prefWidth="237.0" promptText="Username" stylesheets="@../resources/SignUpCSS.css" />
+      <TextField fx:id="fullNameTextField" layoutX="853.0" layoutY="180.0" prefHeight="50.0" prefWidth="237.0" promptText="Full Name" stylesheets="@../resources/SignUpCSS.css" />
+      <TextField fx:id="emailTextField" layoutX="590.0" layoutY="292.0" prefHeight="50.0" prefWidth="500.0" promptText="example@gmail.com" stylesheets="@../resources/SignUpCSS.css" />
+      <TextField fx:id="heightTextField" layoutX="590.0" layoutY="399.0" prefHeight="39.0" prefWidth="237.0" promptText="1.80" stylesheets="@../resources/SignUpCSS.css" />
+      <TextField fx:id="ageTextField" layoutX="853.0" layoutY="399.0" prefHeight="39.0" prefWidth="237.0" promptText="20" stylesheets="@../resources/SignUpCSS.css" />
+      <Label layoutX="590.0" layoutY="153.0" text="Your Username:">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="853.0" layoutY="153.0" text="Full Name:">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="590.0" layoutY="269.0" text="Email:">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="589.0" layoutY="377.0" text="Height:">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="853.0" layoutY="377.0" text="Age:">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="genreComboBox" layoutX="590.0" layoutY="500.0" prefHeight="27.0" prefWidth="237.0" stylesheets="@../resources/comboBox.css" />
+      <ComboBox fx:id="goalComboBox" layoutX="853.0" layoutY="500.0" prefHeight="27.0" prefWidth="237.0" stylesheets="@../resources/comboBox.css" />
+      <Label layoutX="589.0" layoutY="477.0" text="Genre:">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="853.0" layoutY="477.0" text="Goal:">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonConfirm" layoutX="614.0" layoutY="619.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="178.0" stylesheets="@../resources/buttonsCSS.css" text="Confirm Changes">
+         <font>
+            <Font name="Circular Std Regular" size="12.0" />
+         </font></Button>
+      <Button fx:id="buttonCancel" layoutX="923.0" layoutY="619.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="104.0" stylesheets="@../resources/buttonsCSS.css" text="Cancel">
+         <font>
+            <Font name="Circular Std Regular" size="12.0" />
+         </font></Button>
+      <Label focusTraversable="false" layoutX="703.0" layoutY="43.0" text="Your Profile" textFill="#15b7b9">
+         <font>
+            <Font name="Rockwell" size="50.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="userImg" fitHeight="26.0" fitWidth="27.0" layoutX="599.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/ic_user.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="nameImg" fitHeight="26.0" fitWidth="27.0" layoutX="862.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/iconsFullName.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="emailImg" fitHeight="26.0" fitWidth="27.0" layoutX="599.0" layoutY="304.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/iconEmail.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="heightImg" fitHeight="26.0" fitWidth="27.0" layoutX="599.0" layoutY="406.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/icon_height.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="ageImg" fitHeight="26.0" fitWidth="27.0" layoutX="862.0" layoutY="406.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/icon_age.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="lblUsername" focusTraversable="false" layoutX="588.0" layoutY="234.0" prefHeight="17.0" prefWidth="241.0" textFill="RED" />
+      <Label fx:id="lblFullName" focusTraversable="false" layoutX="855.0" layoutY="234.0" prefHeight="17.0" prefWidth="241.0" textFill="RED" />
+      <Label fx:id="lblEmail" focusTraversable="false" layoutX="590.0" layoutY="347.0" prefHeight="17.0" prefWidth="500.0" textFill="RED" />
+      <Label fx:id="lblHeight" focusTraversable="false" layoutX="588.0" layoutY="444.0" prefHeight="17.0" prefWidth="241.0" textFill="RED" />
+      <Label fx:id="lblAge" focusTraversable="false" layoutX="851.0" layoutY="444.0" prefHeight="17.0" prefWidth="241.0" textFill="RED" />
+      <Label fx:id="lblGenre" focusTraversable="false" layoutX="588.0" layoutY="533.0" prefHeight="17.0" prefWidth="241.0" textFill="RED" />
+      <Label fx:id="lblGoal" focusTraversable="false" layoutX="856.0" layoutY="533.0" prefHeight="17.0" prefWidth="241.0" textFill="RED" />
+      <Button fx:id="buttonHelp" layoutX="972.0" layoutY="42.0" mnemonicParsing="false" style="-fx-background-radius: 25;" stylesheets="@../resources/buttonIcon.css">
+         <graphic>
+            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/help_icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="buttonChangePasswrd" layoutX="751.0" layoutY="550.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="178.0" stylesheets="@../resources/buttonIcon.css" text="Change password" textFill="#15b7b9">
+         <font>
+            <Font name="Circular Std Regular" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

@@ -15,43 +15,31 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
- * Controller class for help window . 
- * It shows a help page that explains how to use the user's data management window.
- * The view is defined in Help.fmxl file and the help page is help.html.
  *
- * @author Mikel
+ * @author Sendoa
  */
-public class IngredientHelpController {
-    /**
-     * The control that shows the help page.
-     */
+public class ClientControlHelp {
+    
     @FXML
     private WebView webView;
-    /**
-     * Initializes and show the help window.
-     * @param root The FXML document hierarchy root. 
-     */
+    
     public void initAndShowStage(Parent root) {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
-        stage.setTitle("Help with the Ingredient Management");
+        stage.setTitle("Ayuda para la Gestion de Usuarios");
         stage.setResizable(false);
         stage.setMinWidth(800);
         stage.setMinHeight(600);
         stage.setOnShowing(this::handleWindowShowing);
         stage.show();
     }
-    /**
-     * Initializes window state. It implements behavior for WINDOW_SHOWING type 
-     * event.
-     * @param event  The window event 
-     */
+    
     private void handleWindowShowing(WindowEvent event){
         WebEngine webEngine = webView.getEngine();
         //Load help page.
         webEngine.load(getClass()
-                .getResource("/ui/views/HelpIngredient.html").toExternalForm());
+                .getResource("/ui/views/ClientControlHelp.html").toExternalForm());
     }
 }
