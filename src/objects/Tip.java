@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Sendoa
  */
-@XmlRootElement
+@XmlRootElement(name="tip")
 public class Tip implements Serializable {
 
     private static final long serialVersionUID = 1L;
