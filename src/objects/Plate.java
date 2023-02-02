@@ -12,7 +12,8 @@ import javafx.collections.FXCollections;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author HaizeaF Class that contains the information of a plate.
+ * Class that contains the information of a plate.
+ * @author HaizeaF 
  */
 @XmlRootElement(name = "plate")
 public class Plate implements Serializable {
@@ -170,6 +171,10 @@ public class Plate implements Serializable {
 
     public List<Ingredient> getIngredients() {
         return ingredients.get();
+    }
+    
+    public SimpleListProperty<Ingredient> getIngredientsProperty() {
+        return ingredients;
     }
 
     public byte[] getPlateImg() {

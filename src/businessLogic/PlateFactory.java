@@ -3,8 +3,8 @@ package businessLogic;
 import services.PlateFacadeRESTClient;
 
 /**
- *
- * @author haize
+ * Plate factory for PlateInterface
+ * @author HaizeaF
  */
 public class PlateFactory {
     private static PlateInterface model;

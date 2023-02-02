@@ -63,8 +63,8 @@ import objects.FoodTypeEnum;
 import objects.MealEnum;
 
 /**
- *
- * @author haize
+ * Controller of the window that manages the plates.
+ * @author HaizeaF
  */
 public class PlateControlVController {
 
@@ -100,7 +100,7 @@ public class PlateControlVController {
 
     private ObservableList<Plate> platesData = null;
 
-    private List<Plate> filteredPlates;
+    private List<Plate> filter;
 
     private PlateInterface plateModel;
 
@@ -141,7 +141,7 @@ public class PlateControlVController {
         Callback<TableColumn<Plate, byte[]>, TableCell<Plate, byte[]>> cellImageFactory
                 = (TableColumn<Plate, byte[]> p) -> new ImageButtonCell(stage);
         Callback<TableColumn<Plate, List<Ingredient>>, TableCell<Plate, List<Ingredient>>> cellIngredientsFactory
-                = (TableColumn<Plate, List<Ingredient>> p) -> new IngredientsButtonCell(stage);
+                = (TableColumn<Plate, List<Ingredient>> p) -> new IngredientsButtonCell(stage,tableViewPlates);
 
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("plateName"));
         tableColumnMealType.setCellValueFactory(new PropertyValueFactory<>("mealType"));
@@ -155,8 +155,11 @@ public class PlateControlVController {
 
         // The cells of tableColumnName, tableColumnCalories, tableColumnCarbohydrates, tableColumnLipids and tableColumnProteins are TextField and will have the value formatted based on location.
         tableColumnName.setCellFactory(TextFieldTableCell.<Plate>forTableColumn());
+        tableColumnName.setMinWidth(200);
         // Checks that the text entered does not exceed 50 characters. In case it is higher it shows a pop-up window with the text: "Maximum characters (50) for the name of the plate exceeded." In case it is not higher it sends a request to the server to update the plate with the entered data. If there is an error with the server, a popup window is shown informing about it.
-        tableColumnName.setOnEditCommit((CellEditEvent<Plate, String> t) -> {
+        tableColumnName.setOnEditCommit(
+                (CellEditEvent<Plate, String> t) -> {
+                    String name = t.getOldValue();
                     try {
                         if (t.getNewValue().length() <= 50) {
                             ((Plate) t.getTableView().getItems().get(
@@ -169,6 +172,9 @@ public class PlateControlVController {
                             alert.show();
                         }
                     } catch (BusinessLogicException ex) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setPlateName(name);
+                        tableViewPlates.refresh();
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                         alert.show();
@@ -176,9 +182,11 @@ public class PlateControlVController {
                 });
 
         tableColumnCalories.setCellFactory(TextFieldTableCell.<Plate, Float>forTableColumn(new FloatStringFormatter()));
+        tableColumnCalories.setMinWidth(5);
         // Check that the number entered is not greater than 9999. In case it is higher it displays a pop-up window with the text: "Only number with a maximum of 4 digits allowed." In case it is not higher it sends a request to the server to update the plate with the entered data. It is also updated in the table. If there is any error with the server a popup window is shown informing about it.
         tableColumnCalories.setOnEditCommit(
                 (CellEditEvent<Plate, Float> t) -> {
+                    Float calories = t.getOldValue();
                     try {
                         if (t.getNewValue() <= 9999) {
                             ((Plate) t.getTableView().getItems().get(
@@ -191,16 +199,29 @@ public class PlateControlVController {
                             alert.show();
                         }
                     } catch (BusinessLogicException ex) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setCalories(calories);
+                        tableViewPlates.refresh();
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                        alert.show();
+                    } catch (NullPointerException e) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setCalories(t.getOldValue());
+                        tableViewPlates.refresh();
+                        String msg = "Invalid value for calories.";
+                        LOGGER.log(Level.SEVERE, msg);
+                        Alert alert = new Alert(AlertType.ERROR, msg);
                         alert.show();
                     }
                 });
 
         tableColumnCarbohydrates.setCellFactory(TextFieldTableCell.<Plate, Float>forTableColumn(new FloatStringFormatter()));
+        tableColumnCarbohydrates.setMinWidth(5);
         // Check that the number entered is not greater than 9999. In case it is higher it displays a pop-up window with the text: "Only number with a maximum of 4 digits allowed." In case it is not higher it sends a request to the server to update the plate with the entered data. It is also updated in the table. If there is any error with the server a popup window is shown informing about it.
         tableColumnCarbohydrates.setOnEditCommit(
                 (CellEditEvent<Plate, Float> t) -> {
+                    Float carbohydrates = t.getOldValue();
                     try {
                         if (t.getNewValue() <= 9999) {
                             ((Plate) t.getTableView().getItems().get(
@@ -213,16 +234,29 @@ public class PlateControlVController {
                             alert.show();
                         }
                     } catch (BusinessLogicException ex) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setCarbohydrates(carbohydrates);
+                        tableViewPlates.refresh();
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                        alert.show();
+                    } catch (NullPointerException e) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setCarbohydrates(t.getOldValue());
+                        tableViewPlates.refresh();
+                        String msg = "Invalid value for carbohydrates.";
+                        LOGGER.log(Level.SEVERE, msg);
+                        Alert alert = new Alert(AlertType.ERROR, msg);
                         alert.show();
                     }
                 });
 
         tableColumnLipids.setCellFactory(TextFieldTableCell.<Plate, Float>forTableColumn(new FloatStringFormatter()));
+        tableColumnLipids.setMinWidth(5);
         // Check that the number entered is not greater than 9999. In case it is higher it displays a pop-up window with the text: "Only number with a maximum of 4 digits allowed." In case it is not higher it sends a request to the server to update the plate with the entered data. It is also updated in the table. If there is any error with the server a popup window is shown informing about it.
         tableColumnLipids.setOnEditCommit(
                 (CellEditEvent<Plate, Float> t) -> {
+                    Float lipids = t.getOldValue();
                     try {
                         if (t.getNewValue() <= 9999) {
                             ((Plate) t.getTableView().getItems().get(
@@ -235,16 +269,29 @@ public class PlateControlVController {
                             alert.show();
                         }
                     } catch (BusinessLogicException ex) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setLipids(lipids);
+                        tableViewPlates.refresh();
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                        alert.show();
+                    } catch (NullPointerException e) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setLipids(t.getOldValue());
+                        tableViewPlates.refresh();
+                        String msg = "Invalid value for lipids.";
+                        LOGGER.log(Level.SEVERE, msg);
+                        Alert alert = new Alert(AlertType.ERROR, msg);
                         alert.show();
                     }
                 });
 
         tableColumnProteins.setCellFactory(TextFieldTableCell.<Plate, Float>forTableColumn(new FloatStringFormatter()));
+        tableColumnProteins.setMinWidth(5);
         // Check that the number entered is not greater than 9999. In case it is higher it displays a pop-up window with the text: "Only number with a maximum of 4 digits allowed." In case it is not higher it sends a request to the server to update the plate with the entered data. It is also updated in the table. If there is any error with the server a popup window is shown informing about it.
         tableColumnProteins.setOnEditCommit(
                 (CellEditEvent<Plate, Float> t) -> {
+                    Float proteins = t.getOldValue();
                     try {
                         if (t.getNewValue() <= 9999) {
                             ((Plate) t.getTableView().getItems().get(
@@ -257,8 +304,19 @@ public class PlateControlVController {
                             alert.show();
                         }
                     } catch (BusinessLogicException ex) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setProteins(proteins);
+                        tableViewPlates.refresh();
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                        alert.show();
+                    } catch (NullPointerException e) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setProteins(t.getOldValue());
+                        tableViewPlates.refresh();
+                        String msg = "Invalid value for proteins.";
+                        LOGGER.log(Level.SEVERE, msg);
+                        Alert alert = new Alert(AlertType.ERROR, msg);
                         alert.show();
                     }
                 });
@@ -268,11 +326,15 @@ public class PlateControlVController {
         // Sends a request to the server to update the plate with the entered data. It is also updated in the table. If there is any error with the server a popup window is shown informing about it.
         tableColumnMealType.setOnEditCommit(
                 (CellEditEvent<Plate, MealEnum> t) -> {
+                    MealEnum mealType = t.getOldValue();
                     try {
                         ((Plate) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())).setMealType(t.getNewValue());
                         plateModel.edit_XML((Plate) t.getTableView().getSelectionModel().getSelectedItem());
                     } catch (BusinessLogicException ex) {
+                        ((Plate) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setMealType(mealType);
+                        tableViewPlates.refresh();
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                         alert.show();
@@ -281,15 +343,18 @@ public class PlateControlVController {
 
         // The tableColumnVegetarian cells are a CheckBox.
         tableColumnVegetarian.setCellFactory(CheckBoxTableCell.<Plate>forTableColumn(tableColumnVegetarian));
+        tableColumnVegetarian.setMinWidth(5);
         tableColumnVegetarian.setCellValueFactory(
                 (CellDataFeatures<Plate, Boolean> param) -> param.getValue().getVegetarianProperty());
 
         // The cells of tableColumnImage and tableColumnIngredients are a Button.
         tableColumnIngredients.setCellFactory(cellIngredientsFactory);
-        tableColumnIngredients.setMinWidth(20);
+        tableColumnIngredients.setMinWidth(50);
 
         tableColumnImage.setCellFactory(cellImageFactory);
+        tableColumnImage.setMinWidth(50);
 
+        stage.show();
         // The table is loaded with the plates data.
         if (platesData == null) {
             loadData();
@@ -302,11 +367,13 @@ public class PlateControlVController {
         // A context menu will open with the "Delete row" option.
         contextMenu.getItems().get(0).setOnAction(this::handleDeleteAction);
 
-        stage.show();
         LOGGER.info("PlateControlVController window initialized.");
     }
 
-    // A pop-up window appears asking: "Are you sure you want to close the app? If you click "Yes", the program closes. If you click "No" the pop-up window disappears.
+    /**
+     * A pop-up window appears asking: "Are you sure you want to close the app? If you click "Yes", the program closes. If you click "No" the pop-up window disappears.
+     * @param event The event that is thrown when the user closes the window.
+     */ 
     private void handleExitAction(WindowEvent event) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
         a.showAndWait();
@@ -324,7 +391,10 @@ public class PlateControlVController {
         }
     }
 
-    // Adds a new editable line to the table, to create a new plate. Send to the server a request to create a new empty plate and add it to the table.
+    /**
+     * Adds a new editable line to the table, to create a new plate. Send to the server a request to create a new empty plate and add it to the table.
+     * @param event The event that is thrown when the add row button is clicked.
+     */ 
     @FXML
     private void handleAddRow(ActionEvent event) {
         try {
@@ -340,7 +410,10 @@ public class PlateControlVController {
         }
     }
 
-    // A pop-up window is displayed saying "Are you sure you want to delete this plate?" With two options (YES or NO). In case of saying yes, a request is sent to the server to delete the plate, it is deleted in the table and the pop-up window closes. If you say no, the pop-up window closes.
+    /**
+     * A pop-up window is displayed saying "Are you sure you want to delete this plate?" With two options (YES or NO). In case of saying yes, a request is sent to the server to delete the plate, it is deleted in the table and the pop-up window closes. If you say no, the pop-up window closes.
+     * @param event The event that is thrown when the delete button is clicked.
+     */ 
     private void handleDeleteAction(ActionEvent event) {
         Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this plate?");
         a.showAndWait();
@@ -366,7 +439,10 @@ public class PlateControlVController {
         }
     }
 
-    // Opens DietsControlWindow and closes this.
+    /**
+     * Opens DietsControlWindow and closes this.
+     * @param event The event that is thrown when the diet button on the side menu is clicked.
+     */
     @FXML
     private void handleButtonDiets(ActionEvent event) {
         try {
@@ -374,7 +450,7 @@ public class PlateControlVController {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/DietControlWindow.fxml"));
             Parent root = (Parent) loader.load();
 
-            PlateControlVController controller = ((PlateControlVController) loader.getController());
+            DietsControlVController controller = ((DietsControlVController) loader.getController());
 
             controller.setStage(new Stage());
 
@@ -386,7 +462,10 @@ public class PlateControlVController {
         }
     }
 
-    // Opens IngridientsControlWindow and closes this.
+    /**
+     * Opens IngredientsControlWindow and closes this.
+     * @param event The event that is thrown when the ingredient button on the side menu is clicked.
+     */
     @FXML
     private void handleButtonIngredients(ActionEvent event) {
         try {
@@ -394,7 +473,7 @@ public class PlateControlVController {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/IngredientControlWindow.fxml"));
             Parent root = (Parent) loader.load();
 
-            PlateControlVController controller = ((PlateControlVController) loader.getController());
+            IngredientControlVController controller = ((IngredientControlVController) loader.getController());
 
             controller.setStage(stage);
 
@@ -406,7 +485,10 @@ public class PlateControlVController {
         }
     }
 
-    // Opens TipsControlWindow and closes this.
+    /**
+     * Opens TipsControlWindow and closes this.
+     * @param event The event that is thrown when the tip button on the side menu is clicked.
+     */
     @FXML
     private void handleButtonTips(ActionEvent event) {
         try {
@@ -426,15 +508,18 @@ public class PlateControlVController {
         }
     }
 
-    // Opens ClientsControlWindow and closes this.
+    /**
+     * Opens ClientsControlWindow and closes this.
+     * @param event The event that is thrown when the client button on the side menu is clicked.
+     */
     @FXML
     private void handleButtonClients(ActionEvent event) {
         try {
             stage.close();
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientsControlWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientAdminlWindow.fxml"));
             Parent root = (Parent) loader.load();
 
-            PlateControlVController controller = ((PlateControlVController) loader.getController());
+            ClientControlWindow controller = ((ClientControlWindow) loader.getController());
 
             controller.setStage(stage);
 
@@ -446,15 +531,18 @@ public class PlateControlVController {
         }
     }
 
-    // A pop-up window is displayed asking: "Are you sure you want to log out?". If you click "Yes" the pop-up window disappears, the SignIn window opens and the current one closes. If you click "No" the pop-up window disappears.
+    /**
+     * A pop-up window is displayed asking: "Are you sure you want to log out?". If you click "Yes" the pop-up window disappears, the SignIn window opens and the current one closes. If you click "No" the pop-up window disappears.
+     * @param event The event that is thrown when the log out button is clicked.
+     */ 
     @FXML
     private void handleButtonLogOut(ActionEvent event) {
         try {
             stage.close();
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientsControlWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/SignInView.fxml"));
             Parent root = (Parent) loader.load();
 
-            PlateControlVController controller = ((PlateControlVController) loader.getController());
+            SignInController controller = ((SignInController) loader.getController());
 
             controller.setStage(stage);
 
@@ -466,13 +554,16 @@ public class PlateControlVController {
         }
     }
 
-    // Check that there are plates whose name matches the characters entered. If they do not exist, a pop-up window is displayed with the text: "There are no plates with that name". If they do exist, the table is reloaded with the plates whose names match the characters entered.
+    /**
+     * Check that there are plates whose name matches the characters entered. If they do not exist, a pop-up window is displayed with the text: "There are no plates with that name". If they do exist, the table is reloaded with the plates whose names match the characters entered.
+     * @param event The event that is thrown when the button search is clicked.
+     */
     private void handleButtonSearch(ActionEvent event) {
         try {
             if (!textFieldSearchBar.getText().isEmpty()) {
                 List<Plate> namedPlates = PlateFactory.getModel().findPlatesByName_XML(new GenericType<List<Plate>>() {
                 }, textFieldSearchBar.getText());
-                List<Plate> filter = new ArrayList<>(filteredPlates);
+                filter = new ArrayList<>(platesData);
                 if (!namedPlates.isEmpty()) {
                     filter = filter.stream()
                             .filter(plate -> namedPlates.stream().anyMatch(namePlate -> namePlate.getPlateName().equals(plate.getPlateName())))
@@ -481,10 +572,11 @@ public class PlateControlVController {
                     Alert alert = new Alert(AlertType.INFORMATION, "There are no plates with that name.");
                     alert.show();
                 }
+
                 tableViewPlates.setItems(FXCollections.observableList(filter));
                 tableViewPlates.refresh();
             } else {
-                tableViewPlates.setItems(FXCollections.observableList(filteredPlates));
+                tableViewPlates.setItems(FXCollections.observableList(platesData));
                 tableViewPlates.refresh();
             }
         } catch (BusinessLogicException ex) {
@@ -494,13 +586,20 @@ public class PlateControlVController {
         }
     }
 
-    // Lose focus of textFieldSearchBar.
+    /**
+     * Lose focus of textFieldSearchBar.
+     * @param keyEvent The key event that is thrown.
+     */
     private void handleSearchBar(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.ESCAPE) {
             buttonSearch.requestFocus();
         }
     }
-
+    
+    /**
+     * A filter window is shown.
+     * @param event The event that is thrown when the filter button is clicked.
+     */
     @FXML
     private void handleButtonFilter(ActionEvent event) {
         // Open a fileChooser to choose an image.
@@ -542,22 +641,24 @@ public class PlateControlVController {
         alert.getDialogPane().setContent(grid);
 
         alert.showAndWait().ifPresent(response -> {
-            // If you click Cancel the popup window disappears. If you click Accept the pop-up window disappears and checks for plates matching the filters.
-            if (response == ButtonType.OK) {
-                try {
+            try {
+                // If you click Cancel the popup window disappears. If you click Accept the pop-up window disappears and checks for plates matching the filters.
+                if (response == ButtonType.OK) {
                     textFieldSearchBar.setText("");
                     ObservableList<Ingredient> ingredients = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>>() {
                     }));
-                    filteredPlates = new ArrayList<>(platesData);
+                    loadData();
                     HashMap<Integer, Ingredient> ingredientMap = new HashMap<>();
                     ingredients.forEach((ingredient) -> {
                         ingredientMap.put(ingredient.getIngredient_id(), ingredient);
                     });
-                    
+
                     if (!comboBoxMeal.getSelectionModel().isEmpty()) {
                         try {
-                            filteredPlates = plateModel.findPlatesByMealType_XML(new GenericType<List<Plate>>() {
-                            }, comboBoxMeal.getValue().toString());
+                            filter = FXCollections.observableArrayList(plateModel.findPlatesByMealType_XML(new GenericType<List<Plate>>() {
+                            }, comboBoxMeal.getValue().toString()));
+                            platesData = FXCollections.observableArrayList(platesData.stream().filter(plate -> filter.stream().anyMatch(plateMT -> plateMT.getMealType().equals(plate.getMealType())))
+                                    .collect(Collectors.toList()));
                         } catch (BusinessLogicException ex) {
                             LOGGER.log(Level.SEVERE, ex.getMessage());
                             Alert alert2 = new Alert(AlertType.ERROR, ex.getMessage());
@@ -565,38 +666,52 @@ public class PlateControlVController {
                         }
                     }
                     if (checkBox.isSelected()) {
-                        filteredPlates = filteredPlates.stream().filter((Plate plate) -> plate.getIsVegetarian()).collect(Collectors.toList());
+                        platesData = FXCollections.observableArrayList(platesData.stream().filter((Plate plate) -> plate.getIsVegetarian()).collect(Collectors.toList()));
                     }
                     if (!comboBoxIngredients.getSelectionModel().isEmpty() && !ingredients.isEmpty()) {
                         final List<Ingredient> platesDataIngredients = ingredients.stream().filter((Ingredient ingredient) -> ingredient.getFoodType() == comboBoxIngredients.getValue()).collect(Collectors.toList());
-                        filteredPlates.removeIf(p -> !p.getIngredients().stream().anyMatch(i -> platesDataIngredients.contains(ingredientMap.get(i.getIngredient_id()))));
+                        filter = new ArrayList<>(platesData);
+                        platesData.stream().filter((plate) -> (plate.getIngredientsProperty().isEmpty())).forEachOrdered((plate) -> {
+                            filter.remove(plate);
+                        });
+                        platesData = FXCollections.observableArrayList(filter);
+                        platesData.removeIf(p -> !p.getIngredients().stream().anyMatch(i -> platesDataIngredients.contains(ingredientMap.get(i.getIngredient_id()))));
                     } else if (!comboBoxIngredients.getSelectionModel().isEmpty() && ingredients.isEmpty()) {
-                        filteredPlates.clear();
+                        platesData.clear();
                     }
                     // If they do not exist, a pop-up window is displayed with the text: "There are no plates with those parameters".
-                    if (filteredPlates.isEmpty()) {
+                    if (platesData.isEmpty()) {
                         loadData();
                         String msg = "There are no matching plates with the filters.";
                         Alert alert2 = new Alert(AlertType.INFORMATION, msg);
                         alert2.show();
                         LOGGER.log(Level.SEVERE, msg);
                     } else {
-                        // If they do exist, the table is reloaded with the plates whose data match the chosen parameters.
-                        tableViewPlates.setItems(FXCollections.observableList(filteredPlates));
+                        // If they do exist, the table is reloaded with the plates whose data match the chosen parameters.          
+                        tableViewPlates.setItems(FXCollections.observableList(platesData));
                         tableViewPlates.refresh();
                     }
-                } catch (BusinessLogicException ex) {
-                    Logger.getLogger(PlateControlVController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-
-            if (alert.getResult().equals(ButtonType.CANCEL)) {
-                event.consume();
+                if (alert.getResult().equals(ButtonType.CANCEL)) {
+                    event.consume();
+                }
+            } catch (NullPointerException ex) {
+                String msg = "There are no plates with such ingredients.";
+                LOGGER.log(Level.SEVERE, msg);
+                Alert alert2 = new Alert(AlertType.ERROR, msg);
+                alert2.show();
+            } catch (BusinessLogicException ex) {
+                LOGGER.log(Level.SEVERE, ex.getMessage());
+                Alert alert2 = new Alert(AlertType.ERROR, ex.getMessage());
+                alert2.show();
             }
         });
     }
 
-    // It will display a help window.
+    /**
+     * It will display a help window.
+     * @param event The event that is thrown when the help button is clicked.
+     */
     @FXML
     private void handleButtonHelp(ActionEvent event) {
         try {
@@ -613,7 +728,10 @@ public class PlateControlVController {
         }
     }
 
-    // Checks if there is data in the table. If there is data, it generates a report and displays it. If there is no data, it displays a pop-up window with the text: "No data available for report".
+    /**
+     * Checks if there is data in the table. If there is data, it generates a report and displays it. If there is no data, it displays a pop-up window with the text: "No data available for report".
+     * @param event The event that is thrown when the report button is clicked.
+     */ 
     @FXML
     private void handleButtonReport(ActionEvent event) {
         try {
@@ -651,13 +769,14 @@ public class PlateControlVController {
                         }
                     })
             );
-            // Se carga una lista para filtrar los platos
-            filteredPlates = new ArrayList<>(platesData);
         } catch (BusinessLogicException ex) {
             String msg = "An error occurred while connecting to the server. Try again later.";
             LOGGER.log(Level.SEVERE, msg);
             Alert alert = new Alert(AlertType.ERROR, msg);
-            alert.show();
+            alert.showAndWait();
+            if (alert.getResult().equals(ButtonType.OK)) {
+                Platform.exit();
+            }
         }
     }
 }

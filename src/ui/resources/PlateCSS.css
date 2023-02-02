@@ -1,0 +1,60 @@
+#labelTitle {
+	-fx-graphic-text-gap: 10;
+}
+
+.button {
+	-fx-background-color:  #15B7B9;
+	-fx-graphic-text-gap: 10;
+	-fx-padding: 0px 29px;
+}
+
+.button:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}	
+
+.button:pressed {
+	-fx-background-color: #109192;
+}
+
+#buttonUser {
+	-fx-background-color:  #15B7B9;
+	-fx-mark-color: #15B7B9;
+}
+
+#buttonUser:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+}
+
+#buttonUser:pressed {
+	-fx-background-color: #109192;
+}
+
+#textFieldSearchBar{
+	-fx-background-color: #F4F4F4;
+	-fx-border-color:  #ABB2B9;
+	-fx-border-radius: 5px;
+	-fx-padding: 0px 43px;
+}
+
+.menu-button {
+	-fx-background-color: #15B7B9;
+	-fx-border-radius: 5px;
+	-fx-mark-color: #15B7B9;
+	-fx-padding: 5px;
+}
+
+.menu-button:hover {
+	-fx-background-color: #13A8A9;
+	-fx-border-radius: 5px;
+	-fx-mark-color: #15B7B9;
+	-fx-padding: 5px;
+}
+
+.menu-button:pressed {
+	-fx-background-color: #109192;
+}
+
+
+
