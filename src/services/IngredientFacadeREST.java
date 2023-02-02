@@ -6,7 +6,10 @@
 package services;
 
 import businessLogic.IngredientInterface;
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+import exceptions.BusinessLogicException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -44,12 +47,17 @@ public class IngredientFacadeREST implements IngredientInterface {
     /**
      * This method sends an Ingredient to the server to be modified in XML format.
      * @param requestEntity entity to be modified.
-     * @throws WebApplicationException Exception to be catched.
+     * @throws exceptions.BusinessLogicException Exception to be catched.
      */
     @Override
-    public void edit_XML(Ingredient requestEntity) throws WebApplicationException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),
+    public void edit_XML(Ingredient requestEntity) throws BusinessLogicException {
+        try{
+            webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),
                 Ingredient.class);
+        }catch (Exception ex) {
+            LOGGER.log(Level.SEVERE,"Ingredient: Exception editing ingredients, {0}",ex.getMessage());
+            throw new BusinessLogicException("Error editing ingredients:\n" + ex.getMessage());
+        }    
     }
     
     /**
@@ -58,24 +66,34 @@ public class IngredientFacadeREST implements IngredientInterface {
      * @param responseType type of the class expected.
      * @param id id of the object to find.
      * @return the object finded.
-     * @throws WebApplicationException  Exception to be catched..
+     * @throws BusinessLogicException  Exception to be catched..
      */
     @Override
-    public <T> T find_XML(Class<T> responseType, Integer id) throws WebApplicationException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    public <T> T find_XML(Class<T> responseType, Integer id) throws BusinessLogicException {
+        try{
+            WebTarget resource = webTarget;
+            resource = resource.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id}));
+            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        }catch (Exception ex) {
+            LOGGER.log(Level.SEVERE,"Ingredient: Exception finding ingredients, {0}",ex.getMessage());
+            throw new BusinessLogicException("Error finding ingredients:\n" + ex.getMessage());
+        }
     }
 
     /**
      * This method creates Ingredients.
      * @param requestEntity Ingredient that is sending to the server
-     * @throws WebApplicationException Exception to be catched.
+     * @throws BusinessLogicException Exception to be catched.
      */
     @Override
-    public void create_XML(Ingredient requestEntity) throws WebApplicationException {
-        webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),
+    public void create_XML(Ingredient requestEntity) throws BusinessLogicException {
+        try{
+            webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML),
                 Ingredient.class);
+        }catch (Exception ex) {
+            LOGGER.log(Level.SEVERE,"Ingredient: Exception creating ingredients, {0}",ex.getMessage());
+            throw new BusinessLogicException("Error creating ingredients:\n" + ex.getMessage());
+        }
     }
 
     /**
@@ -83,22 +101,32 @@ public class IngredientFacadeREST implements IngredientInterface {
      * @param <T> type of the class.
      * @param responseType type of the class expected.
      * @return the object finded.
-     * @throws WebApplicationException Exception to be catched.
+     * @throws BusinessLogicException Exception to be catched.
      */
     @Override
-    public <T> T findAll_XML(GenericType<T> responseType) throws WebApplicationException {
-        WebTarget resource = webTarget;
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    public <T> T findAll_XML(GenericType<T> responseType) throws BusinessLogicException {
+        try{
+            WebTarget resource = webTarget;
+            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        }catch (Exception ex) {
+            LOGGER.log(Level.SEVERE,"Ingredient: Exception finding ingredients, {0}",ex.getMessage());
+            throw new BusinessLogicException("Error finding ingredients:\n" + ex.getMessage());
+        }
     }
 
     /**
      * This method deletes an ingredient from the server.
      * @param id Id of the ingredient to be deleted.
-     * @throws WebApplicationException Exception to be catched.
+     * @throws BusinessLogicException Exception to be catched.
      */
     @Override
-    public void remove(Integer id) throws WebApplicationException {
-        webTarget.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id})).request().delete(Ingredient.class);
+    public void remove(Integer id) throws BusinessLogicException {
+        try{
+            webTarget.path(java.text.MessageFormat.format("ingredient/{0}", new Object[]{id})).request().delete(Ingredient.class);
+        }catch (Exception ex) {
+            LOGGER.log(Level.SEVERE,"Ingredient: Exception removing ingredients, {0}",ex.getMessage());
+            throw new BusinessLogicException("Error removing ingredients:\n" + ex.getMessage());
+        }
     }
     
     /**
@@ -107,13 +135,18 @@ public class IngredientFacadeREST implements IngredientInterface {
      * @param responseType type of the class expected.
      * @param ingredientName name to search
      * @return the object finded.
-     * @throws WebApplicationException Exception to be catched.
+     * @throws BusinessLogicException Exception to be catched.
      */
     @Override
-    public <T> T findIngredientsByName_XML(GenericType<T> responseType, String ingredientName) throws WebApplicationException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{ingredientName}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    public <T> T findIngredientsByName_XML(GenericType<T> responseType, String ingredientName) throws BusinessLogicException {
+        try{
+            WebTarget resource = webTarget;
+            resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{ingredientName}));
+            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        }catch (Exception ex) {
+            LOGGER.log(Level.SEVERE,"Ingredient: Exception finding ingredients by name, {0}",ex.getMessage());
+            throw new BusinessLogicException("Error finding ingredients:\n" + ex.getMessage());
+        }
     }
     
     /**
