@@ -111,7 +111,7 @@
       </Pane>
       <Pane layoutX="404.0" layoutY="247.0" prefHeight="50.0" prefWidth="56.0">
          <children>
-            <Button fx:id="buttonInsertRow" layoutX="6.0" layoutY="8.0" mnemonicParsing="false" onAction="#handleAddRow" stylesheets="@../resources/ButtonIcon.css">
+            <Button fx:id="buttonInsertRow" layoutX="6.0" layoutY="8.0" mnemonicParsing="false" onAction="#handleAddRow" stylesheets="@../resources/buttonIcon.css">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -173,7 +173,7 @@
             <Font name="CircularStd-Book" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="buttonReport" layoutX="1288.0" layoutY="258.0" mnemonicParsing="false" onAction="#handleButtonReport" stylesheets="@../resources/ButtonIcon.css">
+      <Button fx:id="buttonReport" layoutX="1288.0" layoutY="258.0" mnemonicParsing="false" onAction="#handleButtonReport" stylesheets="@../resources/buttonIcon.css">
          <graphic>
             <ImageView fitHeight="26.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -182,7 +182,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="buttonHelp" layoutX="625.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleButtonHelp" style="-fx-background-radius: 25px;" stylesheets="@../resources/ButtonIcon.css">
+      <Button fx:id="buttonHelp" layoutX="625.0" layoutY="60.0" mnemonicParsing="false" onAction="#handleButtonHelp" style="-fx-background-radius: 25px;" stylesheets="@../resources/buttonIcon.css">
          <graphic>
             <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                <image>
