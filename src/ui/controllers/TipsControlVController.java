@@ -29,7 +29,7 @@ public class TipsControlVController {
      * Log that gives more info when app is running.
      */
     private static final Logger LOGGER = Logger.getLogger("TipsControlVController.class");
-    
+
     /**
      * Sends you to the plates view.
      */
@@ -57,7 +57,7 @@ public class TipsControlVController {
     private Button buttonClients;
     @FXML
     private Button buttonLogout;
-    
+
     public Stage getStage() {
         return stage;
     }
@@ -72,7 +72,7 @@ public class TipsControlVController {
         stage.setScene(scene);
         stage.setTitle("Tip Management");
         stage.setResizable(false);
-        
+
         buttonPlates.setOnAction(this::handleButtonPlatesAction);
 
         buttonDiets.setOnAction(this::handleButtonDietsAction);
@@ -82,13 +82,15 @@ public class TipsControlVController {
         buttonTips.setOnAction(this::handleButtonTipsAction);
 
         buttonClients.setOnAction(this::handleButtonClientsAction);
-        
+
         buttonLogout.setOnAction(this::handleLogOutAction);
+
+        stage.show();
     }
-    
+
     /**
      * Opens log in windwow and closes this one
-     * 
+     *
      * @param event The ActionEvent object for the event.
      */
     public void handleLogOutAction(ActionEvent event) {
@@ -134,7 +136,7 @@ public class TipsControlVController {
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
             showErrorAlert("Failed trying to open Plates window.");
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Plate window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "TipsControlVController: Error trying to open Plate window, {0}", ex.getMessage());
         }
     }
 
@@ -158,7 +160,7 @@ public class TipsControlVController {
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
             showErrorAlert("Failed trying to open Diets window.");
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Diets window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "TipsControlVController: Error trying to open Diets window, {0}", ex.getMessage());
         }
     }
 
@@ -182,7 +184,7 @@ public class TipsControlVController {
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
             showErrorAlert("Failed trying to open Ingredients window.");
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Plates window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "TipsControlVController: Error trying to open Plates window, {0}", ex.getMessage());
         }
     }
 
@@ -206,7 +208,7 @@ public class TipsControlVController {
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
             showErrorAlert("Failed trying to open Tips window.");
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Tips window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "TipsControlVController: Error trying to open Tips window, {0}", ex.getMessage());
         }
     }
 
@@ -219,21 +221,22 @@ public class TipsControlVController {
     @FXML
     private void handleButtonClientsAction(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientsControlWindow.fxml"));
+            stage.close();
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientAdminWindow.fxml"));
             Parent root = (Parent) loader.load();
 
             ClientControlWindow controller = ((ClientControlWindow) loader.getController());
 
             controller.setStage(stage);
-            stage.close();
+
             controller.initStage(root);
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
             showErrorAlert("Failed trying to open Clients window.");
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Clients window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "TipsControlVController: Error trying to open Clients window, {0}", ex.getMessage());
         }
     }
-    
+
     /**
      * This method makes an alert to be used by other methods.
      *
