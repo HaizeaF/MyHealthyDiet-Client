@@ -228,9 +228,17 @@ public class IngredientControlVController {
             
             buttonSearch.setOnAction(this::handleSearchAction);
             
-            //
+            // Report button
             
             buttonReport.setOnAction(this::handleButtonReportAction);
+            
+            // Window navigation
+            
+            buttonClients.setOnAction(this::handleClientsWindowNavigation);
+            buttonDiets.setOnAction(this::handleDietssWindowNavigation);
+            buttonTips.setOnAction(this::handleTipsWindowNavigation);
+            buttonPlates.setOnAction(this::handlePlatesWindowNavigation);
+            buttonIngredients.setOnAction(this::handleIngredientsWindowNavigation);
             
             //tableIngredient.getSelectionModel().selectedItemProperty().addListener(this::handleTableSelectionChanged);
             
@@ -471,5 +479,125 @@ public class IngredientControlVController {
     private void cargarTablaIngredientesUnPlato(ObservableList<Ingredient> ingredients){
         if(ingredients!=null)
             tableIngredient.setItems(ingredients);
+    }
+    
+    /**
+     * Navigation with Client window
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
+    @FXML
+    private void handleClientsWindowNavigation(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/DietControlWindow.fxml"));
+            Parent root = (Parent) loader.load();
+
+            ClientControlWindow controller = ((ClientControlWindow) loader.getController());
+
+            controller.setStage(stage);
+            stage.close();
+            controller.initStage(root);
+        } catch (IOException | IllegalStateException ex) {
+            //If theres is an error trying to change view, an alert will show.
+            String msg =("Failed trying to open Clients window.");
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, "ClientControlWindow: Error trying to open Clients window, {0}", ex.getMessage());
+        }
+    }
+    
+    /**
+     * Navigation with Diet window
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
+    @FXML
+    private void handleDietssWindowNavigation(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/DietControlWindow.fxml"));
+            Parent root = (Parent) loader.load();
+
+            DietsControlVController controller = ((DietsControlVController) loader.getController());
+
+            controller.setStage(stage);
+            stage.close();
+            controller.initStage(root);
+        } catch (IOException | IllegalStateException ex) {
+            //If theres is an error trying to change view, an alert will show.
+            String msg =("Failed trying to open Diets window.");
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Dietss window, {0}", ex.getMessage());
+        }
+    }
+    
+    /**
+     * Navigation with Plates window
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
+    @FXML
+    private void handlePlatesWindowNavigation(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PlateControlView.fxml"));
+            Parent root = (Parent) loader.load();
+
+            PlateControlVController  controller = ((PlatesControlVController) loader.getController());
+
+            controller.setStage(stage);
+            stage.close();
+            controller.initStage(root);
+        } catch (IOException | IllegalStateException ex) {
+            //If theres is an error trying to change view, an alert will show.
+            String msg =("Failed trying to open Plates window.");
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, "PlateControlVController: Error trying to open Plates window, {0}", ex.getMessage());
+        }
+    }
+    
+    /**
+     * Navigation with Tips window
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
+    @FXML
+    private void handleTipsWindowNavigation(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/TipControlWindow.fxml"));
+            Parent root = (Parent) loader.load();
+
+            TipsControlVController controller = ((TipsontrolVController) loader.getController());
+
+            controller.setStage(stage);
+            stage.close();
+            controller.initStage(root);
+        } catch (IOException | IllegalStateException ex) {
+            //If theres is an error trying to change view, an alert will show.
+            String msg =("Failed trying to open Tips window.");
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, "TipsControlVController: Error trying to open Tips window, {0}", ex.getMessage());
+        }
+    }
+    
+    /**
+     * Navigation with Ingredient window
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
+    @FXML
+    private void handleIngredientsWindowNavigation(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/IngredientControlWindow.fxml"));
+            Parent root = (Parent) loader.load();
+
+            IngredientControlVController controller = ((IngredientControlVController) loader.getController());
+
+            controller.setStage(stage);
+            stage.close();
+            controller.initStage(root);
+        } catch (IOException | IllegalStateException ex) {
+            //If theres is an error trying to change view, an alert will show.
+            String msg =("Failed trying to open Ingredients window.");
+            Alert alert = new Alert(AlertType.ERROR, msg);
+            alert.show();
+            LOGGER.log(Level.SEVERE, "IngredientControlVController: Error trying to open Ingredients window, {0}", ex.getMessage());
+        }
     }
 }
