@@ -38,6 +38,7 @@ import cryptography.HashMD5;
 import exceptions.BusinessLogicException;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.GridPane;
 import objects.ClientOBJ;
 
 /**
@@ -150,7 +151,23 @@ public class SignInController {
     }
 
     private void forgotPassword(ActionEvent event) {
-
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Password Recovery");
+        alert.setHeaderText("Insert your email:");
+        
+        GridPane grid = new GridPane();
+        
+        TextField textFieldEmail = new TextField();
+        textFieldEmail.setPromptText("example@mail.com");
+        
+        grid.add(textFieldEmail, 0, 0);
+        
+        alert.getDialogPane().setContent(grid);
+        alert.showAndWait().ifPresent(response -> {
+            if(response == ButtonType.OK){
+                
+            }
+        });
     }
 
     /**
