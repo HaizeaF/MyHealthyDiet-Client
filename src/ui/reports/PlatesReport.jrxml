@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3b0f320e-9ad6-4ccc-9324-544e07a21d55">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="plateName" class="java.lang.String"/>
+	<field name="mealType" class="java.lang.Object"/>
+	<field name="calories" class="java.lang.Float"/>
+	<field name="carbohydrates" class="java.lang.Float"/>
+	<field name="lipids" class="java.lang.Float"/>
+	<field name="proteins" class="java.lang.Float"/>
+	<field name="isVegetarian" class="java.lang.Boolean"/>
+	<field name="ingredients.ingredientName" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="79" uuid="93419c05-6ea3-4435-9aea-96392c55ddd9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" size="24"/>
+				</textElement>
+				<text><![CDATA[Plates Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="82" height="61" uuid="949f69e4-4bb1-4dbc-ac3c-de83243c5adf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[PLATE NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="212" y="0" width="98" height="61" uuid="812516f7-be3b-4410-90c9-e0adc3e41e6d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[CARBOHYDRATES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="0" width="55" height="61" uuid="7456ef56-9bca-43c6-abbe-8483f499126d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[PROTEINS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="405" y="0" width="75" height="61" uuid="bc5bd0a6-9a2f-458c-8004-7f0b1c5cffad"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[VEGETARIAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="0" width="40" height="61" uuid="466f667c-38aa-43c9-bfda-cf13bcfc342e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[LIPIDS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="151" y="0" width="61" height="61" uuid="8d36591e-1df9-4153-bee4-fb1df1d88668"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[CALORIES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="0" width="69" height="61" uuid="fd0fa187-c788-4264-b532-8231324ffdb5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[MEAL TYPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="0" width="75" height="61" uuid="64c2da0d-fb13-4c0e-8a3a-4ce2bae3a3c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Circular Std" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[INGREDIENTS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="56" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="82" height="56" uuid="b7813c6a-a891-4890-bb76-a9ba31c5f40b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{plateName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="151" y="0" width="61" height="56" uuid="9ee23efe-ffb9-4f12-b388-dd3ec6a5c014"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{calories}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="212" y="0" width="98" height="56" uuid="e0f2ce9b-8eb1-47e7-9cb0-438d92dfae7d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{carbohydrates}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="0" width="40" height="56" uuid="00a04c54-1621-4c71-99c0-688af04ae810"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{lipids}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="55" height="56" uuid="123356b7-ee06-4e18-8c7f-8735be73e60f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{proteins}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="0" width="69" height="56" uuid="c59f1da9-e49c-4ae9-bdff-fa68b9483f04"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{mealType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="405" y="0" width="75" height="56" uuid="b5dae0b4-efeb-4a95-93aa-bfe558cebb52"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{isVegetarian}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="0" width="75" height="56" uuid="49e767cd-57b0-4805-8acd-5d8000427703"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ingredients.ingredientName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="1" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
