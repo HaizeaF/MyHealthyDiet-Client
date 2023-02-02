@@ -36,6 +36,8 @@ import objects.User;
 import cryptography.Asymmetric;
 import cryptography.HashMD5;
 import exceptions.BusinessLogicException;
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
 import objects.ClientOBJ;
 
 /**
@@ -43,7 +45,7 @@ import objects.ClientOBJ;
  * @author Sendoa
  */
 public class SignInController {
-    
+
     private Stage stage;
     private static final Logger LOGGER = Logger.getLogger("SignInVController.class");
     @FXML
@@ -70,7 +72,7 @@ public class SignInController {
     private ImageView userIcon;
     @FXML
     private ImageView passwordIcon;
-    
+
     public Stage getStage() {
         return stage;
     }
@@ -78,15 +80,15 @@ public class SignInController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
-    public void initStage(Parent root){
+
+    public void initStage(Parent root) {
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
 
         stage.setTitle("SignIn");
         stage.setResizable(false);
-        
+
         // USERNAME TEXT FIELD //
         // Comprobar si el texto cambia
         textFieldUsername.setOnKeyTyped(this::textChanged);
@@ -114,7 +116,7 @@ public class SignInController {
         stage.show();
         LOGGER.info("SingIn window initialized");
     }
-    
+
     private void handleExitAction(WindowEvent event) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
         a.showAndWait();
@@ -131,11 +133,14 @@ public class SignInController {
             LOGGER.log(Level.SEVERE, msg);
         }
     }
-    
+
     /**
-     * It checks that the text entered is less than 25 characters. If it reaches the maximum allowed, it does not allow more characters to be entered and subtracts and displays the first 25 characters.
+     * It checks that the text entered is less than 25 characters. If it reaches
+     * the maximum allowed, it does not allow more characters to be entered and
+     * subtracts and displays the first 25 characters.
      *
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     private void textChanged(KeyEvent event) {
         if (((TextField) event.getSource()).getText().length() >= 25) {
@@ -143,14 +148,16 @@ public class SignInController {
             ((TextField) event.getSource()).setText(((TextField) event.getSource()).getText().substring(0, 25));
         }
     }
-    
-    private void forgotPassword(ActionEvent event){
-        
+
+    private void forgotPassword(ActionEvent event) {
+
     }
 
     /**
      * Open the Sign Up window and close the Sign in window.
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     /*private void handleSignUp(ActionEvent event) {
         try {
@@ -169,23 +176,23 @@ public class SignInController {
             Logger.getLogger(SignInVController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }*/
-
     /**
      * Login method
      *
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     @FXML
     private void handleSignIn(ActionEvent event) {
+        LOGGER.info("Signin in user");
+        buttonSignIn.requestFocus();
+        // Comprueba que los campos están informados y que el usuario y la contraseña son válidos 
+        // (cumplen los requisitos especificados en sus propios eventos)
+        // Si los datos se validan correctame/ (cumplen los requisitos especificados en sus propios eventos)
+        // Si los datos se validan correctamente, se ejecuta el método doSignIn().
+        textErrorHandlerUsername(null);
+        handleKeyReleasedPasswd(null);
         try {
-            LOGGER.info("Signin in user");
-            buttonSignIn.requestFocus();
-            // Comprueba que los campos están informados y que el usuario y la contraseña son válidos 
-            // (cumplen los requisitos especificados en sus propios eventos)
-            // Si los datos se validan correctame/ (cumplen los requisitos especificados en sus propios eventos)
-            // Si los datos se validan correctamente, se ejecuta el método doSignIn().
-            textErrorHandlerUsername(null);
-            handleKeyReleasedPasswd(null);
             if (labelInvalidPassword.getText().equalsIgnoreCase("") && labelInvalidUser.getText().equalsIgnoreCase("")) {
                 UserInterface model = UserFactory.getModel();
                 byte[] passwordBytes = new Asymmetric().cipher(textFieldPassword.getText());
@@ -194,22 +201,34 @@ public class SignInController {
                     ClientOBJ client = (ClientOBJ) user;
                     LOGGER.info("Cliente encontrado");
                 } else {
+                    stage.close();
                     LOGGER.info("Usuario encontrado");
+                    FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientAdminWindow.fxml"));
+                    Parent root = (Parent) loader.load();
+
+                    ClientControlWindow controller = ((ClientControlWindow) loader.getController());
+
+                    controller.setStage(stage);
+
+                    controller.initStage(root);
                 }
-                stage.close();
             }
         } catch (BusinessLogicException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
-            e.printStackTrace();
             alert.show();
             LOGGER.severe(e.getMessage());
+        } catch (IOException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Window not found");
+            alert.show();
+            LOGGER.severe("Window not found");
         }
     }
 
     /**
      * Check what state (pressed/not pressed) the password is in.
      *
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     private void handleShowHide(ActionEvent event) {
         if (buttonShowHide.isSelected()) {
@@ -227,7 +246,9 @@ public class SignInController {
 
     /**
      * Copy text from one field to another
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     private void handleKeyReleasedPasswd(KeyEvent event) {
         if (passwordField.isVisible()) {
@@ -259,7 +280,7 @@ public class SignInController {
         }
     }
 
-    private void textErrorHandlerUsername(KeyEvent event){
+    private void textErrorHandlerUsername(KeyEvent event) {
         try {
             if (textFieldUsername.getText().isEmpty()) {
                 throw new InvalidUserValueException("Enter a username");
@@ -279,9 +300,10 @@ public class SignInController {
             labelInvalidUser.setText(ex.getMessage());
         }
     }
-    
+
     /**
      * Check the change of focus
+     *
      * @param observable Actual value
      * @param oldValue Old value
      * @param newValue New Value

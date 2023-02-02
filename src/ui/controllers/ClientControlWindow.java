@@ -174,7 +174,7 @@ public class ClientControlWindow {
         columnStatus.setCellValueFactory(new PropertyValueFactory("status"));
 
         stage.show();
-        
+
         try {
             // load all the clients and place them in the table
             clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
@@ -393,7 +393,10 @@ public class ClientControlWindow {
         // REPORT BUTTON //
         buttonReport.setOnAction(
                 this::handleButtonReportAction);
-        
+
+        // LOG OUT BUTTON //
+        buttonLogout.setOnAction(this::handleLogOutAction);
+
         LOGGER.info(
                 "ClientController window initialized");
     }
@@ -544,7 +547,7 @@ public class ClientControlWindow {
 
     /**
      * This method creates a report based on the table data
-     * 
+     *
      * @param event an ActionEvent.ACTION event type for when the button is
      * pressed
      */
@@ -566,8 +569,8 @@ public class ClientControlWindow {
 
     /**
      * This method opens the help window
-     * 
-     * @param event 
+     *
+     * @param event
      */
     private void handleHelpAction(ActionEvent event) {
         try {
@@ -584,7 +587,7 @@ public class ClientControlWindow {
 
     /**
      * Method to format a Date
-     * 
+     *
      * @param dateToFormat The date to be formatted
      * @return The date converted to local date
      */
@@ -598,12 +601,35 @@ public class ClientControlWindow {
 
     /**
      * Email validation method
-     * 
+     *
      * @param email the email to be chacked
      * @return boolean depending if the pattern is correct
      */
     public static boolean validateEmail(String email) {
         Matcher matcher = PATTERN.matcher(email);
         return matcher.matches();
+    }
+
+    public void handleLogOutAction(ActionEvent event) {
+        try {
+            Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
+            a.showAndWait();
+            if (a.getResult().equals(ButtonType.CANCEL)) {
+                event.consume();
+            } else {
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/SignInView.fxml"));
+                Parent root = (Parent) loader.load();
+
+                SignInController controller = ((SignInController) loader.getController());
+
+                controller.setStage(stage);
+
+                controller.initStage(root);
+            }
+        } catch (IOException ex) {
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            alert.show();
+            LOGGER.log(Level.SEVERE, ex.getMessage());
+        }
     }
 }

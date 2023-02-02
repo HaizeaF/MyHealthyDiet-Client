@@ -274,7 +274,7 @@ public class UserModifyVController {
         try {
             ClientOBJ cliente = new ClientOBJ(this.client.getUser_id(), userTextField.getText(), emailTextField.getText(), fullNameTextField.getText(), StatusEnum.ENABLED, PrivilegeEnum.USER, null, new Date(System.currentTimeMillis()), ageTextField.getText(), Float.parseFloat(heightTextField.getText()), (GenreEnum) genreComboBox.getSelectionModel().getSelectedItem(), (GoalEnum) goalComboBox.getSelectionModel().getSelectedItem());
             ClientFactory.getModel().edit(cliente);
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Data updated succesfully");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Data updated succesfully");
             alert.show();
             LOGGER.info("Client updated");
             buttonCancel.setDisable(true);
