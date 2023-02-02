@@ -273,7 +273,7 @@ public class ClientControlWindow {
                 ((ClientOBJ) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())).setHeight(t.getNewValue());
                 ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
-            } catch (BusinessLogicException ex) {
+            } catch (BusinessLogicException | NullPointerException ex) {
                 Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
                 alert.show();
                 LOGGER.log(Level.SEVERE, ex.getMessage());
@@ -542,6 +542,12 @@ public class ClientControlWindow {
         }
     }
 
+    /**
+     * This method creates a report based on the table data
+     * 
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
+     */
     private void handleButtonReportAction(ActionEvent event) {
         try {
             JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/ClientsReport.jrxml");
@@ -558,6 +564,11 @@ public class ClientControlWindow {
         }
     }
 
+    /**
+     * This method opens the help window
+     * 
+     * @param event 
+     */
     private void handleHelpAction(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/views/ClientControlHelp.fxml"));
@@ -565,29 +576,32 @@ public class ClientControlWindow {
             ClientControlHelp clientControlHelp = ((ClientControlHelp) loader.getController());
             //Initializes and shows help stage
             clientControlHelp.initAndShowStage(root);
-
         } catch (IOException ex) {
             Logger.getLogger(ClientControlWindow.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * Method to format a Date
+     * 
+     * @param dateToFormat The date to be formatted
+     * @return The date converted to local date
+     */
     public LocalDate formatDate(Date dateToFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        convertToLocalDateViaInstant(dateToFormat);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        //return sdf.format(dateToFormat);
         LocalDate localDate = LocalDate.parse(sdf.format(dateToFormat), formatter);
         LOGGER.info(localDate.toString());
         return localDate;
     }
 
-    public LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
-        return dateToConvert.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-    }
-
+    /**
+     * Email validation method
+     * 
+     * @param email the email to be chacked
+     * @return boolean depending if the pattern is correct
+     */
     public static boolean validateEmail(String email) {
         Matcher matcher = PATTERN.matcher(email);
         return matcher.matches();

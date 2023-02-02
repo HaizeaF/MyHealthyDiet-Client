@@ -24,7 +24,11 @@ public class FloatStringFormatter extends StringConverter<Float> {
 
     @Override
     public String toString(Float value) {
-        return nf.format(value);
+        try {
+            return nf.format(value);
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
     }
 
     @Override
