@@ -650,22 +650,21 @@ public class IngredientControlVController {
      */
     @FXML
     private void handleTipsWindowNavigation(ActionEvent event) {
-        /*try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/TipControlWindow.fxml"));
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/TipsControlWindow.fxml"));
             Parent root = (Parent) loader.load();
 
-            TipsControlVController controller = ((TipsontrolVController) loader.getController());
+            TipsControlVController controller = ((TipsControlVController) loader.getController());
 
             controller.setStage(stage);
             stage.close();
             controller.initStage(root);
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
-            String msg =("Failed trying to open Tips window.");
-            Alert alert = new Alert(AlertType.ERROR, msg);
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
             LOGGER.log(Level.SEVERE, "TipsControlVController: Error trying to open Tips window, {0}", ex.getMessage());
-        }*/
+        }
     }
 
     /**
