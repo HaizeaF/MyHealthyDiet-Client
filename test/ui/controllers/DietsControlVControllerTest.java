@@ -1,6 +1,5 @@
 package ui.controllers;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Node;
@@ -12,8 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import main.DietMain;
 import objects.Diet;
@@ -21,11 +18,9 @@ import objects.GoalEnum;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
@@ -97,20 +92,19 @@ public class DietsControlVControllerTest extends ApplicationTest {
      * DietsControlVController.
      */
     @Test
-    @Ignore
     public void testB_HandleButtonSearchAction() {
         List<Diet> dataList;
         texfieldSearchbar = lookup("#texfieldSearchbar").query();
         buttonSearch = lookup("#buttonSearch").query();
 
         clickOn(texfieldSearchbar);
-        write("c");
+        write("Dieta M");
 
         clickOn(buttonSearch);
 
         dataList = new ArrayList<>(tableViewDiets.getItems());
         for (Diet diet : dataList) {
-            assertTrue(diet.getDietName().contains("c"));
+            assertTrue(diet.getDietName().contains("Dieta M"));
         }
 
     }
@@ -120,22 +114,21 @@ public class DietsControlVControllerTest extends ApplicationTest {
      * DietsControlVController.
      */
     @Test
-    @Ignore
     public void testC_HandleButtonSearchEnterAction() {
         List<Diet> dataList;
         texfieldSearchbar = lookup("#texfieldSearchbar").query();
         buttonSearch = lookup("#buttonSearch").query();
 
         clickOn(texfieldSearchbar);
-        eraseText(1);
+        eraseText(7);
 
         clickOn(texfieldSearchbar);
-        write("v");
+        write("Dieta V");
         push(KeyCode.ENTER);
 
         dataList = new ArrayList<>(tableViewDiets.getItems());
         for (Diet diet : dataList) {
-            assertTrue(diet.getDietName().contains("v"));
+            assertTrue(diet.getDietName().contains("Dieta V"));
         }
 
     }
@@ -144,21 +137,26 @@ public class DietsControlVControllerTest extends ApplicationTest {
      * Test of filters method, of class DietsControlVController.
      */
     @Test
-    @Ignore
     public void testD_HandleButtonFiltersAction() {
         List<Diet> dataList;
         buttonFilters = lookup("#buttonFilters").query();
         texfieldSearchbar = lookup("#texfieldSearchbar").query();
-
-        texfieldSearchbar.clear();
+        
+        clickOn(texfieldSearchbar);
+        eraseText(7);
+                
         push(KeyCode.ENTER);
 
         clickOn(buttonFilters);
         verifyThat("Filters", isVisible());
+        moveBy(-650, 140).clickOn();
+        push(KeyCode.DOWN);
+        clickOn();
+        push(KeyCode.ENTER);
 
         dataList = new ArrayList<>(tableViewDiets.getItems());
         for (Diet diet : dataList) {
-
+            assertTrue(diet.getType() == GoalEnum.MAINTAIN);
         }
 
     }
@@ -167,8 +165,12 @@ public class DietsControlVControllerTest extends ApplicationTest {
      * Test of create method, of class DietsControlVController.
      */
     @Test
-    @Ignore
     public void testE_HandleCreateAction() {
+        texfieldSearchbar = lookup("#texfieldSearchbar").query();
+        clickOn(texfieldSearchbar);
+        eraseText(7);
+        push(KeyCode.ENTER);
+
         Integer count = tableViewDiets.getItems().size();
 
         buttonInsertRow = lookup("#buttonInsertRow").query();
@@ -182,7 +184,6 @@ public class DietsControlVControllerTest extends ApplicationTest {
      * Test of update method, of class DietsControlVController.
      */
     @Test
-    @Ignore
     public void testF_HandleUpdateAction() {
 
         assertNotEquals("tableViewDiets has no data: Cannot test.", tableViewDiets.getItems().size(), 0);
@@ -221,19 +222,19 @@ public class DietsControlVControllerTest extends ApplicationTest {
         push(KeyCode.ENTER);
 
         clickOn(tableColumnCalories);
-        write("1,0");
+        write("1,5");
         push(KeyCode.ENTER);
 
         clickOn(tableColumnProteins);
-        write("1,0");
+        write("1,5");
         push(KeyCode.ENTER);
 
         clickOn(tableColumnLipids);
-        write("1,0");
+        write("1,5");
         push(KeyCode.ENTER);
 
         clickOn(tableColumnCarbohydrates);
-        write("1,0");
+        write("1,5");
         push(KeyCode.ENTER);
 
         doubleClickOn(tableColumnType);
@@ -269,7 +270,6 @@ public class DietsControlVControllerTest extends ApplicationTest {
      * Test of delete method, of class DietsControlVController.
      */
     @Test
-    @Ignore
     public void testG_HandleDeleteAction() {
         assertNotEquals("tableViewDiets has no data: Cannot test.", tableViewDiets.getItems().size(), 0);
         Node row = lookup(".table-row-cell").nth(0).query();

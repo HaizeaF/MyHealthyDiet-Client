@@ -1,11 +1,10 @@
 package services;
 
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import objects.Plate;
 import businessLogic.PlateInterface;
-import exceptions.BussinessLogicException;
+import exceptions.BusinessLogicException;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.ws.rs.core.GenericType;
@@ -39,91 +38,91 @@ public class PlateFacadeRESTClient implements PlateInterface {
     }
 
     @Override
-    public void edit_XML(Plate requestEntity) throws BussinessLogicException {
+    public void edit_XML(Plate requestEntity) throws BusinessLogicException {
         try {
             LOGGER.info("Editing plate.");
             webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), Plate.class);
         } catch (Exception e) {
-            throw new BussinessLogicException("An error occurred while trying to edit the plate: " + e.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to edit the plate: " + e.getMessage());
         }
     }
 
     @Override
-    public <T> T findPlatesByMealType_XML(GenericType<T> responseType, String mealType) throws BussinessLogicException {
+    public <T> T findPlatesByMealType_XML(GenericType<T> responseType, String mealType) throws BusinessLogicException {
         try {
             LOGGER.info("Finding plates by meal type.");
             WebTarget resource = webTarget;
             resource = resource.path(java.text.MessageFormat.format("findByMealType/{0}", new Object[]{mealType}));
             return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
         } catch (Exception e) {
-            throw new BussinessLogicException("An error occurred while trying to find the plates by meal type: " + e.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to find the plates by meal type: " + e.getMessage());
         }
     }
 
     @Override
-    public <T> T find_XML(Class<T> responseType, Integer id) throws BussinessLogicException {
+    public <T> T find_XML(Class<T> responseType, Integer id) throws BusinessLogicException {
         try {
             LOGGER.info("Finding plate by id.");
             WebTarget resource = webTarget;
             resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
             return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
         } catch (Exception e) {
-            throw new BussinessLogicException("An error occurred while trying to find a plate by id: " + e.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to find a plate by id: " + e.getMessage());
         }
     }
 
     @Override
-    public <T> T findPlatesByName_XML(GenericType<T> responseType, String plateName) throws BussinessLogicException {
+    public <T> T findPlatesByName_XML(GenericType<T> responseType, String plateName) throws BusinessLogicException {
         try {
             LOGGER.info("Finding plates by name.");
             WebTarget resource = webTarget;
             resource = resource.path(java.text.MessageFormat.format("findByName/{0}", new Object[]{plateName}));
             return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
         } catch (Exception e) {
-            throw new BussinessLogicException("An error occurred while trying to find the plates by name: " + e.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to find the plates by name: " + e.getMessage());
         }
     }
 
     @Override
-    public void create_XML(Plate requestEntity) throws BussinessLogicException {
+    public void create_XML(Plate requestEntity) throws BusinessLogicException {
         try {
             LOGGER.info("Creating plate.");
             webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), Plate.class);
         } catch (Exception e) {
-            throw new BussinessLogicException("An error occurred while trying to create a new plate: " + e.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to create a new plate: " + e.getMessage());
         }
     }
 
     @Override
-    public <T> T findPlatesIfVegetarian_XML(GenericType<T> responseType) throws BussinessLogicException {
+    public <T> T findPlatesIfVegetarian_XML(GenericType<T> responseType) throws BusinessLogicException {
         try {
             LOGGER.info("Finding vegetarian plates.");
             WebTarget resource = webTarget;
             resource = resource.path("findVegetarians");
             return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
         } catch (Exception e) {
-            throw new BussinessLogicException("An error occurred while trying to find the vegetarian plates: " + e.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to find the vegetarian plates: " + e.getMessage());
         }
     }
 
     @Override
-    public <T> T findAll_XML(GenericType<T> responseType) throws BussinessLogicException {
+    public <T> T findAll_XML(GenericType<T> responseType) throws BusinessLogicException {
         try {
             LOGGER.info("Finding all plates.");
             WebTarget resource = webTarget;
             return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
         } catch (Exception e) {
-            throw new BussinessLogicException("An error occurred while trying to find all the plates: " + e.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to find all the plates: " + e.getMessage());
         }
     }
 
     @Override
-    public void remove(Integer id) throws BussinessLogicException {
+    public void remove(Integer id) throws BusinessLogicException {
         try {
             LOGGER.info("Removing plate.");
             webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete(Plate.class);
         } catch (Exception e) {
-            throw new BussinessLogicException("An error occurred while trying to remove the plate: " + e.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to remove the plate: " + e.getMessage());
         }
     }
 
