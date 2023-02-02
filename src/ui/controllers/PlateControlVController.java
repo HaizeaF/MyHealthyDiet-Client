@@ -496,7 +496,7 @@ public class PlateControlVController {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/TipsControlWindow.fxml"));
             Parent root = (Parent) loader.load();
 
-            PlateControlVController controller = ((PlateControlVController) loader.getController());
+            TipsControlVController controller = ((TipsControlVController) loader.getController());
 
             controller.setStage(stage);
 
