@@ -110,7 +110,7 @@ public class SignInController {
         // Comprueba si los botones son pulsados
         buttonForgotPassword.setOnAction(this::forgotPassword);
         buttonShowHide.setOnAction(this::handleShowHide);
-        //buttonSignUp.setOnAction(this::handleSignUp);
+        buttonSignUp.setOnAction(this::handleSignUp);
         buttonSignIn.setOnAction(this::handleSignIn);
         // Comprueba cuando el boton "x" para cerrar la ventana es pulsado
         stage.setOnCloseRequest(this::handleExitAction);
@@ -167,7 +167,8 @@ public class SignInController {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    ClientOBJ client = ClientFactory.getModel().findClientByEmail(new GenericType<ClientOBJ>() {}, textFieldEmail.getText());
+                    ClientOBJ client = ClientFactory.getModel().findClientByEmail(new GenericType<ClientOBJ>() {
+                    }, textFieldEmail.getText());
                     LOGGER.log(Level.INFO, "Client found");
                     ClientFactory.getModel().recoverPassword(client);
                 } catch (BusinessLogicException ex) {
@@ -185,23 +186,24 @@ public class SignInController {
      * @param event an ActionEvent.ACTION event type for when the button is
      * pressed
      */
-    /*private void handleSignUp(ActionEvent event) {
+    private void handleSignUp(ActionEvent event) {
         try {
             stage.close();
             LOGGER.info("SignIn window closed");
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("view/SignUpView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/SignUpView.fxml"));
             Parent root = (Parent) loader.load();
 
-            SignUpVController controller = ((SignUpVController) loader.getController());
+            SignUpController controller = ((SignUpController) loader.getController());
 
             controller.setStage(new Stage());
 
             controller.initStage(root);
             LOGGER.info("SignUp window opened");
         } catch (IOException ex) {
-            Logger.getLogger(SignInVController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SignInController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }*/
+    }
+
     /**
      * Login method
      *
@@ -224,6 +226,14 @@ public class SignInController {
                 User user = model.logIn(ClientOBJ.class, textFieldUsername.getText(), HashMD5.hexadecimal(passwordBytes));
                 if (user instanceof ClientOBJ) {
                     ClientOBJ client = (ClientOBJ) user;
+                    FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/HomeView.fxml"));
+                    Parent root = (Parent) loader.load();
+
+                    HomeViewController controller = ((HomeViewController) loader.getController());
+
+                    controller.setStage(stage);
+                    controller.setClient(client);
+                    controller.initStage(root);
                     LOGGER.info("Cliente encontrado");
                 } else {
                     stage.close();

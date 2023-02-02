@@ -7,7 +7,6 @@ import cellFactories.FloatStringFormatter;
 import cellFactories.ImageButtonCell;
 import cellFactories.IngredientsButtonCell;
 import exceptions.BusinessLogicException;
-import exceptions.BussinessLogicException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -559,7 +558,7 @@ public class PlateControlVController {
                         try {
                             filteredPlates = plateModel.findPlatesByMealType_XML(new GenericType<List<Plate>>() {
                             }, comboBoxMeal.getValue().toString());
-                        } catch (BussinessLogicException ex) {
+                        } catch (BusinessLogicException ex) {
                             LOGGER.log(Level.SEVERE, ex.getMessage());
                             Alert alert2 = new Alert(AlertType.ERROR, ex.getMessage());
                             alert2.show();
