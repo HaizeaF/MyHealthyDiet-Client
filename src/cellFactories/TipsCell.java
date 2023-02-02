@@ -1,6 +1,7 @@
 package cellFactories;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.stage.Stage;
 import objects.Diet;
+import objects.Tip;
 import ui.controllers.DietsControlVController;
 
 /**
@@ -21,7 +23,7 @@ import ui.controllers.DietsControlVController;
  *
  * @author JulenB
  */
-public class TipsCell extends TableCell<Diet, Void> {
+public class TipsCell extends TableCell<Diet, List<Tip>> {
 
     /**
      * The button that is going to be in the cell.
@@ -33,7 +35,9 @@ public class TipsCell extends TableCell<Diet, Void> {
     private static final Logger LOGGER = Logger.getLogger(TipsCell.class.getName());
 
     /**
-     * Constructor of the class that makes the button move you to another window.
+     * Constructor of the class that makes the button move you to another
+     * window.
+     *
      * @param stage The current stage of the app.
      */
     public TipsCell(Stage stage) {
@@ -57,18 +61,20 @@ public class TipsCell extends TableCell<Diet, Void> {
             }
         });
     }
-    
+
     /**
      * This method sets the button in the cell.
+     *
      * @param t cell that you want to update.
      * @param empty If the cell is empty or not.
      */
     @Override
-    protected void updateItem(Void t, boolean empty) {
+    protected void updateItem(List<Tip> t, boolean empty) {
         super.updateItem(t, empty);
-        setAlignment(Pos.CENTER);
         //If the row is not empty, is goint to put the button, if not, set it to null.
         if (!empty) {
+            setText(null);
+            setAlignment(Pos.CENTER);
             setGraphic(button);
         } else {
             setGraphic(null);
