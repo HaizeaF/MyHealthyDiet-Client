@@ -7,11 +7,9 @@ import cellFactories.PlatesCell;
 import cellFactories.TipsCell;
 import exceptions.BusinessLogicException;
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -227,10 +225,16 @@ public class DietsControlVController {
             buttonSearch.setDefaultButton(true);
 
             //TABLE SET UP
+            //Create an observable list for diets table.
+            dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
+            }));
+            //Set data from dietsData into tableView.
+            tableViewDiets.setItems(dietsData);
+            
             Callback<TableColumn<Diet, List<Plate>>, TableCell<Diet, List<Plate>>> cellPlatesFactory
-                = (TableColumn<Diet, List<Plate>> p) -> new PlatesCell(stage);
+                    = (TableColumn<Diet, List<Plate>> p) -> new PlatesCell(stage, tableViewDiets);
             Callback<TableColumn<Diet, List<Tip>>, TableCell<Diet, List<Tip>>> cellTipsFactory
-                = (TableColumn<Diet, List<Tip>> p) -> new TipsCell(stage);
+                    = (TableColumn<Diet, List<Tip>> p) -> new TipsCell(stage);
             Callback<TableColumn<Diet, byte[]>, TableCell<Diet, byte[]>> buttonImgListCell
                     = (TableColumn<Diet, byte[]> p) -> new ButtonImgListCell(stage);
 
@@ -249,17 +253,19 @@ public class DietsControlVController {
 
             //Set cell factories in diets table columns.
             tableColumnDietName.setCellFactory(TextFieldTableCell.<Diet>forTableColumn());
-            tableColumnDietName.setOnEditCommit(/**
-                     * Checks that the text entered does not exceed 50
-                     * characters. In case it is higher it shows a pop-up window
-                     * with the text: "Maximum characters (50) for the name of
-                     * the diet exceeded." In case it is not higher it sends a
-                     * request to the server to update the diet with the entered
-                     * data. If there is any error with the server a popup
-                     * window is shown informing about it.
-                     *
-                     */
+            /**
+             * Checks that the text entered does not exceed 50 characters. In
+             * case it is higher it shows a pop-up window with the text:
+             * "Maximum characters (50) for the name of the diet exceeded." In
+             * case it is not higher it sends a request to the server to update
+             * the diet with the entered data. If there is any error with the
+             * server a popup window is shown informing about it.
+             *
+             */
+            tableColumnDietName.setOnEditCommit(
                     (CellEditEvent<Diet, String> t) -> {
+                        Diet selectedDiet = (Diet) tableViewDiets.getSelectionModel().getSelectedItem();
+                        String name = selectedDiet.getDietName();
                         try {
                             if (t.getNewValue().length() <= 50) {
                                 ((Diet) t.getTableView().getItems().get(
@@ -272,9 +278,13 @@ public class DietsControlVController {
                                 tableViewDiets.setItems(dietsData);
                             }
                         } catch (BusinessLogicException ex) {
+                            ((Diet) t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow())).setDietName(name);
+                            tableViewDiets.refresh();
                             //If there is an error in the business class, shows an alert.
                             showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
                             LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnDietName, {0}", ex.getMessage());
+
                         }
                     });
 
@@ -289,23 +299,29 @@ public class DietsControlVController {
              *
              */
             tableColumnDescription.setOnEditCommit((CellEditEvent<Diet, String> t) -> {
-                        try {
-                            if (t.getNewValue().length() <= 50) {
-                                ((Diet) t.getTableView().getItems().get(
-                                        t.getTablePosition().getRow())).setDescription(t.getNewValue());
-                                DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
-                            } else {
-                                showErrorAlert("Maximum characters (50) for the description of the diet exceeded.");
-                                dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
-                                }));
-                                tableViewDiets.setItems(dietsData);
-                            }
-                        } catch (BusinessLogicException ex) {
-                            //If there is an error in the business class, shows an alert.
-                            showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
-                            LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnDescription, {0}", ex.getMessage());
-                        }
-                    });
+                Diet selectedDiet = (Diet) tableViewDiets.getSelectionModel().getSelectedItem();
+                String description = selectedDiet.getDescription();
+                try {
+                    if (t.getNewValue().length() <= 50) {
+
+                        ((Diet) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setDescription(t.getNewValue());
+                        DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
+                    } else {
+                        showErrorAlert("Maximum characters (50) for the description of the diet exceeded.");
+                        dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
+                        }));
+                        tableViewDiets.setItems(dietsData);
+                    }
+                } catch (BusinessLogicException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setDescription(description);
+                    tableViewDiets.refresh();
+                    //If there is an error in the business class, shows an alert.
+                    showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnDescription, {0}", ex.getMessage());
+                }
+            });
 
             tableColumnCalories.setCellFactory(TextFieldTableCell.<Diet, Float>forTableColumn(new FloatStringFormatter()));
             /**
@@ -318,24 +334,35 @@ public class DietsControlVController {
              *
              */
             tableColumnCalories.setOnEditCommit((CellEditEvent<Diet, Float> t) -> {
-                        try {
-                            if (t.getNewValue() <= 9999) {
-                                formatDecimal(Locale.FRANCE, t.getNewValue());
-                                ((Diet) t.getTableView().getItems().get(
-                                        t.getTablePosition().getRow())).setCalories(t.getNewValue());
-                                DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
-                            } else {
-                                showErrorAlert("Only number with a maximum of 4 digits allowed.");
-                                dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
-                                }));
-                                tableViewDiets.setItems(dietsData);
-                            }
-                        } catch (BusinessLogicException ex) {
-                            //If there is an error in the business class, shows an alert.
-                            showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
-                            LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnCalories, {0}", ex.getMessage());
-                        }
-                    });
+                Diet selectedDiet = (Diet) tableViewDiets.getSelectionModel().getSelectedItem();
+                Float calories = selectedDiet.getCalories();
+                try {
+                    if (t.getNewValue() <= 9999) {
+                        ((Diet) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setCalories(t.getNewValue());
+                        DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
+                    } else {
+                        showErrorAlert("Only number with a maximum of 4 digits allowed.");
+                        dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
+                        }));
+                        tableViewDiets.setItems(dietsData);
+                    }
+                } catch (BusinessLogicException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setCalories(calories);
+                    tableViewDiets.refresh();
+                    //If there is an error in the business class, shows an alert.
+                    showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnCalories, {0}", ex.getMessage());
+                } catch (NullPointerException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setCalories(t.getOldValue());
+                    tableViewDiets.refresh();
+                    //If is set a String value it, shows an alert.
+                    showErrorAlert("This field only admits numbers.");
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnCalories, {0}", ex.getMessage());
+                }
+            });
 
             tableColumnProteins.setCellFactory(TextFieldTableCell.<Diet, Float>forTableColumn(new FloatStringFormatter()));
             /**
@@ -348,23 +375,35 @@ public class DietsControlVController {
              *
              */
             tableColumnProteins.setOnEditCommit((CellEditEvent<Diet, Float> t) -> {
-                        try {
-                            if (t.getNewValue() <= 9999) {
-                                ((Diet) t.getTableView().getItems().get(
-                                        t.getTablePosition().getRow())).setProteins(t.getNewValue());
-                                DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
-                            } else {
-                                showErrorAlert("Only number with a maximum of 4 digits allowed.");
-                                dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
-                                }));
-                                tableViewDiets.setItems(dietsData);
-                            }
-                        } catch (BusinessLogicException ex) {
-                            //If there is an error in the business class, shows an alert.
-                            showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
-                            LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnProteins, {0}", ex.getMessage());
-                        }
-                    });
+                Diet selectedDiet = (Diet) tableViewDiets.getSelectionModel().getSelectedItem();
+                Float proteins = selectedDiet.getProteins();
+                try {
+                    if (t.getNewValue() <= 9999) {
+                        ((Diet) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setProteins(t.getNewValue());
+                        DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
+                    } else {
+                        showErrorAlert("Only number with a maximum of 4 digits allowed.");
+                        dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
+                        }));
+                        tableViewDiets.setItems(dietsData);
+                    }
+                } catch (BusinessLogicException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setProteins(proteins);
+                    tableViewDiets.refresh();
+                    //If there is an error in the business class, shows an alert.
+                    showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnProteins, {0}", ex.getMessage());
+                } catch (NullPointerException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setCalories(t.getOldValue());
+                    tableViewDiets.refresh();
+                    //If is set a String value it, shows an alert.
+                    showErrorAlert("This field only admits numbers.");
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnProteins, {0}", ex.getMessage());
+                }
+            });
 
             tableColumnLipids.setCellFactory(TextFieldTableCell.<Diet, Float>forTableColumn(new FloatStringFormatter()));
             /**
@@ -377,23 +416,35 @@ public class DietsControlVController {
              *
              */
             tableColumnLipids.setOnEditCommit((CellEditEvent<Diet, Float> t) -> {
-                        try {
-                            if (t.getNewValue() <= 9999) {
-                                ((Diet) t.getTableView().getItems().get(
-                                        t.getTablePosition().getRow())).setLipids(t.getNewValue());
-                                DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
-                            } else {
-                                showErrorAlert("Only number with a maximum of 4 digits allowed.");
-                                dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
-                                }));
-                                tableViewDiets.setItems(dietsData);
-                            }
-                        } catch (BusinessLogicException ex) {
-                            //If there is an error in the business class, shows an alert.
-                            showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
-                            LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
-                        }
-                    });
+                Diet selectedDiet = (Diet) tableViewDiets.getSelectionModel().getSelectedItem();
+                Float lipids = selectedDiet.getLipids();
+                try {
+                    if (t.getNewValue() <= 9999) {
+                        ((Diet) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setLipids(t.getNewValue());
+                        DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
+                    } else {
+                        showErrorAlert("Only number with a maximum of 4 digits allowed.");
+                        dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
+                        }));
+                        tableViewDiets.setItems(dietsData);
+                    }
+                } catch (BusinessLogicException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setLipids(lipids);
+                    tableViewDiets.refresh();
+                    //If there is an error in the business class, shows an alert.
+                    showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+                } catch (NullPointerException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setCalories(t.getOldValue());
+                    tableViewDiets.refresh();
+                    //If is set a String value it, shows an alert.
+                    showErrorAlert("This field only admits numbers.");
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+                }
+            });
 
             tableColumnCarbohydrates.setCellFactory(TextFieldTableCell.<Diet, Float>forTableColumn(new FloatStringFormatter()));
             /**
@@ -406,32 +457,58 @@ public class DietsControlVController {
              *
              */
             tableColumnCarbohydrates.setOnEditCommit((CellEditEvent<Diet, Float> t) -> {
-                        try {
-                            if (t.getNewValue() <= 9999) {
-                                ((Diet) t.getTableView().getItems().get(
-                                        t.getTablePosition().getRow())).setCarbohydrates(t.getNewValue());
-                                DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
-                            } else {
-                                showErrorAlert("Only number with a maximum of 4 digits allowed.");
-                                dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
-                                }));
-                                tableViewDiets.setItems(dietsData);
-                            }
-                        } catch (BusinessLogicException ex) {
-                            //If there is an error in the business class, shows an alert.
-                            showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
-                            LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnCarbohydrates, {0}", ex.getMessage());
-                        }
-                    });
+                Diet selectedDiet = (Diet) tableViewDiets.getSelectionModel().getSelectedItem();
+                Float carbohydrates = selectedDiet.getCarbohydrates();
+                try {
+                    if (t.getNewValue() <= 9999) {
+                        ((Diet) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())).setCarbohydrates(t.getNewValue());
+                        DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
+                    } else {
+                        showErrorAlert("Only number with a maximum of 4 digits allowed.");
+                        dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
+                        }));
+                        tableViewDiets.setItems(dietsData);
+                    }
+                } catch (BusinessLogicException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setCarbohydrates(carbohydrates);
+                    tableViewDiets.refresh();
+                    //If there is an error in the business class, shows an alert.
+                    showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnCarbohydrates, {0}", ex.getMessage());
+                } catch (NullPointerException ex) {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setCalories(t.getOldValue());
+                    tableViewDiets.refresh();
+                    //If is set a String value it, shows an alert.
+                    showErrorAlert("This field only admits numbers.");
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnCarbohydrates, {0}", ex.getMessage());
+                }
+            });
 
             tableColumnType.setCellFactory(ComboBoxTableCell.<Diet, GoalEnum>forTableColumn(GoalEnum.values()));
-            tableColumnType.setOnEditCommit(//If the image is valid, it will save it, send a update message to business logic and updates it.
+            tableColumnType.setOnEditCommit(
+                    //If the image is valid, it will save it, send a update message to business logic and updates it.
                     (CellEditEvent<Diet, GoalEnum> t) -> {
+                        Diet selectedDiet = (Diet) tableViewDiets.getSelectionModel().getSelectedItem();
+                        ComboBox<String> comboBox = new ComboBox<>();
+                        comboBox.getItems().addAll("MAINTAIN", "INCREASE", "DECREASE");
+                        comboBox.setValue(selectedDiet.getType().toString());
                         try {
                             ((Diet) t.getTableView().getItems().get(
                                     t.getTablePosition().getRow())).setType(t.getNewValue());
                             DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
                         } catch (BusinessLogicException ex) {
+                            GoalEnum ge = GoalEnum.DECREASE;
+                            if(comboBox.getValue().equals("MAINTAIN")){
+                                ge = GoalEnum.MAINTAIN;
+                            }else if(comboBox.getValue().equals("INCREASE")){
+                                ge = GoalEnum.INCREASE;
+                            }
+                            ((Diet) t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow())).setType(ge);
+                            tableViewDiets.refresh();
                             //If there is an error in the business class, shows an alert.
                             showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
                             LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnType, {0}", ex.getMessage());
@@ -459,21 +536,15 @@ public class DietsControlVController {
              * the server a popup window is shown informing about it.
              */
             tableColumnImage.setOnEditCommit((CellEditEvent<Diet, byte[]> t) -> {
-                        try {
-                            ((Diet) t.getTableView().getItems().get(
-                                    t.getTablePosition().getRow())).setDietImg(t.getNewValue());
-                            DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
-                        } catch (BusinessLogicException ex) {
-                            showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
-                            LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnImage, {0}", ex.getMessage());
-                        }
-                    });
-
-            //Create an observable list for diets table.
-            dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
-            }));
-            //Set data from dietsData into tableView.
-            tableViewDiets.setItems(dietsData);
+                try {
+                    ((Diet) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())).setDietImg(t.getNewValue());
+                    DietFactory.getModel().edit_XML((Diet) t.getTableView().getSelectionModel().getSelectedItem());
+                } catch (BusinessLogicException ex) {
+                    showErrorAlert("Window can not be loaded:\n" + ex.getMessage());
+                    LOGGER.log(Level.SEVERE, "DietsControlVController: Error at setOnEditCommit in tableColumnImage, {0}", ex.getMessage());
+                }
+            });
 
             //ACTIONS FOR CONTROLS
             stage.setOnCloseRequest(this::handleExitAction);
@@ -725,7 +796,7 @@ public class DietsControlVController {
             //If there is an error in the business class, shows an alert.
             showErrorAlert("Error deleting the diet:\n" + ex.getMessage());
             LOGGER.log(Level.SEVERE, "DietsControlVController: Error removing a diet, {0}", ex.getMessage());
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             //If there is an error selecting a diet, shows an alert.
             showErrorAlert("You must select the diet you want to delete.");
             LOGGER.log(Level.SEVERE, "DietsControlVController: Error removing a diet, {0}", ex.getMessage());
@@ -913,14 +984,5 @@ public class DietsControlVController {
         Alert alert = new Alert(Alert.AlertType.ERROR, errorMsg, ButtonType.OK);
         alert.showAndWait();
 
-    }
-
-    static public void formatDecimal(Locale currentLocale, Float decimal) {
-
-        Double decimalToDouble = Double.parseDouble(decimal.toString());
-        NumberFormat numberFormatter;
-
-        numberFormatter = NumberFormat.getNumberInstance(currentLocale);
-        String decimalToString = numberFormatter.format(decimalToDouble);
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -12,10 +13,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import objects.Diet;
 import objects.Plate;
-import ui.controllers.DietsControlVController;
+import ui.controllers.PlateControlVController;
 
 /**
  * This class inserts a button in the Plates cell of the table from the
@@ -40,16 +42,19 @@ public class PlatesCell extends TableCell<Diet, List<Plate>> {
      *
      * @param stage The current stage of the app.
      */
-    public PlatesCell(Stage stage) {
+    public PlatesCell(Stage stage, TableView dietsData) {
         //When the button is pressed, it is going to move you to another window.
         button.setOnAction((ActionEvent t) -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PlateControlWindow.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PlateControlView.fxml"));
                 Parent root = (Parent) loader.load();
 
-                DietsControlVController controller = ((DietsControlVController) loader.getController());
+                PlateControlVController controller = ((PlateControlVController) loader.getController());
 
                 controller.setStage(stage);
+                Diet diet = (Diet) dietsData.getSelectionModel().getSelectedItem();
+                controller.setData((ObservableList<Plate>) diet.getPlates());
+
                 //The actual stage is closed and the new one is initialized.
                 stage.close();
                 controller.initStage(root);
@@ -58,6 +63,11 @@ public class PlatesCell extends TableCell<Diet, List<Plate>> {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Failed loading Plates window", ButtonType.OK);
                 alert.showAndWait();
                 LOGGER.log(Level.SEVERE, "PlatesCell: Load of PlateControlWindow failed, {0}", ex.getMessage());
+            } catch (NullPointerException ex) {
+                //If the isn´t any row selected, shows you an error alert.
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Please select a row before trying to see its plates", ButtonType.OK);
+                alert.showAndWait();
+                LOGGER.log(Level.SEVERE, "PlatesCell: Row to selected, {0}", ex.getMessage());
             }
         });
     }
