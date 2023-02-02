@@ -40,7 +40,7 @@ public class ModifyTest extends Application {
 
         ClientOBJ client = null;
         try {
-            client = ClientFactory.getModel().findClientById(new GenericType<ClientOBJ>() {}, "6");
+            client = ClientFactory.getModel().findClientById(new GenericType<ClientOBJ>() {}, "7");
         } catch (BusinessLogicException ex) {
             Logger.getLogger(ModifyTest.class.getName()).log(Level.SEVERE, null, ex);
         }

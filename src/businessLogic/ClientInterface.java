@@ -25,6 +25,8 @@ public interface ClientInterface {
     
     public void edit(ClientOBJ requestEntity) throws BusinessLogicException;
     
+    public void recoverPassword(ClientOBJ requestEntity) throws BusinessLogicException;
+    
     public <T> T findClientByLogin(GenericType<T> responseType, String usrLogin) throws BusinessLogicException;
     
     public void create(ClientOBJ requestEntity) throws BusinessLogicException;
@@ -32,6 +34,8 @@ public interface ClientInterface {
     public <T> T findClientBySearch(GenericType<T> responseType, String usrValue) throws BusinessLogicException;
     
     public <T> T findAll(GenericType<T> responseType) throws BusinessLogicException;
+    
+    public <T> T findClientByEmail(GenericType<T> responseType, String usrEmail) throws BusinessLogicException;
     
     public void remove(Integer id) throws BusinessLogicException;
     

@@ -215,7 +215,7 @@ public class PasswordChangeVController {
                 byte[] newPasswordBytes = new Asymmetric().cipher(newPasswrdField.getText());
                 client.setPassword(HashMD5.hexadecimal(newPasswordBytes));
                 client.setLastPasswordChange(new Date(System.currentTimeMillis()));
-                ClientFactory.getModel().edit(client);
+                ClientFactory.getModel().editPassword(client);
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Password changed succesfully", ButtonType.OK);
                 alert.showAndWait();
                 stage.close();

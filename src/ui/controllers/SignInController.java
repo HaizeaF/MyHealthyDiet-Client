@@ -39,6 +39,7 @@ import exceptions.BusinessLogicException;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
+import javax.ws.rs.core.GenericType;
 import objects.ClientOBJ;
 
 /**
@@ -154,18 +155,26 @@ public class SignInController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Password Recovery");
         alert.setHeaderText("Insert your email:");
-        
+
         GridPane grid = new GridPane();
-        
+
         TextField textFieldEmail = new TextField();
         textFieldEmail.setPromptText("example@mail.com");
-        
+
         grid.add(textFieldEmail, 0, 0);
-        
+
         alert.getDialogPane().setContent(grid);
         alert.showAndWait().ifPresent(response -> {
-            if(response == ButtonType.OK){
-                
+            if (response == ButtonType.OK) {
+                try {
+                    ClientOBJ client = ClientFactory.getModel().findClientByEmail(new GenericType<ClientOBJ>() {}, textFieldEmail.getText());
+                    LOGGER.log(Level.INFO, "Client found");
+                    ClientFactory.getModel().recoverPassword(client);
+                } catch (BusinessLogicException ex) {
+                    Alert alerta = new Alert(Alert.AlertType.ERROR, ex.getMessage());
+                    alerta.show();
+                    LOGGER.log(Level.SEVERE, ex.getMessage());
+                }
             }
         });
     }
@@ -199,7 +208,6 @@ public class SignInController {
      * @param event an ActionEvent.ACTION event type for when the button is
      * pressed
      */
-    @FXML
     private void handleSignIn(ActionEvent event) {
         LOGGER.info("Signin in user");
         buttonSignIn.requestFocus();
