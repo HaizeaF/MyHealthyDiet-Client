@@ -171,6 +171,10 @@ public class Plate implements Serializable {
     public List<Ingredient> getIngredients() {
         return ingredients.get();
     }
+    
+    public SimpleListProperty<Ingredient> getIngredientsProperty() {
+        return ingredients;
+    }
 
     public byte[] getPlateImg() {
         return (byte[]) plateImg.get();
