@@ -19,7 +19,7 @@ import javafx.stage.WindowEvent;
  * It shows a help page that explains how to use the user's data management window.
  * The view is defined in Help.fmxl file and the help page is help.html.
  *
- * @author javi
+ * @author Mikel
  */
 public class IngredientHelpController {
     /**

@@ -14,7 +14,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Class Object Ingredient.
  * @author Mikel
  */
 @XmlRootElement(name="ingredient")
@@ -47,6 +47,15 @@ public class Ingredient implements Serializable {
     
     public Ingredient(Integer ingredient_id, String ingredientName, FoodTypeEnum foodType, Boolean isInSeason, Float waterIndex) {
         this.ingredient_id = new SimpleIntegerProperty(ingredient_id);
+        this.ingredientName = new SimpleStringProperty(ingredientName);
+        this.foodType = new SimpleObjectProperty<>(foodType);
+        this.isInSeason = new SimpleBooleanProperty(isInSeason);
+        this.waterIndex = new SimpleFloatProperty(waterIndex);
+        
+    }
+    
+    public Ingredient(String ingredientName, FoodTypeEnum foodType, Boolean isInSeason, Float waterIndex) {
+        this.ingredient_id = new SimpleIntegerProperty();
         this.ingredientName = new SimpleStringProperty(ingredientName);
         this.foodType = new SimpleObjectProperty<>(foodType);
         this.isInSeason = new SimpleBooleanProperty(isInSeason);
@@ -106,14 +115,22 @@ public class Ingredient implements Serializable {
         this.waterIndex.set(waterIndex);
     }
     
-    
+    /**
+     * This method hashes the id.
+     * @return id hashed 
+     */
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (ingredient_id != null ? ingredient_id.hashCode() : 0);
         return hash;
     }
-
+    
+    /**
+     * This method compares ingredients.
+     * @param object Parameter to compare
+     * @return Boolean result depending on the result of the comparision.
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -126,7 +143,10 @@ public class Ingredient implements Serializable {
         }
         return true;
     }
-
+    /**
+     * This method gives the name of the ingredient
+     * @return Name of the ingredient.
+     */
     @Override
     public String toString() {
         return this.ingredientName.toString();

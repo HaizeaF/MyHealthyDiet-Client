@@ -63,8 +63,8 @@ import objects.FoodTypeEnum;
 import objects.Ingredient;
 
 /**
- *
- * @author User
+ * Controller of the ingredient management window.
+ * @author Mikel
  */
 public class IngredientControlVController {
     
@@ -190,12 +190,9 @@ public class IngredientControlVController {
      * This method initialize the stage of the application showing a greeting to the user who accessed to this.
      * @param root path of the window
      */
-    
     public void initStage(Parent root) {
         try {
-            NumberFormat nf2 = NumberFormat.getNumberInstance(Locale.US);
-            nf2.setMaximumFractionDigits(2);
-            nf2.setMinimumFractionDigits(2);
+            buttonSearch.setDefaultButton(true);
             NumberFormat nf = NumberFormat.getNumberInstance(Locale.getDefault());
             DecimalFormat df = (DecimalFormat)nf;
             IngredientInterface ingredientModel = IngredientFactory.getModel();
@@ -294,8 +291,8 @@ public class IngredientControlVController {
                         }
                     ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
                     tableIngredient.refresh();
-                    } catch(Exception e){
-                        String msg = "Error, this value is not compatible";
+                    } catch (NullPointerException ex){
+                        String msg = "This value is not compatible.";
                         Alert alert = new Alert(AlertType.ERROR, msg);
                         alert.show();
                         LOGGER.log(Level.SEVERE, msg);
@@ -349,7 +346,10 @@ public class IngredientControlVController {
             LOGGER.log(Level.SEVERE, msg);
         }
     }
-    
+    /**
+     * This method delete an ingredient from the table.
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
     private void handleDeleteAction(ActionEvent event) {
         Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this Ingredient?");
         a.showAndWait();
@@ -364,28 +364,37 @@ public class IngredientControlVController {
                 tableIngredient.refresh();
             }
         }catch (Exception e){
-            String msg = "Error closing the app: " + e.getMessage();
+            String msg = "Error deleting an ingredient";
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, msg);
         }    
     }
     
+    /**
+     * This method create an ingredient from the table.
+     * @param e an ActionEvent.ACTION event type for when the button is pressed
+     */
     private void handleCreateAction(ActionEvent e){
         try{
-            Ingredient newIngredient = new Ingredient();
+            Float num = Float.parseFloat("20.5");
+            Ingredient newIngredient = new Ingredient("aa", FoodTypeEnum.NUT, false, num);
             IngredientFactory.getModel().create_XML(newIngredient);
             ingredientsData = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>> () {}));
             tableIngredient.setItems(ingredientsData);
             tableIngredient.refresh();
         }catch (Exception ex){
-            String msg = "Error closing the app: " + ex.getMessage();
+            String msg = "Error creating an ingredient";
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, msg); 
         }
     }
     
+    /**
+     * This method shows a report that loads all the ingredients.
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
     private void handleButtonReportAction(ActionEvent event) {
         try {
             JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/IngredientReport.jrxml");
@@ -402,6 +411,10 @@ public class IngredientControlVController {
         }
     }
     
+    /**
+     * This method makes a search by name in the ingredients table.
+     * @param action an ActionEvent.ACTION event type for when the button is pressed
+     */
     private void handleSearchAction(ActionEvent action) {
         LOGGER.info("Searhing for clients");
         if (!(texfieldSearchbar.getText()).isEmpty()) {
@@ -416,7 +429,10 @@ public class IngredientControlVController {
             tableIngredient.refresh();
         }
     }
-    
+    /**
+     * This method makes a search by foodType in the ingredients table.
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
     private void handleFilterAction(Event event){
         MenuItem newMenuItem = ((MenuItem)event.getSource());
         String foodTypeSelected = newMenuItem.getText();
@@ -433,6 +449,10 @@ public class IngredientControlVController {
         tableIngredient.refresh();
     }
     
+    /**
+     * This method opens an html window that shows information to help users to navigate and use the window.
+     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     */
     private void handleHelpWindowAction(Event event){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/helpIngredient.fxml"));
@@ -444,6 +464,10 @@ public class IngredientControlVController {
         }
     }
     
+    /**
+     * This method sends an observable List to another window
+     * @param ingredients ObservableList of all the ingredients of the window.
+     */
     private void cargarTablaIngredientesUnPlato(ObservableList<Ingredient> ingredients){
         if(ingredients!=null)
             tableIngredient.setItems(ingredients);
