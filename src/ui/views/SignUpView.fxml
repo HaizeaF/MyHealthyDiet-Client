@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="SignIn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.SignUpController">
+   <children>
+      <Label layoutX="777.0" layoutY="66.0" text="Sign Up" textFill="#15b7b9">
+         <font>
+            <Font name="Rockwell" size="50.0" />
+         </font>
+      </Label>
+      <Label layoutX="777.0" layoutY="128.0" text="Create your account" textFill="#686868">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="778.0" layoutY="181.0" text="Your Username" textFill="#686868">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <TextField id="textFieldUsername" fx:id="textFieldUsername" layoutX="778.0" layoutY="207.0" prefHeight="50.0" prefWidth="237.0" promptText="Username" stylesheets="@../resources/SignUpCSS.css" />
+      <ImageView fx:id="userIcon" fitHeight="26.0" fitWidth="27.0" layoutX="787.0" layoutY="219.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/ic_user.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="labelInvalidUser" layoutX="780.0" layoutY="268.0" prefHeight="16.0" prefWidth="237.0" textFill="RED">
+         <font>
+            <Font name="Rockwell" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="778.0" layoutY="412.0" text="Password" textFill="#686868">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <PasswordField id="passwordField" fx:id="passwordField" layoutX="778.0" layoutY="438.0" prefHeight="50.0" prefWidth="237.0" promptText="••••••••" style="-fx-padding: 0px 53px 0px 40px;" stylesheets="@../resources/SignUpCSS.css" />
+      <TextField id="textFieldPassword" fx:id="textFieldPassword" layoutX="778.0" layoutY="438.0" prefHeight="50.0" prefWidth="237.0" style="-fx-background-color: -fx-control-inner-background;" stylesheets="@../resources/SignUpCSS.css" visible="false" />
+      <ImageView fx:id="passwordIcon" fitHeight="26.0" fitWidth="27.0" layoutX="787.0" layoutY="450.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/icon_password.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="labelInvalidPassword" layoutX="778.0" layoutY="496.0" prefHeight="16.0" prefWidth="237.0" textFill="RED">
+         <font>
+            <Font name="Rockwell" size="12.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonSignUp" defaultButton="true" layoutX="876.0" layoutY="538.0" mnemonicParsing="false" prefWidth="259.0" stylesheets="@../resources/SignUpCSS.css" text="Sign Up">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <effect>
+            <DropShadow color="#9e9e9e" />
+         </effect>
+      </Button>
+      <Label layoutX="943.0" layoutY="621.0" text="Already have an account?" textFill="#abb2b9">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font></Label>
+      <Button fx:id="buttonSignIn" layoutX="876.0" layoutY="668.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" stylesheets="@../resources/SignUpCSS.css" text="Sign In" textFill="#15b7b9">
+         <font>
+            <Font name="Rockwell" size="18.0" />
+         </font>
+      </Button>
+      <Pane prefHeight="768.0" prefWidth="683.0">
+         <children>
+            <ImageView fitHeight="768.0" fitWidth="683.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/imageSignUp.jpg" />
+               </image>
+            </ImageView>
+         </children></Pane>
+      <Line endX="-79.0" layoutX="1017.0" layoutY="629.0" startX="-149.0" stroke="#abb2b9" />
+      <Label layoutX="1034.0" layoutY="181.0" text="Full Name" textFill="#686868">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <TextField id="textFieldUsername" fx:id="textFieldName" layoutX="1034.0" layoutY="207.0" prefHeight="50.0" prefWidth="237.0" promptText="Name" stylesheets="@../resources/SignUpCSS.css" />
+      <Label layoutX="1032.0" layoutY="412.0" text="Confirm Password" textFill="#686868">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <PasswordField id="passwordField" fx:id="passwordFieldConfirm" layoutX="1032.0" layoutY="438.0" prefHeight="50.0" prefWidth="237.0" promptText="••••••••" style="-fx-padding: 0px 53px 0px 40px;" stylesheets="@../resources/SignUpCSS.css" />
+      <TextField id="textFieldPassword" fx:id="textFieldConfirmPassword" layoutX="1032.0" layoutY="438.0" prefHeight="50.0" prefWidth="237.0" style="-fx-background-color: -fx-control-inner-background;" stylesheets="@../resources/SignUpCSS.css" visible="false" />
+      <ImageView fx:id="confirmPasswordIcon" fitHeight="26.0" fitWidth="27.0" layoutX="1038.0" layoutY="450.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/icon_password.png" />
+         </image>
+      </ImageView>
+      <ToggleButton fx:id="buttonShowHide2" layoutX="1218.0" layoutY="444.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fx:id="imageViewButton1" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/iconEye2.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </ToggleButton>
+      <Label fx:id="labelInvalidConfirmPassword" layoutX="1034.0" layoutY="496.0" prefHeight="16.0" prefWidth="237.0" textFill="RED">
+         <font>
+            <Font name="Rockwell" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="777.0" layoutY="296.0" text="Email" textFill="#686868">
+         <font>
+            <Font name="Rockwell" size="14.0" />
+         </font>
+      </Label>
+      <TextField id="textFieldPassword" fx:id="textFieldEmail" layoutX="777.0" layoutY="322.0" prefHeight="50.0" prefWidth="493.0" promptText="example@../mail.com" stylesheets="@../resources/SignUpCSS.css" />
+      <ImageView fx:id="emailIcon" fitHeight="26.0" fitWidth="27.0" layoutX="787.0" layoutY="336.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/iconEmail.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="labelInvalidEmail" layoutX="780.0" layoutY="382.0" prefHeight="16.0" prefWidth="493.0" textFill="RED">
+         <font>
+            <Font name="Rockwell" size="12.0" />
+         </font>
+      </Label>
+      <Line endX="-79.0" layoutX="1264.0" layoutY="629.0" startX="-149.0" stroke="#abb2b9" />
+      <Label fx:id="labelInvalidName" layoutX="1040.0" layoutY="268.0" prefHeight="16.0" prefWidth="237.0" textFill="RED">
+         <font>
+            <Font name="Rockwell" size="12.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="nameIcon" fitHeight="26.0" fitWidth="27.0" layoutX="1042.0" layoutY="219.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/iconsFullName.png" />
+         </image>
+      </ImageView>
+      <ToggleButton fx:id="buttonShowHide1" layoutX="965.0" layoutY="444.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fx:id="imageViewButton11" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/iconEye2.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </ToggleButton>
+   </children>
+</Pane>

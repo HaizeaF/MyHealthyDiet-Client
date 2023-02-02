@@ -72,7 +72,7 @@
             <Line endX="210.5" layoutX="101.0" layoutY="668.0" startX="-76.5" stroke="WHITE" />
             <MenuButton fx:id="buttonUser" alignment="BASELINE_LEFT" contentDisplay="TEXT_ONLY" layoutX="21.0" layoutY="686.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" popupSide="RIGHT" prefHeight="63.0" prefWidth="295.0" stylesheets="@../resources/SidebarCSS.css" text="          Usuario" textFill="WHITE">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Profile">
+                  <MenuItem fx:id="menuItemModify" mnemonicParsing="false" text="Profile">
                      <graphic>
                         <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -81,7 +81,7 @@
                         </ImageView>
                      </graphic>
                   </MenuItem>
-                  <MenuItem mnemonicParsing="false" text="Log out">
+                  <MenuItem fx:id="menuItemLogOut" mnemonicParsing="false" text="Log out">
                      <graphic>
                         <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
