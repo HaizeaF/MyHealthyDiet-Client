@@ -8,7 +8,7 @@ package businessLogic;
 import services.IngredientFacadeREST;
 
 /**
- *
+ * Ingredient factory of the ingredient restful
  * @author Mikel
  */
 public class IngredientFactory {

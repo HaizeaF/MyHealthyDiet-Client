@@ -6,46 +6,35 @@
 package ui.controllers;
 
 import java.util.concurrent.TimeoutException;
-import java.util.logging.Logger;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import main.IngredientControlApplicationPrueba;
 import objects.FoodTypeEnum;
-import objects.Ingredient;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-import org.testfx.api.FxAssert;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import static org.testfx.matcher.control.TextMatchers.hasText;
 import objects.Ingredient;
+import org.testfx.api.FxRobot;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
 /**
- *
- * @author User
+ * Class testFx to test IngredientControlVController window.
+ * @author Mikel
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class IngredientControlVControllerTest extends ApplicationTest {
@@ -144,9 +133,8 @@ public class IngredientControlVControllerTest extends ApplicationTest {
     }
     
     @Test
-    public void test2_UpdateRow() {
+    public void test2_UpdateRowPart1() {
         Node row=lookup(".table-row-cell").nth(0).query();
-        Node row2=lookup(".table-row-cell").nth(1).query();
         
         Node tablecolumnIngredientName = lookup("#columnIngredientName").nth(1).query();
         Node tablecolumnFoodType = lookup("#columnFoodType").nth(1).query();
@@ -155,30 +143,44 @@ public class IngredientControlVControllerTest extends ApplicationTest {
         
         clickOn(row);
         
-        clickOn(tablecolumnWaterIndex);
-        write("1,3");
-        push(KeyCode.ENTER);
-        
-        clickOn(row2);
-        clickOn(row);
+        Ingredient selectedIngredient = (Ingredient) tableIngredient.getSelectionModel().getSelectedItem();
+        String string = selectedIngredient.getWaterIndex().toString();
         
         clickOn(tablecolumnIsInSeason);
-        
-        clickOn(row2);
-        clickOn(row);
-        
-        clickOn(tablecolumnFoodType);
+        doubleClickOn(tablecolumnFoodType);
         push(KeyCode.DOWN);
         
-        clickOn(row2);
+        clickOn(tablecolumnWaterIndex);
+        write("2,3");
+        push(KeyCode.ENTER);
+              
+        Ingredient modifiedIngredient = (Ingredient) tableIngredient.getSelectionModel().getSelectedItem();
+        assertNotEquals(string, modifiedIngredient.getWaterIndex().toString());
+    }
+    
+     @Test
+    public void test3_UpdateRowPart2() {
+        Node row=lookup(".table-row-cell").nth(0).query();
+        
+        Node tablecolumnIngredientName = lookup("#columnIngredientName").nth(1).query();
+        
         clickOn(row);
         
-        clickOn(tablecolumnIngredientName);
-        write("aaaaaaaa");
-        push(KeyCode.ENTER);
+        Ingredient selectedIngredient = (Ingredient) tableIngredient.getSelectionModel().getSelectedItem();
+        String string = selectedIngredient.getIngredientName();
+        
+        doubleClickOn(tablecolumnIngredientName);
+        write("aaaa");
+        push(KeyCode.ENTER);   
+        
+        Ingredient modifiedIngredient = (Ingredient) tableIngredient.getSelectionModel().getSelectedItem();
+        assertNotEquals(string, modifiedIngredient.getIngredientName());
     }
+    /**
+     * Test of search by name 
+     */
     @Test
-    public void test3_SearchByName() {
+    public void test4_SearchByName() {
         texfieldSearchbar = lookup("#texfieldSearchbar").query();
         clickOn("#texfieldSearchbar");
         write("aa");
@@ -192,7 +194,17 @@ public class IngredientControlVControllerTest extends ApplicationTest {
     }
     
     @Test
-    public void test4_delete() {
+    public void test5_SearchFilter() {
+        menuButtonFilters = lookup("#menuButtonFilters").query();
+        clickOn("#texfieldSearchbar");
+        push(KeyCode.DOWN);
+    }
+    
+    /**
+     * Test of delete method.
+     */
+    @Test
+    public void test6_delete() {
         /*Node row=lookup(".table-row-cell").nth(0).query();
         rightClickOn(row).moveBy(10, 30);
         push(KeyCode.ENTER);

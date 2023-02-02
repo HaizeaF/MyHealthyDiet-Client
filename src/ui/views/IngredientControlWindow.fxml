@@ -125,7 +125,7 @@
             </ContextMenu>
          </contextMenu>
       </TableView>
-      <TextField fx:id="texfieldSearchbar" layoutX="394.0" layoutY="148.0" prefHeight="46.0" prefWidth="799.0" promptText="Type diet title" stylesheets="@../resources/DietsCSS.css">
+      <TextField fx:id="texfieldSearchbar" layoutX="394.0" layoutY="148.0" prefHeight="46.0" prefWidth="799.0" promptText="Type ingredient title" stylesheets="@../resources/DietsCSS.css">
          <font>
             <Font name="CircularStd-Book" size="18.0" />
          </font>

@@ -12,7 +12,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 /**
- *
+ * Class Object Weight.
  * @author Mikel
  */
 public class Weight implements Serializable {
@@ -72,14 +72,23 @@ public class Weight implements Serializable {
     public void setClient(ClientOBJ client) {
         this.client.set(client);
     }
-
+    
+    /**
+     * This method hashes the id.
+     * @return id hashed 
+     */
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (weight_id != null ? weight_id.hashCode() : 0);
         return hash;
     }
-
+    
+    /**
+     * This method compares two wieghts.
+     * @param object Weight to compare
+     * @return Boolean value depending on the result of the comparision.
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -92,7 +101,11 @@ public class Weight implements Serializable {
         }
         return true;
     }
-
+    
+    /**
+     * This methods gives a weight object.
+     * @return String with weight data.
+     */
     @Override
     public String toString() {
         return super.toString();
