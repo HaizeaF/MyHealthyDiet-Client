@@ -70,7 +70,7 @@ public class ClientControlWindowTest extends ApplicationTest {
      * Test of create method, of class ClientControlWindow
      */
     @Test
-    @Ignore
+    //@Ignore
     public void test2_AddClient() {
         Integer count = tableClients.getItems().size();
         clickOn("#buttonInsert");

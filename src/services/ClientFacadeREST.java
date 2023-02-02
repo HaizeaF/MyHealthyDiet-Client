@@ -61,11 +61,10 @@ public class ClientFacadeREST implements ClientInterface {
 
     public void editPassword(ClientOBJ requestEntity) throws BusinessLogicException {
         try {
-            webTarget.path("updatePassword").request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), ClientOBJ.class);
+            webTarget.path("editPassword").request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), ClientOBJ.class);
         } catch (Exception ex) {
-            throw new BusinessLogicException("An error occurred while trying to edit the clients password:" + ex.getMessage());
+            throw new BusinessLogicException("An error occurred while trying to edit the client:" + ex.getMessage());
         }
-
     }
 
     public void edit(ClientOBJ requestEntity) throws BusinessLogicException {
@@ -75,6 +74,14 @@ public class ClientFacadeREST implements ClientInterface {
             throw new BusinessLogicException("An error occurred while trying to edit the client:" + ex.getMessage());
         }
 
+    }
+
+    public void recoverPassword(ClientOBJ requestEntity) throws BusinessLogicException {
+        try {
+            webTarget.path("recoverPassword").request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML), ClientOBJ.class);
+        } catch (Exception ex) {
+            throw new BusinessLogicException("An error occurred while trying to edit the clients password:" + ex.getMessage());
+        }
     }
 
     public <T> T findClientByLogin(GenericType<T> responseType, String usrLogin) throws BusinessLogicException {
@@ -93,7 +100,6 @@ public class ClientFacadeREST implements ClientInterface {
         } catch (Exception ex) {
             throw new BusinessLogicException("An error occurred while trying to create the client:" + ex.getMessage());
         }
-
     }
 
     public <T> T findClientBySearch(GenericType<T> responseType, String usrValue) throws BusinessLogicException {
@@ -104,7 +110,6 @@ public class ClientFacadeREST implements ClientInterface {
         } catch (Exception ex) {
             throw new BusinessLogicException("An error occurred while trying to find the clients:" + ex.getMessage());
         }
-
     }
 
     public <T> T findAll(GenericType<T> responseType) throws BusinessLogicException {
@@ -114,7 +119,16 @@ public class ClientFacadeREST implements ClientInterface {
         } catch (Exception ex) {
             throw new BusinessLogicException("An error occurred while trying to find all the clients:" + ex.getMessage());
         }
+    }
 
+    public <T> T findClientByEmail(GenericType<T> responseType, String usrEmail) throws BusinessLogicException {
+        try {
+            WebTarget resource = webTarget;
+            resource = resource.path(java.text.MessageFormat.format("email/{0}", new Object[]{usrEmail}));
+            return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+        } catch (Exception ex) {
+            throw new BusinessLogicException("Couldn't find a user with the specified email");
+        }
     }
 
     public void remove(Integer id) throws BusinessLogicException {
