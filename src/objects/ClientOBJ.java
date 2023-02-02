@@ -34,20 +34,15 @@ public class ClientOBJ extends User {
     private SimpleObjectProperty<GenreEnum> genre;
 
     private SimpleObjectProperty<GoalEnum> goal;
-    /**
-     * @associates <{entities.Weight}>
-     */
-    private SimpleListProperty<Weight> weights;
 
     public ClientOBJ(Integer user_id, String login, String email, String fullName, StatusEnum status,
             PrivilegeEnum privilege, String password, Date lastPasswordChange, String age, Float height,
-            GenreEnum genre, GoalEnum goal, List<Weight> weights) {
+            GenreEnum genre, GoalEnum goal) {
         super(user_id, login, email, fullName, status, privilege, password, lastPasswordChange);
         this.age = new SimpleStringProperty(age);
         this.height = new SimpleFloatProperty(height);
         this.genre = new SimpleObjectProperty<>(genre);
         this.goal = new SimpleObjectProperty<>(goal);
-        this.weights = new SimpleListProperty<>(FXCollections.observableList(weights));
     }
 
     public ClientOBJ() {
@@ -56,7 +51,6 @@ public class ClientOBJ extends User {
         this.height = new SimpleFloatProperty(Float.parseFloat("1.80"));
         this.genre = new SimpleObjectProperty<>(GenreEnum.NON_BINARY);
         this.goal = new SimpleObjectProperty<>(GoalEnum.MAINTAIN);
-        this.weights = new SimpleListProperty<>();
     }
 
     public void setAge(String age) {
@@ -89,14 +83,6 @@ public class ClientOBJ extends User {
 
     public GoalEnum getGoal() {
         return goal.get();
-    }
-
-    public void setWeights(List<Weight> weights) {
-        this.weights.set(FXCollections.observableList(weights));
-    }
-
-    public List<Weight> getWeights() {
-        return weights.get();
     }
 
     @Override
