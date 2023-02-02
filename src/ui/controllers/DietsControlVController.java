@@ -616,9 +616,9 @@ public class DietsControlVController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/views/DietHelpFXMLControlVController.fxml"));
             Parent root = (Parent) loader.load();
-            DietHelpControllerController DietHelpControllerController = ((DietHelpControllerController) loader.getController());
+            DietHelpControllerController dietHelpControllerController = ((DietHelpControllerController) loader.getController());
             //Initializes and shows help stage
-            DietHelpControllerController.initAndShowStage(root);
+            dietHelpControllerController.initAndShowStage(root);
         } catch (IOException ex) {
             //If theres is an error trying to open the help view, an alert will show. 
             showErrorAlert("Error trying to open help view:\n" + ex.getMessage());
@@ -815,6 +815,7 @@ public class DietsControlVController {
     private void handleCreateAction(ActionEvent event) {
         try {
             Diet diet = (Diet) new Diet();
+            diet.setType(GoalEnum.INCREASE);
             DietFactory.getModel().create_XML(diet);
             dietsData = FXCollections.observableArrayList(DietFactory.getModel().findAllDiets_XML(new GenericType<List<Diet>>() {
             }));
@@ -960,10 +961,10 @@ public class DietsControlVController {
     @FXML
     private void handleButtonClientsAction(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientsControlWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientAdminWindow.fxml"));
             Parent root = (Parent) loader.load();
 
-            DietsControlVController controller = ((DietsControlVController) loader.getController());
+            ClientControlWindow controller = ((ClientControlWindow) loader.getController());
 
             controller.setStage(stage);
             stage.close();
