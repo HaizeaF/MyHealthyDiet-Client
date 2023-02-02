@@ -193,6 +193,11 @@ public class ClientControlWindow {
         itemDisabled.setOnAction(this::handleFilterDisabled);
 
         // EDITABLE ITEMS //
+        /**
+         * Checks if it can be converted to integer, if it does it updates the
+         * client with the new age value if not it shows an alert indicating the
+         * error and puts back the previous value
+         */
         columnAge.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnAge.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
             try {
@@ -210,6 +215,12 @@ public class ClientControlWindow {
             }
         });
 
+        /**
+         * This checks the maximum characters and the format of the email, if
+         * everything is correct it updates the client with the new email value,
+         * if not it shows and alert specifying the error and puts back the
+         * previous value
+         */
         columnEmail.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnEmail.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
             if (t.getNewValue().length() >= 50 || validateEmail(t.getNewValue())) {
@@ -235,6 +246,9 @@ public class ClientControlWindow {
             }
         });
 
+        /**
+         * Updates the client genre
+         */
         columnGenre.setCellFactory(ComboBoxTableCell.<ClientOBJ, GenreEnum>forTableColumn(GenreEnum.values()));
         columnGenre.setOnEditCommit((CellEditEvent<ClientOBJ, GenreEnum> t) -> {
             try {
@@ -251,6 +265,9 @@ public class ClientControlWindow {
             }
         });
 
+        /**
+         * Updates the client goal
+         */
         columnGoal.setCellFactory(ComboBoxTableCell.<ClientOBJ, GoalEnum>forTableColumn(GoalEnum.values()));
         columnGoal.setOnEditCommit((CellEditEvent<ClientOBJ, GoalEnum> t) -> {
             try {
@@ -267,6 +284,11 @@ public class ClientControlWindow {
             }
         });
 
+        /**
+         * Checks if entered value can be converted to Float, if everything goes
+         * correctly it updates the value, if not it puts back the previous
+         * value
+         */
         columnHeight.setCellFactory(TextFieldTableCell.<ClientOBJ, Float>forTableColumn(new FloatStringFormatter()));
         columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
             try {
@@ -283,6 +305,11 @@ public class ClientControlWindow {
             }
         });
 
+        /**
+         * Checks if the Login exists, if it does, it shows an alert indicating
+         * it, if it doesent it checks wether or not the length is correct, if
+         * it is, the client login gets updated
+         */
         columnLogin.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnLogin.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
             try {
@@ -320,6 +347,9 @@ public class ClientControlWindow {
         }
         );
 
+        /**
+         * Checks if the length is ok, if it is it updates the name
+         */
         columnName.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnName.setOnEditCommit(
                 (CellEditEvent<ClientOBJ, String> t) -> {
@@ -347,6 +377,9 @@ public class ClientControlWindow {
                 }
         );
 
+        /**
+         * Updates the client status
+         */
         columnStatus.setCellFactory(ComboBoxTableCell.<ClientOBJ, StatusEnum>forTableColumn(StatusEnum.values()));
         columnStatus.setOnEditCommit(
                 (CellEditEvent<ClientOBJ, StatusEnum> t) -> {
@@ -396,7 +429,7 @@ public class ClientControlWindow {
 
         // LOG OUT BUTTON //
         buttonLogout.setOnAction(this::handleLogOutAction);
-        
+
         // MENU BUTTONS //
         buttonPlates.setOnAction(this::handleButtonPlatesAction);
 
@@ -623,7 +656,7 @@ public class ClientControlWindow {
 
     /**
      * Opens log in windwow and closes this one
-     * 
+     *
      * @param event The ActionEvent object for the event.
      */
     public void handleLogOutAction(ActionEvent event) {
@@ -648,7 +681,7 @@ public class ClientControlWindow {
             LOGGER.log(Level.SEVERE, ex.getMessage());
         }
     }
-    
+
     /**
      * Displays plates window and close this one. Open the PlateControlWindow
      * window and close it.
@@ -670,7 +703,7 @@ public class ClientControlWindow {
             //If theres is an error trying to change view, an alert will show.
             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Plate window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "ClientControlWindow: Error trying to open Plate window, {0}", ex.getMessage());
         }
     }
 
@@ -695,7 +728,7 @@ public class ClientControlWindow {
             //If theres is an error trying to change view, an alert will show.
             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Diets window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "ClientControlWindow: Error trying to open Diets window, {0}", ex.getMessage());
         }
     }
 
@@ -720,7 +753,7 @@ public class ClientControlWindow {
             //If theres is an error trying to change view, an alert will show.
             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Plates window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "ClientControlWindow: Error trying to open Plates window, {0}", ex.getMessage());
         }
     }
 
@@ -745,7 +778,7 @@ public class ClientControlWindow {
             //If theres is an error trying to change view, an alert will show.
             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Tips window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "ClientControlWindow: Error trying to open Tips window, {0}", ex.getMessage());
         }
     }
 
@@ -758,19 +791,20 @@ public class ClientControlWindow {
     @FXML
     private void handleButtonClientsAction(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientsControlWindow.fxml"));
+            stage.close();
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientAdminWindow.fxml"));
             Parent root = (Parent) loader.load();
 
             ClientControlWindow controller = ((ClientControlWindow) loader.getController());
 
             controller.setStage(stage);
-            stage.close();
+
             controller.initStage(root);
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
             Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
             alert.show();
-            LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Clients window, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "ClientControlWindow: Error trying to open Clients window, {0}", ex.getMessage());
         }
     }
 }
