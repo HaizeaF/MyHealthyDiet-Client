@@ -5,8 +5,8 @@ import javax.ws.rs.core.GenericType;
 import objects.Plate;
 
 /**
- *
- * @author haize
+ * PlateInterface that implements the methods for PlateRESTClient
+ * @author HaizeaF
  */
 public interface PlateInterface {
     public void edit_XML(Plate requestEntity) throws BusinessLogicException;

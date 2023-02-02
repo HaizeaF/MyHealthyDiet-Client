@@ -27,20 +27,23 @@ import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 /**
- *
- * @author haize
+ * CRUD test for the Plate management window.
+ * @author HaizeaF
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PlateControlVControllerTest extends ApplicationTest {
 
     private final TableView tableViewPlates = lookup("#tableViewPlates").query();
-
+    
     @BeforeClass
     public static void setUpClass() throws TimeoutException {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(PlateControlVPrueba.class);
     }
-
+    
+    /**
+     * This method tests the initial stage of the window.
+     */
     @Test
     public void test1_initialStage() {
         verifyThat("#buttonInsertRow", isEnabled());
@@ -58,14 +61,20 @@ public class PlateControlVControllerTest extends ApplicationTest {
         verifyThat("#tableColumnIngredients", isEnabled());
         verifyThat("#tableColumnImage", isEnabled());
     }
-
+    
+    /**
+     * This method tests if a plate is correctly created.
+     */
     @Test
     public void test2_handleAddRow() {
         Integer count = tableViewPlates.getItems().size();
         clickOn("#buttonInsertRow");
         assertEquals(tableViewPlates.getItems().size(), count + 1);
     }
-
+    
+    /**
+     * This method tests if a plate is correctly modified.
+     */
     @Test
     public void test3_modifyPlate() {
         Node row = lookup(".table-row-cell").nth(0).query();
@@ -117,7 +126,10 @@ public class PlateControlVControllerTest extends ApplicationTest {
         assertNotEquals(oldProteins, modifiedPlate.getProteins());
         assertNotEquals(oldVegetarian, modifiedPlate.getIsVegetarian());
     }
-
+    
+    /**
+     * This method tests if a plate is correctly searched.
+     */
     @Test
     public void test4_searchPlate() {
         clickOn("#textFieldSearchBar");
@@ -136,7 +148,10 @@ public class PlateControlVControllerTest extends ApplicationTest {
         verifyThat("There are no plates with that name.", isVisible());
         push(KeyCode.ENTER);
     }
-
+    
+    /**
+     * This method tests if a plate is correctly filtered.
+     */
     @Test
     public void test5_filterPlate() {
         clickOn("#buttonFilter");
@@ -153,7 +168,10 @@ public class PlateControlVControllerTest extends ApplicationTest {
         clickOn("#buttonFilter");
         moveBy(-650, 240).clickOn();
     }
-
+    
+    /**
+     * This method tests if a plate is correctly deleted.
+     */
     @Test
     public void test6_handleDeleteRow() {
         Integer count = tableViewPlates.getItems().size();

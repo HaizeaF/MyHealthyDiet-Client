@@ -17,14 +17,18 @@ import javafx.stage.Stage;
 import objects.Plate;
 
 /**
- *
+ * Cell factory for button that open a filechooser to put a image on a plate.
  * @author haize
  */
 public class ImageButtonCell extends TableCell<Plate, byte[]> {
 
     final Button cellButton = new Button("Choose image");
     private static final Logger LOGGER = Logger.getLogger(ImageButtonCell.class.getName());
-
+    
+    /**
+     * This method sets the event for the button. It opens the filechooser and then it saves the image on the current plate.
+     * @param stage 
+     */
     public ImageButtonCell(Stage stage) {
         // Open a fileChooser to choose an image. 
         FileChooser.ExtensionFilter imageFilter
@@ -41,7 +45,7 @@ public class ImageButtonCell extends TableCell<Plate, byte[]> {
                     Plate plate = (Plate) getTableRow().getItem();
                     plate.setPlateImg(imgBytes);
                     PlateFactory.getModel().edit_XML(plate);
-                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Image added correctly.");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Image added correctly.");
                     alert.show();
                 } catch (IOException | BusinessLogicException ex) {
                     String msg = "Error saving the image: " + ex.getMessage();

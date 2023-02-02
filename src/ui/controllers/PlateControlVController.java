@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -64,8 +63,8 @@ import objects.FoodTypeEnum;
 import objects.MealEnum;
 
 /**
- *
- * @author haize
+ * Controller of the window that manages the plates.
+ * @author HaizeaF
  */
 public class PlateControlVController {
 
@@ -142,7 +141,7 @@ public class PlateControlVController {
         Callback<TableColumn<Plate, byte[]>, TableCell<Plate, byte[]>> cellImageFactory
                 = (TableColumn<Plate, byte[]> p) -> new ImageButtonCell(stage);
         Callback<TableColumn<Plate, List<Ingredient>>, TableCell<Plate, List<Ingredient>>> cellIngredientsFactory
-                = (TableColumn<Plate, List<Ingredient>> p) -> new IngredientsButtonCell(stage);
+                = (TableColumn<Plate, List<Ingredient>> p) -> new IngredientsButtonCell(stage,tableViewPlates);
 
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("plateName"));
         tableColumnMealType.setCellValueFactory(new PropertyValueFactory<>("mealType"));
@@ -371,7 +370,10 @@ public class PlateControlVController {
         LOGGER.info("PlateControlVController window initialized.");
     }
 
-    // A pop-up window appears asking: "Are you sure you want to close the app? If you click "Yes", the program closes. If you click "No" the pop-up window disappears.
+    /**
+     * A pop-up window appears asking: "Are you sure you want to close the app? If you click "Yes", the program closes. If you click "No" the pop-up window disappears.
+     * @param event The event that is thrown when the user closes the window.
+     */ 
     private void handleExitAction(WindowEvent event) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
         a.showAndWait();
@@ -389,7 +391,10 @@ public class PlateControlVController {
         }
     }
 
-    // Adds a new editable line to the table, to create a new plate. Send to the server a request to create a new empty plate and add it to the table.
+    /**
+     * Adds a new editable line to the table, to create a new plate. Send to the server a request to create a new empty plate and add it to the table.
+     * @param event The event that is thrown when the add row button is clicked.
+     */ 
     @FXML
     private void handleAddRow(ActionEvent event) {
         try {
@@ -405,7 +410,10 @@ public class PlateControlVController {
         }
     }
 
-    // A pop-up window is displayed saying "Are you sure you want to delete this plate?" With two options (YES or NO). In case of saying yes, a request is sent to the server to delete the plate, it is deleted in the table and the pop-up window closes. If you say no, the pop-up window closes.
+    /**
+     * A pop-up window is displayed saying "Are you sure you want to delete this plate?" With two options (YES or NO). In case of saying yes, a request is sent to the server to delete the plate, it is deleted in the table and the pop-up window closes. If you say no, the pop-up window closes.
+     * @param event The event that is thrown when the delete button is clicked.
+     */ 
     private void handleDeleteAction(ActionEvent event) {
         Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this plate?");
         a.showAndWait();
@@ -431,7 +439,10 @@ public class PlateControlVController {
         }
     }
 
-    // Opens DietsControlWindow and closes this.
+    /**
+     * Opens DietsControlWindow and closes this.
+     * @param event The event that is thrown when the diet button on the side menu is clicked.
+     */
     @FXML
     private void handleButtonDiets(ActionEvent event) {
         try {
@@ -451,7 +462,10 @@ public class PlateControlVController {
         }
     }
 
-    // Opens IngridientsControlWindow and closes this.
+    /**
+     * Opens IngredientsControlWindow and closes this.
+     * @param event The event that is thrown when the ingredient button on the side menu is clicked.
+     */
     @FXML
     private void handleButtonIngredients(ActionEvent event) {
         try {
@@ -471,7 +485,10 @@ public class PlateControlVController {
         }
     }
 
-    // Opens TipsControlWindow and closes this.
+    /**
+     * Opens TipsControlWindow and closes this.
+     * @param event The event that is thrown when the tip button on the side menu is clicked.
+     */
     @FXML
     private void handleButtonTips(ActionEvent event) {
         try {
@@ -491,7 +508,10 @@ public class PlateControlVController {
         }
     }
 
-    // Opens ClientsControlWindow and closes this.
+    /**
+     * Opens ClientsControlWindow and closes this.
+     * @param event The event that is thrown when the client button on the side menu is clicked.
+     */
     @FXML
     private void handleButtonClients(ActionEvent event) {
         try {
@@ -511,7 +531,10 @@ public class PlateControlVController {
         }
     }
 
-    // A pop-up window is displayed asking: "Are you sure you want to log out?". If you click "Yes" the pop-up window disappears, the SignIn window opens and the current one closes. If you click "No" the pop-up window disappears.
+    /**
+     * A pop-up window is displayed asking: "Are you sure you want to log out?". If you click "Yes" the pop-up window disappears, the SignIn window opens and the current one closes. If you click "No" the pop-up window disappears.
+     * @param event The event that is thrown when the log out button is clicked.
+     */ 
     @FXML
     private void handleButtonLogOut(ActionEvent event) {
         try {
@@ -531,7 +554,10 @@ public class PlateControlVController {
         }
     }
 
-    // Check that there are plates whose name matches the characters entered. If they do not exist, a pop-up window is displayed with the text: "There are no plates with that name". If they do exist, the table is reloaded with the plates whose names match the characters entered.
+    /**
+     * Check that there are plates whose name matches the characters entered. If they do not exist, a pop-up window is displayed with the text: "There are no plates with that name". If they do exist, the table is reloaded with the plates whose names match the characters entered.
+     * @param event The event that is thrown when the button search is clicked.
+     */
     private void handleButtonSearch(ActionEvent event) {
         try {
             if (!textFieldSearchBar.getText().isEmpty()) {
@@ -560,13 +586,20 @@ public class PlateControlVController {
         }
     }
 
-    // Lose focus of textFieldSearchBar.
+    /**
+     * Lose focus of textFieldSearchBar.
+     * @param keyEvent The key event that is thrown.
+     */
     private void handleSearchBar(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.ESCAPE) {
             buttonSearch.requestFocus();
         }
     }
-
+    
+    /**
+     * A filter window is shown.
+     * @param event The event that is thrown when the filter button is clicked.
+     */
     @FXML
     private void handleButtonFilter(ActionEvent event) {
         // Open a fileChooser to choose an image.
@@ -675,7 +708,10 @@ public class PlateControlVController {
         });
     }
 
-    // It will display a help window.
+    /**
+     * It will display a help window.
+     * @param event The event that is thrown when the help button is clicked.
+     */
     @FXML
     private void handleButtonHelp(ActionEvent event) {
         try {
@@ -692,7 +728,10 @@ public class PlateControlVController {
         }
     }
 
-    // Checks if there is data in the table. If there is data, it generates a report and displays it. If there is no data, it displays a pop-up window with the text: "No data available for report".
+    /**
+     * Checks if there is data in the table. If there is data, it generates a report and displays it. If there is no data, it displays a pop-up window with the text: "No data available for report".
+     * @param event The event that is thrown when the report button is clicked.
+     */ 
     @FXML
     private void handleButtonReport(ActionEvent event) {
         try {

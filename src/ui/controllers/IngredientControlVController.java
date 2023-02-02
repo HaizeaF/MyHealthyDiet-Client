@@ -62,121 +62,123 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import objects.FoodTypeEnum;
 import objects.Ingredient;
+import objects.Plate;
 
 /**
  * Controller of the ingredient management window.
+ *
  * @author Mikel
  */
 public class IngredientControlVController {
-    
+
     private Stage stage;
     private static final Logger LOGGER = Logger.getLogger("IngredientControlVController");
-    
+
     @FXML
     private Pane paneIngredientWindow;
-    
+
     @FXML
     private Pane paneIngredientMenu;
-    
+
     @FXML
     private Label labelTitle;
-    
+
     @FXML
     private Button buttonTips;
-    
+
     @FXML
     private Button buttonPlates;
-    
+
     @FXML
     private Button buttonClients;
-    
+
     @FXML
     private Button buttonDiets;
-    
+
     @FXML
     private Button buttonIngredients;
-    
+
     @FXML
     private Button buttonLogout;
-    
+
     @FXML
     private TableView tableIngredient;
-    
+
     @FXML
     private TableColumn<Ingredient, String> columnIngredientName;
-    
+
     @FXML
     private TableColumn<Ingredient, FoodTypeEnum> columnFoodType;
-    
+
     @FXML
     private TableColumn<Ingredient, Boolean> columnIsInSeason;
-    
+
     @FXML
     private TableColumn<Ingredient, Float> columnWaterIndex;
-    
+
     @FXML
     private TextField texfieldSearchbar;
-    
+
     @FXML
     private Button buttonSearch;
-    
+
     @FXML
     private MenuButton menuButtonFilters;
-    
+
     @FXML
     private MenuItem menuItemVegetable;
-    
+
     @FXML
     private MenuItem menuItemFruit;
-    
+
     @FXML
     private MenuItem menuItemNut;
-    
+
     @FXML
     private MenuItem menuItemGrain;
-    
+
     @FXML
     private MenuItem menuItemBean;
-    
+
     @FXML
     private MenuItem menuItemMeat;
-    
+
     @FXML
     private MenuItem menuItemPorultry;
-    
+
     @FXML
     private MenuItem menuItemFish;
-    
+
     @FXML
     private MenuItem menuItemSeafood;
-    
+
     @FXML
     private MenuItem menuItemDairy;
-    
+
     @FXML
     private MenuItem menuItemDelete;
-    
+
     @FXML
     private Pane paneButtons;
-    
+
     @FXML
     private Button buttonInsertRow;
-    
+
     @FXML
     private Button buttonHelp;
-    
+
     @FXML
     private Button buttonReport;
-    
+
     @FXML
     private ContextMenu contextMenu;
-    
+
     private CheckBox cuadro;
-    
-    private ObservableList<Ingredient> ingredientsData = FXCollections.observableArrayList();
-    
+
+    private ObservableList<Ingredient> ingredientsData = null;
+
     private ObservableList<Ingredient> ingredientsDataFiltered = FXCollections.observableArrayList();
-    
+
     public Stage getStage() {
         return stage;
     }
@@ -185,7 +187,11 @@ public class IngredientControlVController {
         this.stage = stage;
     }
 
-  /*  @FXML
+    public void setData(ObservableList<Ingredient> ingredientsData) {
+        this.ingredientsData = ingredientsData;
+    }
+
+    /*  @FXML
     private Label labelMessage;
     /**
      * This method initialize the stage of the application showing a greeting to the user who accessed to this.
@@ -195,7 +201,7 @@ public class IngredientControlVController {
         try {
             buttonSearch.setDefaultButton(true);
             NumberFormat nf = NumberFormat.getNumberInstance(Locale.getDefault());
-            DecimalFormat df = (DecimalFormat)nf;
+            DecimalFormat df = (DecimalFormat) nf;
             IngredientInterface ingredientModel = IngredientFactory.getModel();
             // Crea una escena asociada al root
             Scene scene = new Scene(root);
@@ -205,10 +211,10 @@ public class IngredientControlVController {
             stage.setTitle("Ingredient Control Window");
             // La ventana no es redimensionable
             stage.setResizable(false);
-            
+
             // Confirmar el cierre de la aplicación
             stage.setOnCloseRequest(this::handleExitAction);
-            
+
             // Filtro a buscar por FoodTypeEnum
             menuItemVegetable.setOnAction(this::handleFilterAction);
             menuItemSeafood.setOnAction(this::handleFilterAction);
@@ -220,50 +226,43 @@ public class IngredientControlVController {
             menuItemFish.setOnAction(this::handleFilterAction);
             menuItemDairy.setOnAction(this::handleFilterAction);
             menuItemBean.setOnAction(this::handleFilterAction);
-            
+
             // Ventana de informacion de ayuda.
             buttonHelp.setOnAction(this::handleHelpWindowAction);
-            
+
             // Crear un ingrediente
             buttonInsertRow.setOnAction(this::handleCreateAction);
-            
+
             // Search button
-            
             buttonSearch.setOnAction(this::handleSearchAction);
-            
+
             // LOG OUT BUTTON //
-               
             buttonLogout.setOnAction(this::handleLogOutAction);
-            
+
             // Report button
-            
             buttonReport.setOnAction(this::handleButtonReportAction);
-            
+
             // Window navigation
-            
             buttonClients.setOnAction(this::handleClientsWindowNavigation);
             buttonDiets.setOnAction(this::handleDietssWindowNavigation);
             buttonTips.setOnAction(this::handleTipsWindowNavigation);
             buttonPlates.setOnAction(this::handlePlatesWindowNavigation);
             buttonIngredients.setOnAction(this::handleIngredientsWindowNavigation);
-            
+
             //tableIngredient.getSelectionModel().selectedItemProperty().addListener(this::handleTableSelectionChanged);
-            
             // Cargar tabla de ingredientes
             columnIngredientName.setCellValueFactory(
                     new PropertyValueFactory<>("ingredientName"));
             columnIngredientName.setCellFactory(TextFieldTableCell.<Ingredient>forTableColumn());
             columnIngredientName.setOnEditCommit(
                     (CellEditEvent<Ingredient, String> t) -> {
-                        try{
-                            if(t.getNewValue().length()<=50){
+                        try {
+                            if (t.getNewValue().length() <= 50) {
                                 ((Ingredient) t.getTableView().getItems().get(
-                                        t.getTablePosition().getRow())
-                                        ).setIngredientName(t.getNewValue());
+                                        t.getTablePosition().getRow())).setIngredientName(t.getNewValue());
                             } else {
                                 ((Ingredient) t.getTableView().getItems().get(
-                                        t.getTablePosition().getRow())
-                                        ).setIngredientName(t.getOldValue());
+                                        t.getTablePosition().getRow())).setIngredientName(t.getOldValue());
                                 Alert alert = new Alert(AlertType.ERROR, "Maximum characters (50) for the name of the ingredient exceeded.");
                                 alert.show();
                             }
@@ -276,91 +275,94 @@ public class IngredientControlVController {
                             alert.show();
                             LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
                         }
-            });
-            
-            
+                    });
+
             columnFoodType.setCellValueFactory(
                     new PropertyValueFactory<>("foodType"));
             columnFoodType.setCellFactory(ComboBoxTableCell.<Ingredient, FoodTypeEnum>forTableColumn(FoodTypeEnum.values()));
             columnFoodType.setOnEditCommit(
-                (CellEditEvent<Ingredient, FoodTypeEnum> t) -> {
-                    try{
-                        ((Ingredient) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())).setFoodType(t.getNewValue());
-                        ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
-                    } catch (BusinessLogicException ex) {
+                    (CellEditEvent<Ingredient, FoodTypeEnum> t) -> {
+                        try {
+                            ((Ingredient) t.getTableView().getItems().get(
+                                    t.getTablePosition().getRow())).setFoodType(t.getNewValue());
+                            ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
+                        } catch (BusinessLogicException ex) {
                             //If there is an error in the business class, shows an alert.
                             String msg = "Window can not be loaded:\n" + ex.getMessage();
                             Alert alert = new Alert(AlertType.ERROR, msg);
                             alert.show();
                             LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
                         }
-                });
-            
+                    });
+
             columnIsInSeason.setCellFactory(
-                CheckBoxTableCell.<Ingredient>forTableColumn(columnIsInSeason));
+                    CheckBoxTableCell.<Ingredient>forTableColumn(columnIsInSeason));
             columnIsInSeason.setCellValueFactory(
-                    (CellDataFeatures<Ingredient, Boolean> param) ->  param.getValue().getIsInSeasonProperty());
-            
+                    (CellDataFeatures<Ingredient, Boolean> param) -> param.getValue().getIsInSeasonProperty());
+
             columnWaterIndex.setCellValueFactory(
                     new PropertyValueFactory<>("waterIndex"));
             columnWaterIndex.setCellFactory(TextFieldTableCell.<Ingredient, Float>forTableColumn(new FloatStringFormatterIngredient()));
             columnWaterIndex.setOnEditCommit(
-                (CellEditEvent<Ingredient, Float> t) -> {
-                    try{
-                        if(t.getNewValue()<=100 && t.getNewValue()>=0){
-                            ((Ingredient) t.getTableView().getItems().get(
-                                    t.getTablePosition().getRow())).setWaterIndex(t.getNewValue());
-                        }else{
-                            if(t.getNewValue()>100){
-                                Alert alert = new Alert(AlertType.ERROR, "Maximum number is 100, you cannot exceed it.");
-                                alert.show();
-                            }else if (t.getNewValue()<0){
-                                Alert alert = new Alert(AlertType.ERROR, "Minimum  number is 0, you cannot put less than the minimum.");
-                                alert.show();
+                    (CellEditEvent<Ingredient, Float> t) -> {
+                        try {
+                            if (t.getNewValue() <= 100 && t.getNewValue() >= 0) {
+                                ((Ingredient) t.getTableView().getItems().get(
+                                        t.getTablePosition().getRow())).setWaterIndex(t.getNewValue());
+                            } else {
+                                if (t.getNewValue() > 100) {
+                                    Alert alert = new Alert(AlertType.ERROR, "Maximum number is 100, you cannot exceed it.");
+                                    alert.show();
+                                } else if (t.getNewValue() < 0) {
+                                    Alert alert = new Alert(AlertType.ERROR, "Minimum  number is 0, you cannot put less than the minimum.");
+                                    alert.show();
+                                }
                             }
-                        }
-                    ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
-                    tableIngredient.refresh();
-                    } catch (NullPointerException ex){
-                        String msg = "This value is not compatible.";
-                        Alert alert = new Alert(AlertType.ERROR, msg);
-                        alert.show();
-                        LOGGER.log(Level.SEVERE, msg);
-                    } catch (BusinessLogicException ex) {
+                            ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
+                            tableIngredient.refresh();
+                        } catch (NullPointerException ex) {
+                            String msg = "This value is not compatible.";
+                            Alert alert = new Alert(AlertType.ERROR, msg);
+                            alert.show();
+                            LOGGER.log(Level.SEVERE, msg);
+                        } catch (BusinessLogicException ex) {
                             //If there is an error in the business class, shows an alert.
                             String msg = "Window can not be loaded:\n" + ex.getMessage();
                             Alert alert = new Alert(AlertType.ERROR, msg);
                             alert.show();
                             LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
                         }
-                }
+                    }
             );
-            
-            List<Ingredient> ingredients = ingredientModel.findAll_XML(new GenericType<List<Ingredient>>() {});
-            //Set handler to update ObservableList properties. Applicable if cell is edited
 
-            for(int i=0;i<ingredients.size();i++){
-                ingredientsData.add(ingredients.get(i));
+            if (ingredientsData == null) {
+                ingredientsData = FXCollections.observableArrayList();
+                List<Ingredient> ingredients = ingredientModel.findAll_XML(new GenericType<List<Ingredient>>() {
+                });
+                //Set handler to update ObservableList properties. Applicable if cell is edited
+
+                for (int i = 0; i < ingredients.size(); i++) {
+                    ingredientsData.add(ingredients.get(i));
+                }
+                ingredients.forEach(
+                        ingredient -> ingredient.getIsInSeasonProperty().addListener((observable, oldValue, newValue) -> {
+                            try {
+                                ingredientModel.edit_XML(ingredient);
+                            } catch (BusinessLogicException ex) {
+                                //If there is an error in the business class, shows an alert.
+                                String msg = "Window can not be loaded:\n" + ex.getMessage();
+                                Alert alert = new Alert(AlertType.ERROR, msg);
+                                alert.show();
+                                LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+                            }
+                        })
+                );
             }
-            ingredients.forEach(
-                ingredient -> ingredient.getIsInSeasonProperty().addListener((observable, oldValue, newValue) -> {
-                    try{
-                        ingredientModel.edit_XML(ingredient);
-                    } catch (BusinessLogicException ex) {
-                            //If there is an error in the business class, shows an alert.
-                            String msg = "Window can not be loaded:\n" + ex.getMessage();
-                            Alert alert = new Alert(AlertType.ERROR, msg);
-                            alert.show();
-                            LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
-                        }
-                })
-            );
             tableIngredient.setItems(ingredientsData);
             tableIngredient.setEditable(true);
-            
+
             contextMenu.getItems().get(0).setOnAction(this::handleDeleteAction);
-            
+
             // Enseña la ventana principal
             stage.show();
             LOGGER.info("Ingredient Control Window initialized");
@@ -371,9 +373,12 @@ public class IngredientControlVController {
             LOGGER.log(Level.SEVERE, msg);
         }
     }
+
     /**
      * This method close the application using an alert
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     private void handleExitAction(WindowEvent event) {
         Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
@@ -391,54 +396,61 @@ public class IngredientControlVController {
             LOGGER.log(Level.SEVERE, msg);
         }
     }
+
     /**
      * This method delete an ingredient from the table.
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     private void handleDeleteAction(ActionEvent event) {
         Alert a = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this Ingredient?");
         a.showAndWait();
-        try{
+        try {
             if (a.getResult().equals(ButtonType.CANCEL)) {
                 event.consume();
             } else {
-                Integer id = ((Ingredient)tableIngredient.getSelectionModel().getSelectedItem()).getIngredient_id();
+                Integer id = ((Ingredient) tableIngredient.getSelectionModel().getSelectedItem()).getIngredient_id();
                 IngredientFactory.getModel().remove(id);
-                
+
                 tableIngredient.getItems().remove(tableIngredient.getSelectionModel().getSelectedItem());
                 tableIngredient.refresh();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             String msg = "Error deleting an ingredient";
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, msg);
-        }    
+        }
     }
-    
+
     /**
      * This method create an ingredient from the table.
+     *
      * @param e an ActionEvent.ACTION event type for when the button is pressed
      */
-    private void handleCreateAction(ActionEvent e){
-        try{
+    private void handleCreateAction(ActionEvent e) {
+        try {
             Float num = Float.parseFloat("20.5");
             Ingredient newIngredient = new Ingredient("aa", FoodTypeEnum.NUT, false, num);
             IngredientFactory.getModel().create_XML(newIngredient);
-            ingredientsData = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>> () {}));
+            ingredientsData = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>>() {
+            }));
             tableIngredient.setItems(ingredientsData);
             tableIngredient.refresh();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             String msg = "Error creating an ingredient";
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
-            LOGGER.log(Level.SEVERE, msg); 
+            LOGGER.log(Level.SEVERE, msg);
         }
     }
-    
+
     /**
      * This method shows a report that loads all the ingredients.
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     private void handleButtonReportAction(ActionEvent event) {
         try {
@@ -449,16 +461,18 @@ public class IngredientControlVController {
             JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
             jasperViewer.setVisible(true);
         } catch (JRException ex) {
-            String msg =("Error trying to open report:\n" + ex.getMessage());
+            String msg = ("Error trying to open report:\n" + ex.getMessage());
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, "IngredientControlVController: Error opening report, {0}", ex.getMessage());
         }
     }
-    
+
     /**
      * This method makes a search by name in the ingredients table.
-     * @param action an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param action an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     private void handleSearchAction(ActionEvent action) {
         LOGGER.info("Searhing for clients");
@@ -490,20 +504,23 @@ public class IngredientControlVController {
             }
         }
     }
+
     /**
      * This method makes a search by foodType in the ingredients table.
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
-    private void handleFilterAction(Event event){
+    private void handleFilterAction(Event event) {
         try {
-            MenuItem newMenuItem = ((MenuItem)event.getSource());
+            MenuItem newMenuItem = ((MenuItem) event.getSource());
             String foodTypeSelected = newMenuItem.getText();
             menuItemVegetable.getText();
             ingredientsData = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>>() {
             }));
             ingredientsDataFiltered.clear();
-            for(int i = 0; i<ingredientsData.size(); i++){
-                if(ingredientsData.get(i).getFoodType().toString().equalsIgnoreCase(foodTypeSelected)){
+            for (int i = 0; i < ingredientsData.size(); i++) {
+                if (ingredientsData.get(i).getFoodType().toString().equalsIgnoreCase(foodTypeSelected)) {
                     ingredientsDataFiltered.add(ingredientsData.get(i));
                 }
             }
@@ -517,12 +534,15 @@ public class IngredientControlVController {
             LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
         }
     }
-    
+
     /**
-     * This method opens an html window that shows information to help users to navigate and use the window.
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     * This method opens an html window that shows information to help users to
+     * navigate and use the window.
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
-    private void handleHelpWindowAction(Event event){
+    private void handleHelpWindowAction(Event event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/helpIngredient.fxml"));
             Parent root = (Parent) loader.load();
@@ -532,19 +552,23 @@ public class IngredientControlVController {
             Logger.getLogger(IngredientControlVController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * This method sends an observable List to another window
+     *
      * @param ingredients ObservableList of all the ingredients of the window.
      */
-    private void cargarTablaIngredientesUnPlato(ObservableList<Ingredient> ingredients){
-        if(ingredients!=null)
+    private void cargarTablaIngredientesUnPlato(ObservableList<Ingredient> ingredients) {
+        if (ingredients != null) {
             tableIngredient.setItems(ingredients);
+        }
     }
-    
+
     /**
      * Navigation with Client window
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     @FXML
     private void handleClientsWindowNavigation(ActionEvent event) {
@@ -559,16 +583,18 @@ public class IngredientControlVController {
             controller.initStage(root);
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
-            String msg =("Failed trying to open Clients window.");
+            String msg = ("Failed trying to open Clients window.");
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, "ClientControlWindow: Error trying to open Clients window, {0}", ex.getMessage());
         }
     }
-    
+
     /**
      * Navigation with Diet window
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     @FXML
     private void handleDietssWindowNavigation(ActionEvent event) {
@@ -583,16 +609,18 @@ public class IngredientControlVController {
             controller.initStage(root);
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
-            String msg =("Failed trying to open Diets window.");
+            String msg = ("Failed trying to open Diets window.");
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, "DietsControlVController: Error trying to open Dietss window, {0}", ex.getMessage());
         }
     }
-    
+
     /**
      * Navigation with Plates window
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     @FXML
     private void handlePlatesWindowNavigation(ActionEvent event) {
@@ -600,23 +628,25 @@ public class IngredientControlVController {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PlateControlView.fxml"));
             Parent root = (Parent) loader.load();
 
-            PlateControlVController  controller = ((PlateControlVController) loader.getController());
+            PlateControlVController controller = ((PlateControlVController) loader.getController());
 
             controller.setStage(stage);
             stage.close();
             controller.initStage(root);
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
-            String msg =("Failed trying to open Plates window.");
+            String msg = ("Failed trying to open Plates window.");
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, "PlateControlVController: Error trying to open Plates window, {0}", ex.getMessage());
         }
     }
-    
+
     /**
      * Navigation with Tips window
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     @FXML
     private void handleTipsWindowNavigation(ActionEvent event) {
@@ -637,10 +667,12 @@ public class IngredientControlVController {
             LOGGER.log(Level.SEVERE, "TipsControlVController: Error trying to open Tips window, {0}", ex.getMessage());
         }*/
     }
-    
+
     /**
      * Navigation with Ingredient window
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     @FXML
     private void handleIngredientsWindowNavigation(ActionEvent event) {
@@ -655,16 +687,18 @@ public class IngredientControlVController {
             controller.initStage(root);
         } catch (IOException | IllegalStateException ex) {
             //If theres is an error trying to change view, an alert will show.
-            String msg =("Failed trying to open Ingredients window.");
+            String msg = ("Failed trying to open Ingredients window.");
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, "IngredientControlVController: Error trying to open Ingredients window, {0}", ex.getMessage());
         }
     }
-    
+
     /**
      * Navigation with Sign In window
-     * @param event an ActionEvent.ACTION event type for when the button is pressed
+     *
+     * @param event an ActionEvent.ACTION event type for when the button is
+     * pressed
      */
     @FXML
     public void handleLogOutAction(ActionEvent event) {
