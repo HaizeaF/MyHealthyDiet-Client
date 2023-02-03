@@ -61,15 +61,13 @@ public class Diet implements Serializable {
 
     //RELATIONS
     /**
-     * @associates <{entities.Plate}>
+     * List with plates that we want to get it fast.
      */
-    //List with plates that we want to get it fast.
     private SimpleListProperty<Plate> plates;
 
     /**
-     * @associates <{entities.Tip}>
+     * List with tips in one diet.
      */
-    //List with tips in one diet.
     private SimpleListProperty<Tip> tips;
 
     /**

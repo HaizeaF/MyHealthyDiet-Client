@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
@@ -36,6 +37,8 @@ public class HomeViewController {
     private MenuItem menuItemModify;
     @FXML
     private MenuItem menuItemLogOut;
+    @FXML
+    private Button buttonPlates;
 
     public Stage getStage() {
         return stage;
@@ -44,8 +47,8 @@ public class HomeViewController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
-    public void setClient(ClientOBJ client){
+
+    public void setClient(ClientOBJ client) {
         this.client = client;
     }
 
@@ -64,6 +67,7 @@ public class HomeViewController {
 
         menuItemLogOut.setOnAction(this::handleLogOutAction);
         menuItemModify.setOnAction(this::handleModifyAction);
+        buttonPlates.setOnAction(this::handlePlatesAction);
 
         // Enseña la ventana principal
         stage.show();
@@ -74,9 +78,9 @@ public class HomeViewController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/UserModify.fxml"));
             Parent root = (Parent) loader.load();
-            
+
             UserModifyVController controller = ((UserModifyVController) loader.getController());
-            
+
             controller.setStage(stage);
             controller.setClient(client);
             controller.initStage(root);
@@ -134,5 +138,23 @@ public class HomeViewController {
             alert.show();
             LOGGER.log(Level.SEVERE, msg);
         }
+    }
+
+    private void handlePlatesAction(ActionEvent event) {
+        Alert alert = new Alert(AlertType.INFORMATION, "WIP");
+        alert.show();
+        /*
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ListPlatesWindow.fxml"));
+            Parent root = (Parent) loader.load();
+            
+            ListPlatesVController controller = ((ListPlatesVController) loader.getController());
+            
+            controller.setStage(stage);
+            controller.setClient(client);
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(HomeViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }
 }

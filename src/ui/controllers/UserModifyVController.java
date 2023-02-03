@@ -46,7 +46,7 @@ import objects.StatusEnum;
  * @author Sendoa
  */
 public class UserModifyVController {
-    
+
     private Stage stage;
     private static final Logger LOGGER = Logger.getLogger("UserModifyVController.class");
     @FXML
@@ -107,26 +107,26 @@ public class UserModifyVController {
     private MenuItem menuItemModify;
     @FXML
     private MenuItem menuItemLogOut;
-    
+
     private ClientOBJ client;
-    
+
     public Stage getStage() {
         return stage;
     }
-    
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
-    public void setClient(ClientOBJ client){
+
+    public void setClient(ClientOBJ client) {
         this.client = client;
     }
-    
+
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
-        
+
         stage.setScene(scene);
-        
+
         stage.setTitle("UserModify");
         stage.setResizable(false);
 
@@ -151,7 +151,7 @@ public class UserModifyVController {
                     String newValue) {
                 if (!newValue.matches("\\d*(\\.\\d*)?")) {
                     heightTextField.setText(oldValue);
-               }
+                }
             }
         });
         heightTextField.setText(String.valueOf(client.getHeight()));
@@ -194,12 +194,14 @@ public class UserModifyVController {
         stage.setOnCloseRequest(this::handleExitAction);
         menuItemLogOut.setOnAction(this::handleLogOutAction);
         menuItemModify.setOnAction(this::handleModifyAction);
-        
+        buttonOverview.setOnAction(this::handleOverwiewAction);
+        buttonPlates.setOnAction(this::handlePlatesAction);
+
         stage.show();
-        
+
         LOGGER.info("Modify window initialiced");
     }
-    
+
     private void handleExitAction(WindowEvent event) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit? This will close the app.");
         a.showAndWait();
@@ -240,7 +242,7 @@ public class UserModifyVController {
             }
         }
     }
-    
+
     private void usernameValid(KeyEvent event) {
         try {
             if (userTextField.getText().isEmpty()) {
@@ -260,7 +262,7 @@ public class UserModifyVController {
             lblUsername.setText(e.getMessage());
         }
     }
-    
+
     private void numberChanged(KeyEvent event) {
         buttonConfirm.setDisable(false);
         buttonCancel.setDisable(false);
@@ -276,7 +278,7 @@ public class UserModifyVController {
             }
         }
     }
-    
+
     private void confirmChanges(ActionEvent event) {
         try {
             ClientOBJ cliente = new ClientOBJ(this.client.getUser_id(), userTextField.getText(), emailTextField.getText(), fullNameTextField.getText(), StatusEnum.ENABLED, PrivilegeEnum.USER, null, new Date(System.currentTimeMillis()), ageTextField.getText(), Float.parseFloat(heightTextField.getText()), (GenreEnum) genreComboBox.getSelectionModel().getSelectedItem(), (GoalEnum) goalComboBox.getSelectionModel().getSelectedItem());
@@ -292,7 +294,7 @@ public class UserModifyVController {
             LOGGER.log(Level.SEVERE, ex.getMessage());
         }
     }
-    
+
     private void cancelChanges(ActionEvent event) {
         userTextField.setText(client.getLogin());
         fullNameTextField.setText(client.getFullName());
@@ -304,7 +306,7 @@ public class UserModifyVController {
         buttonConfirm.setDisable(true);
         buttonCancel.setDisable(true);
     }
-    
+
     private void changePassword(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/PasswordChange.fxml"));
@@ -319,19 +321,19 @@ public class UserModifyVController {
             LOGGER.info(ex.getMessage());
         }
     }
-    
-    private void handleComboBox(Event event){
+
+    private void handleComboBox(Event event) {
         buttonConfirm.setDisable(false);
         buttonCancel.setDisable(false);
     }
-    
+
     public void handleModifyAction(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/UserModify.fxml"));
             Parent root = (Parent) loader.load();
-            
+
             UserModifyVController controller = ((UserModifyVController) loader.getController());
-            
+
             controller.setStage(stage);
             controller.setClient(client);
             controller.initStage(root);
@@ -366,5 +368,38 @@ public class UserModifyVController {
             alert.show();
             LOGGER.log(Level.SEVERE, ex.getMessage());
         }
+    }
+
+    public void handleOverwiewAction(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/HomeView.fxml"));
+            Parent root = (Parent) loader.load();
+
+            HomeViewController controller = ((HomeViewController) loader.getController());
+
+            controller.setStage(stage);
+            controller.setClient(client);
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(UserModifyVController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void handlePlatesAction(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "WIP");
+        alert.show();
+        /*
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ListPlatesWindow.fxml"));
+            Parent root = (Parent) loader.load();
+            
+            ListPlatesVController controller = ((ListPlatesVController) loader.getController());
+            
+            controller.setStage(stage);
+            controller.setClient(client);
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(HomeViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
     }
 }
