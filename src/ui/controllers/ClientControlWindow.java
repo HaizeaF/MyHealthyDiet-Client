@@ -7,11 +7,12 @@ package ui.controllers;
 
 import businessLogic.ClientFactory;
 import cellFactories.FloatStringFormatter;
-import cryptography.Asymmetric;
+import files.AsymmetricClient;
 import cryptography.HashMD5;
 import exceptions.BusinessLogicException;
 import java.util.Collection;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.text.SimpleDateFormat;
@@ -478,7 +479,7 @@ public class ClientControlWindow {
     private void handleInsertAction(ActionEvent action) {
         try {
             ClientOBJ client = new ClientOBJ();
-            byte[] passwordBytes = new Asymmetric().cipher("abcd*1234");
+            byte[] passwordBytes = new AsymmetricClient().cipher("abcd*1234");
             client.setPassword(HashMD5.hexadecimal(passwordBytes));
             ClientFactory.getModel().create(client);
             clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
@@ -597,7 +598,9 @@ public class ClientControlWindow {
      */
     private void handleButtonReportAction(ActionEvent event) {
         try {
-            JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/ClientsReport.jrxml");
+            InputStream input = getClass().getResourceAsStream("/ui/reports/ClientsReport.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(input);
+            input.close();
             JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<ClientOBJ>) this.tableClients.getItems());
             Map<String, Object> parameters = new HashMap<>();
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataItems);
@@ -608,6 +611,8 @@ public class ClientControlWindow {
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, "DietsControlVController: Error opening report, {0}", ex.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(ClientControlWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -6,7 +6,7 @@
 package ui.controllers;
 
 import businessLogic.ClientFactory;
-import cryptography.Asymmetric;
+import files.AsymmetricClient;
 import cryptography.HashMD5;
 import exceptions.BusinessLogicException;
 import java.io.IOException;
@@ -444,7 +444,7 @@ public class SignUpController {
         
         try {
             ClientOBJ client = new ClientOBJ(0, textFieldUsername.getText(), textFieldEmail.getText(), textFieldName.getText(), StatusEnum.ENABLED, PrivilegeEnum.USER, passwordField.getText(), new Date(System.currentTimeMillis()), "20", Float.parseFloat("1.80"), GenreEnum.NON_BINARY, GoalEnum.MAINTAIN);
-            byte[] passwordBytes = new Asymmetric().cipher(passwordField.getText());
+            byte[] passwordBytes = new AsymmetricClient().cipher(passwordField.getText());
             client.setPassword(HashMD5.hexadecimal(passwordBytes));
             ClientFactory.getModel().create(client);
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "User created succesfully");

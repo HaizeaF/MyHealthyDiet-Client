@@ -8,7 +8,7 @@ package ui.controllers;
 import businessLogic.ClientFactory;
 import businessLogic.UserFactory;
 import businessLogic.UserInterface;
-import cryptography.Asymmetric;
+import files.AsymmetricClient;
 import cryptography.HashMD5;
 import static cryptography.HashMD5.hashText;
 import exceptions.BusinessLogicException;
@@ -203,7 +203,7 @@ public class PasswordChangeVController {
     private void handleConfirm(ActionEvent event) {
         handleKeyPassword(null);
         try {
-            byte[] passwordBytes = new Asymmetric().cipher(passwrdField.getText());
+            byte[] passwordBytes = new AsymmetricClient().cipher(passwrdField.getText());
             ClientOBJ client = UserFactory.getModel().logIn(ClientOBJ.class, this.client.getLogin(), HashMD5.hexadecimal(passwordBytes));
             if (!newPasswrdField.getText().equals(confNewPasswdField.getText())) {
                 lblConfNewPasswrd.setText("Password doesnt match");
@@ -212,7 +212,7 @@ public class PasswordChangeVController {
                 imgConfPassword.setImage(new Image(getClass().getResourceAsStream("/ui/resources/icon_password_incorrect.png")));
             }
             if (lblPasswrd.getText().isEmpty() && lblNewPasswrd.getText().isEmpty() && lblConfNewPasswrd.getText().isEmpty()) {
-                byte[] newPasswordBytes = new Asymmetric().cipher(newPasswrdField.getText());
+                byte[] newPasswordBytes = new AsymmetricClient().cipher(newPasswrdField.getText());
                 client.setPassword(HashMD5.hexadecimal(newPasswordBytes));
                 client.setLastPasswordChange(new Date(System.currentTimeMillis()));
                 ClientFactory.getModel().editPassword(client);

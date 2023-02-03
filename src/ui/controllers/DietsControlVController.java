@@ -7,6 +7,7 @@ import cellFactories.PlatesCell;
 import cellFactories.TipsCell;
 import exceptions.BusinessLogicException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -839,7 +840,9 @@ public class DietsControlVController {
      */
     private void handleButtonReportAction(ActionEvent event) {
         try {
-            JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/DietReport.jrxml");
+            InputStream input = getClass().getResourceAsStream("/ui/reports/DietReport.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(input);
+            input.close();
             JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<Diet>) this.tableViewDiets.getItems());
             if (dataItems.getData().size() < 1) {
                 showErrorAlert("No data available for report");
@@ -853,6 +856,8 @@ public class DietsControlVController {
         } catch (JRException ex) {
             showErrorAlert("Error trying to open report:\n" + ex.getMessage());
             LOGGER.log(Level.SEVERE, "DietsControlVController: Error opening report, {0}", ex.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(DietsControlVController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

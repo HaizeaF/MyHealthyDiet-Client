@@ -33,7 +33,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import objects.User;
-import cryptography.Asymmetric;
+import files.AsymmetricClient;
 import cryptography.HashMD5;
 import exceptions.BusinessLogicException;
 import java.io.IOException;
@@ -244,7 +244,7 @@ public class SignInController {
                     controller.initStage(root);
                 }
                 UserInterface model = UserFactory.getModel();
-                byte[] passwordBytes = new Asymmetric().cipher(textFieldPassword.getText());
+                byte[] passwordBytes = new AsymmetricClient().cipher(textFieldPassword.getText());
                 User user = model.logIn(ClientOBJ.class, textFieldUsername.getText(), HashMD5.hexadecimal(passwordBytes));
                 if (user instanceof ClientOBJ) {
                     ClientOBJ client = (ClientOBJ) user;

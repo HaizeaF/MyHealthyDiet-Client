@@ -10,6 +10,7 @@ import businessLogic.IngredientInterface;
 import cellFactories.FloatStringFormatterIngredient;
 import exceptions.BusinessLogicException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
@@ -454,7 +455,9 @@ public class IngredientControlVController {
      */
     private void handleButtonReportAction(ActionEvent event) {
         try {
-            JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/IngredientReport.jrxml");
+            InputStream input = getClass().getResourceAsStream("/ui/reports/IngredientReport.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(input);
+            input.close();
             JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<Ingredient>) this.tableIngredient.getItems());
             Map<String, Object> parameters = new HashMap<>();
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataItems);
@@ -465,6 +468,8 @@ public class IngredientControlVController {
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, "IngredientControlVController: Error opening report, {0}", ex.getMessage());
+        } catch (IOException ex) {
+            Logger.getLogger(IngredientControlVController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

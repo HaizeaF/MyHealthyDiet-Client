@@ -8,6 +8,7 @@ import cellFactories.ImageButtonCell;
 import cellFactories.IngredientsButtonCell;
 import exceptions.BusinessLogicException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -775,7 +776,9 @@ public class PlateControlVController {
     private void handleButtonReport(ActionEvent event) {
         try {
             if (!tableViewPlates.getItems().isEmpty()) {
-                JasperReport jasperReport = JasperCompileManager.compileReport("src/ui/reports/PlatesReport.jrxml");
+                InputStream input = getClass().getResourceAsStream("/ui/reports/PlatesReport.jrxml");
+                JasperReport jasperReport = JasperCompileManager.compileReport(input);
+                input.close();
                 JRBeanCollectionDataSource dataItems = new JRBeanCollectionDataSource((Collection<Plate>) tableViewPlates.getItems());
                 Map<String, Object> parameters = new HashMap<>();
                 JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataItems);
@@ -790,6 +793,8 @@ public class PlateControlVController {
             LOGGER.log(Level.SEVERE, msg);
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PlateControlVController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -813,9 +818,6 @@ public class PlateControlVController {
             LOGGER.log(Level.SEVERE, msg);
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.showAndWait();
-            if (alert.getResult().equals(ButtonType.OK)) {
-                Platform.exit();
-            }
         }
     }
 }
