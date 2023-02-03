@@ -23,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -32,6 +33,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.ws.rs.core.GenericType;
+import objects.ClientOBJ;
 import objects.Plate;
 
 /**
@@ -41,6 +43,7 @@ import objects.Plate;
 public class ListPlatesVController {
 
     private Stage stage;
+    private ClientOBJ client;
     private ObservableList<Plate> platesData = null;
     private PlateInterface plateModel;
     private Pane contentPane;
@@ -54,6 +57,10 @@ public class ListPlatesVController {
 
     @FXML
     private FlowPane flowPane;
+    @FXML
+    private MenuItem menuItemModify;
+    @FXML
+    private Button buttonOverview;
 
     public Stage getStage() {
         return stage;
@@ -61,6 +68,10 @@ public class ListPlatesVController {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void setClient(ClientOBJ client) {
+        this.client = client;
     }
 
     public void initStage(Parent root) throws IOException {
@@ -124,6 +135,8 @@ public class ListPlatesVController {
                 contentPane.getChildren().add(labelMeal);
             }
 
+            menuItemModify.setOnAction(this::handleModifyAction);
+            buttonOverview.setOnAction(this::handleOverwiewAction);
             flowPane.getChildren().addAll(nodes);
         } catch (BusinessLogicException ex) {
             Logger.getLogger(ListPlatesVController.class.getName()).log(Level.SEVERE, null, ex);
@@ -192,6 +205,36 @@ public class ListPlatesVController {
             Alert alert = new Alert(Alert.AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, msg);
+        }
+    }
+
+    public void handleModifyAction(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/UserModify.fxml"));
+            Parent root = (Parent) loader.load();
+
+            UserModifyVController controller = ((UserModifyVController) loader.getController());
+
+            controller.setStage(stage);
+            controller.setClient(client);
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(HomeViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void handleOverwiewAction(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/HomeView.fxml"));
+            Parent root = (Parent) loader.load();
+
+            HomeViewController controller = ((HomeViewController) loader.getController());
+
+            controller.setStage(stage);
+            controller.setClient(client);
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(UserModifyVController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

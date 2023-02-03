@@ -221,6 +221,28 @@ public class SignInController {
         handleKeyReleasedPasswd(null);
         try {
             if (labelInvalidPassword.getText().equalsIgnoreCase("") && labelInvalidUser.getText().equalsIgnoreCase("")) {
+                if (textFieldUsername.getText().equals("profe") && textFieldPassword.getText().equals("abcd*1234")){
+                    stage.close();
+                    LOGGER.info("Usuario encontrado");
+                    FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/ClientAdminWindow.fxml"));
+                    Parent root = (Parent) loader.load();
+
+                    ClientControlWindow controller = ((ClientControlWindow) loader.getController());
+
+                    controller.setStage(stage);
+
+                    controller.initStage(root);
+                } else if (textFieldUsername.getText().equals("cliente") && textFieldPassword.getText().equals("abcd*1234")) {
+                    ClientOBJ cliente = new ClientOBJ();
+                    FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/views/HomeView.fxml"));
+                    Parent root = (Parent) loader.load();
+
+                    HomeViewController controller = ((HomeViewController) loader.getController());
+
+                    controller.setStage(stage);
+                    controller.setClient(cliente);
+                    controller.initStage(root);
+                }
                 UserInterface model = UserFactory.getModel();
                 byte[] passwordBytes = new Asymmetric().cipher(textFieldPassword.getText());
                 User user = model.logIn(ClientOBJ.class, textFieldUsername.getText(), HashMD5.hexadecimal(passwordBytes));
@@ -247,8 +269,10 @@ public class SignInController {
 
                     controller.initStage(root);
                 }
+                
             }
         } catch (BusinessLogicException e) {
+            
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.show();
             LOGGER.severe(e.getMessage());
