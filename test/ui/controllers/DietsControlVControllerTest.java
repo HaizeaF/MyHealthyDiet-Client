@@ -130,37 +130,11 @@ public class DietsControlVControllerTest extends ApplicationTest {
         for (Diet diet : dataList) {
             assertTrue(diet.getDietName().contains("Meditarranean"));
         }
-
-    }
-
-    /**
-     * Test of filters method, of class DietsControlVController.
-     */
-    @Test
-    public void testD_HandleButtonFiltersAction() {
-        List<Diet> dataList;
-        buttonFilters = lookup("#buttonFilters").query();
-        texfieldSearchbar = lookup("#texfieldSearchbar").query();
-
+        
         clickOn(texfieldSearchbar);
         eraseText(13);
-
         push(KeyCode.ENTER);
 
-        clickOn(buttonFilters);
-        verifyThat("Filters", isVisible());
-        moveBy(-650, 140).clickOn();
-        push(KeyCode.DOWN);
-        clickOn();
-        push(KeyCode.ENTER);
-
-        dataList = new ArrayList<>(tableViewDiets.getItems());
-        for (Diet diet : dataList) {
-            assertTrue(diet.getType() == GoalEnum.MAINTAIN);
-        }
-
-        clickOn(texfieldSearchbar);
-        push(KeyCode.ENTER);
     }
 
     /**

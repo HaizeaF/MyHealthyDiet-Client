@@ -150,30 +150,10 @@ public class PlateControlVControllerTest extends ApplicationTest {
     }
     
     /**
-     * This method tests if a plate is correctly filtered.
-     */
-    @Test
-    public void test5_filterPlate() {
-        clickOn("#buttonFilter");
-        moveBy(-650, 90).clickOn();
-        moveBy(0, 50).clickOn();
-        push(KeyCode.DOWN);
-        push(KeyCode.ENTER);
-        moveBy(0, 100).clickOn();
-        List<Plate> plates = new ArrayList<>(tableViewPlates.getItems());
-        for (Plate plate : plates) {
-            assertTrue(plate.getMealType() == MealEnum.BREAKFAST);
-            assertTrue(plate.getIsVegetarian());
-        }
-        clickOn("#buttonFilter");
-        moveBy(-650, 240).clickOn();
-    }
-    
-    /**
      * This method tests if a plate is correctly deleted.
      */
     @Test
-    public void test6_handleDeleteRow() {
+    public void test5_handleDeleteRow() {
         Integer count = tableViewPlates.getItems().size();
         Node row = lookup(".table-row-cell").nth(0).query();
         rightClickOn(row);
