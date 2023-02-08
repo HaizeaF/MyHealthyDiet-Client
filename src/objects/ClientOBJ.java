@@ -46,7 +46,7 @@ public class ClientOBJ extends User {
     }
 
     public ClientOBJ() {
-        super(0, "login", "example@mail.com", "Example Name", StatusEnum.DISABLED, PrivilegeEnum.USER, "abcd*1234", new Date(System.currentTimeMillis()));
+        super(0, "login", "example@mail.com", "Example Name", StatusEnum.ENABLED, PrivilegeEnum.USER, "abcd*1234", new Date(System.currentTimeMillis()));
         this.age = new SimpleStringProperty("20");
         this.height = new SimpleFloatProperty(Float.parseFloat("1.80"));
         this.genre = new SimpleObjectProperty<>(GenreEnum.NON_BINARY);

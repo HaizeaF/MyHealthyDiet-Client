@@ -35,6 +35,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -54,6 +55,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebEngine;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -109,6 +112,8 @@ public class ClientControlWindow {
     @FXML
     private MenuItem itemDisabled;
     @FXML
+    private MenuItem itemAll;
+    @FXML
     private TableView tableClients;
     @FXML
     private TableColumn<ClientOBJ, String> columnEmail;
@@ -118,8 +123,6 @@ public class ClientControlWindow {
     private TableColumn columnPasswordChange;
     @FXML
     private TableColumn<ClientOBJ, String> columnLogin;
-    @FXML
-    private TableColumn columnPasswrd;
     @FXML
     private TableColumn<ClientOBJ, StatusEnum> columnStatus;
     @FXML
@@ -159,6 +162,15 @@ public class ClientControlWindow {
 
         // Confirmar el cierre de la aplicación
         stage.setOnCloseRequest(this::handleExitAction);
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.F1) {
+                    // Código que se ejecutará cuando se pulse la tecla F1
+                    handleHelpAction(null);
+                }
+            }
+        });
 
         // LOAD TABLE ITEMS //
         tableClients.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -171,7 +183,6 @@ public class ClientControlWindow {
         columnLogin.setCellValueFactory(new PropertyValueFactory("login"));
         columnName.setCellValueFactory(new PropertyValueFactory("fullName"));
         columnPasswordChange.setCellValueFactory(new PropertyValueFactory("lastPasswordChange"));
-        columnPasswrd.setCellValueFactory(new PropertyValueFactory("password"));
         columnStatus.setCellValueFactory(new PropertyValueFactory("status"));
 
         stage.show();
@@ -181,7 +192,7 @@ public class ClientControlWindow {
             clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
             }));
         } catch (BusinessLogicException ex) {
-            Alert alert = new Alert(AlertType.ERROR, "Data could not be loaded");
+            Alert alert = new Alert(AlertType.ERROR, "Data could not be loaded. BackEnd error: try again later or contact your help desk.");
             alert.show();
             LOGGER.log(Level.SEVERE, ex.getMessage());
             tableClients.refresh();
@@ -192,6 +203,7 @@ public class ClientControlWindow {
         buttonSearch.setOnAction(this::handleSearchAction);
         itemEnabled.setOnAction(this::handleFilterEnabled);
         itemDisabled.setOnAction(this::handleFilterDisabled);
+        itemAll.setOnAction(this::handleFilterAll);
 
         // EDITABLE ITEMS //
         /**
@@ -202,12 +214,16 @@ public class ClientControlWindow {
         columnAge.setCellFactory(TextFieldTableCell.<ClientOBJ>forTableColumn());
         columnAge.setOnEditCommit((CellEditEvent<ClientOBJ, String> t) -> {
             try {
-                Integer.parseInt(t.getNewValue());
+                Integer age = Integer.parseInt(t.getNewValue());
+                if (age <= 0) {
+                    throw new BusinessLogicException("Value cannot be negative");
+                }
                 ((ClientOBJ) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())).setAge(t.getNewValue());
                 ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                LOGGER.log(Level.INFO, "Client updated correctly");
             } catch (NumberFormatException | BusinessLogicException ex) {
-                Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
                 alert.show();
                 LOGGER.log(Level.SEVERE, ex.getMessage());
                 ((ClientOBJ) t.getTableView().getItems().get(
@@ -229,8 +245,9 @@ public class ClientControlWindow {
                     ((ClientOBJ) t.getTableView().getItems().get(
                             t.getTablePosition().getRow())).setEmail(t.getNewValue());
                     ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                    LOGGER.log(Level.INFO, "Client updated correctly");
                 } catch (BusinessLogicException ex) {
-                    Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                    Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
                     alert.show();
                     LOGGER.log(Level.SEVERE, ex.getMessage());
                     ((ClientOBJ) t.getTableView().getItems().get(
@@ -256,8 +273,9 @@ public class ClientControlWindow {
                 ((ClientOBJ) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())).setGenre(t.getNewValue());
                 ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                LOGGER.log(Level.INFO, "Client updated correctly");
             } catch (BusinessLogicException ex) {
-                Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
                 alert.show();
                 LOGGER.log(Level.SEVERE, ex.getMessage());
                 ((ClientOBJ) t.getTableView().getItems().get(
@@ -275,8 +293,9 @@ public class ClientControlWindow {
                 ((ClientOBJ) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())).setGoal(t.getNewValue());
                 ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                LOGGER.log(Level.INFO, "Client updated correctly");
             } catch (BusinessLogicException ex) {
-                Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
                 alert.show();
                 LOGGER.log(Level.SEVERE, ex.getMessage());
                 ((ClientOBJ) t.getTableView().getItems().get(
@@ -293,11 +312,15 @@ public class ClientControlWindow {
         columnHeight.setCellFactory(TextFieldTableCell.<ClientOBJ, Float>forTableColumn(new FloatStringFormatter()));
         columnHeight.setOnEditCommit((CellEditEvent<ClientOBJ, Float> t) -> {
             try {
+                if (t.getNewValue() <= 0) {
+                    throw new BusinessLogicException("Value cannot be negative");
+                }
                 ((ClientOBJ) t.getTableView().getItems().get(
                         t.getTablePosition().getRow())).setHeight(t.getNewValue());
                 ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                LOGGER.log(Level.INFO, "Client updated correctly");
             } catch (BusinessLogicException | NullPointerException ex) {
-                Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
                 alert.show();
                 LOGGER.log(Level.SEVERE, ex.getMessage());
                 ((ClientOBJ) t.getTableView().getItems().get(
@@ -335,8 +358,9 @@ public class ClientControlWindow {
                         ((ClientOBJ) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())).setLogin(t.getNewValue());
                         ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                        LOGGER.log(Level.INFO, "Client updated correctly");
                     } catch (BusinessLogicException ex1) {
-                        Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                        Alert alert = new Alert(AlertType.ERROR, ex1.getMessage() + ". BackEnd error: try again later or contact your help desk.");
                         alert.show();
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         ((ClientOBJ) t.getTableView().getItems().get(
@@ -366,8 +390,9 @@ public class ClientControlWindow {
                             ((ClientOBJ) t.getTableView().getItems().get(
                                     t.getTablePosition().getRow())).setFullName(t.getNewValue());
                             ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                            LOGGER.log(Level.INFO, "Client updated correctly");
                         } catch (BusinessLogicException ex) {
-                            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                            Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
                             alert.show();
                             LOGGER.log(Level.SEVERE, ex.getMessage());
                             ((ClientOBJ) t.getTableView().getItems().get(
@@ -388,8 +413,9 @@ public class ClientControlWindow {
                         ((ClientOBJ) t.getTableView().getItems().get(
                                 t.getTablePosition().getRow())).setStatus(t.getNewValue());
                         ClientFactory.getModel().edit((ClientOBJ) t.getTableView().getSelectionModel().getSelectedItem());
+                        LOGGER.log(Level.INFO, "Client updated correctly");
                     } catch (BusinessLogicException ex) {
-                        Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+                        Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
                         alert.show();
                         LOGGER.log(Level.SEVERE, ex.getMessage());
                         ((ClientOBJ) t.getTableView().getItems().get(
@@ -486,8 +512,9 @@ public class ClientControlWindow {
             }));
             tableClients.setItems(clientsData);
             tableClients.refresh();
+            LOGGER.log(Level.INFO, "Client created correctly");
         } catch (BusinessLogicException ex) {
-            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
             alert.show();
             LOGGER.log(Level.SEVERE, ex.getMessage());
             tableClients.refresh();
@@ -510,9 +537,10 @@ public class ClientControlWindow {
                 ClientFactory.getModel().remove(((ClientOBJ) tableClients.getSelectionModel().getSelectedItem()).getUser_id());
                 tableClients.getItems().remove(tableClients.getSelectionModel().getSelectedItem());
                 tableClients.refresh();
+                LOGGER.log(Level.INFO, "Client deleted correctly");
             }
-        } catch (Exception e) {
-            String msg = "Error deleting the Client: " + e.getMessage();
+        } catch (BusinessLogicException e) {
+            String msg = "Error deleting the Client: " + e.getMessage() + ". BackEnd error: try again later or contact your help desk.";
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
             LOGGER.log(Level.SEVERE, msg);
@@ -541,7 +569,7 @@ public class ClientControlWindow {
                 tableClients.refresh();
             }
         } catch (BusinessLogicException ex) {
-            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
             alert.show();
             LOGGER.log(Level.SEVERE, ex.getMessage());
             tableClients.refresh();
@@ -562,7 +590,7 @@ public class ClientControlWindow {
             tableClients.setItems(clientsData);
             tableClients.refresh();
         } catch (BusinessLogicException ex) {
-            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
             alert.show();
             LOGGER.log(Level.SEVERE, ex.getMessage());
             tableClients.refresh();
@@ -583,7 +611,22 @@ public class ClientControlWindow {
             tableClients.setItems(clientsData);
             tableClients.refresh();
         } catch (BusinessLogicException ex) {
-            Alert alert = new Alert(AlertType.ERROR, ex.getMessage());
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
+            alert.show();
+            LOGGER.log(Level.SEVERE, ex.getMessage());
+            tableClients.refresh();
+        }
+    }
+
+    private void handleFilterAll(ActionEvent action) {
+        try {
+            LOGGER.info("Searhing for all the clients");
+            clientsData = FXCollections.observableArrayList(ClientFactory.getModel().findAll(new GenericType<List<ClientOBJ>>() {
+            }));
+            tableClients.setItems(clientsData);
+            tableClients.refresh();
+        } catch (BusinessLogicException ex) {
+            Alert alert = new Alert(AlertType.ERROR, ex.getMessage() + ". BackEnd error: try again later or contact your help desk.");
             alert.show();
             LOGGER.log(Level.SEVERE, ex.getMessage());
             tableClients.refresh();
@@ -644,7 +687,6 @@ public class ClientControlWindow {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate localDate = LocalDate.parse(sdf.format(dateToFormat), formatter);
-        LOGGER.info(localDate.toString());
         return localDate;
     }
 

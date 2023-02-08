@@ -20,7 +20,7 @@
 			<staticText>
 				<reportElement x="340" y="19" width="163" height="31" uuid="dcc7e207-d038-49d3-b4e8-3c8e6e67ff6c"/>
 				<textElement textAlignment="Center">
-					<font fontName="Circular Std" size="24"/>
+					<font fontName="SansSerif" size="24" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Clients Report]]></text>
 			</staticText>

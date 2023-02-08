@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="paneClientAdmin" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.ClientControlWindow">
+<Pane fx:id="paneClientAdmin" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.ClientControlWindow">
    <children>
       <Pane prefHeight="790.0" prefWidth="336.0" style="-fx-background-color: #15B7B9;;">
          <children>
@@ -134,16 +134,15 @@
       </Pane>
       <TableView fx:id="tableClients" layoutX="406.0" layoutY="304.0" prefHeight="427.0" prefWidth="925.0">
         <columns>
-          <TableColumn fx:id="columnEmail" prefWidth="75.0" text="email" />
-            <TableColumn fx:id="columnName" prefWidth="75.0" text="fullName" />
-            <TableColumn fx:id="columnPasswordChange" prefWidth="97.0" text="lastPasswordChange" />
-            <TableColumn fx:id="columnLogin" prefWidth="34.0" text="login" />
-            <TableColumn fx:id="columnPasswrd" prefWidth="75.0" text="password" />
-            <TableColumn fx:id="columnStatus" prefWidth="75.0" text="status" />
-            <TableColumn fx:id="columnAge" prefWidth="75.0" text="age" />
-            <TableColumn fx:id="columnGenre" prefWidth="75.0" text="genre" />
-            <TableColumn fx:id="columnGoal" prefWidth="75.0" text="goal" />
-            <TableColumn fx:id="columnHeight" prefWidth="75.0" text="height" />
+          <TableColumn fx:id="columnEmail" prefWidth="75.0" text="Email" />
+            <TableColumn fx:id="columnName" prefWidth="75.0" text="Name" />
+            <TableColumn fx:id="columnPasswordChange" prefWidth="97.0" text="Last Pasword Change" />
+            <TableColumn fx:id="columnLogin" prefWidth="34.0" text="Login" />
+            <TableColumn fx:id="columnStatus" prefWidth="75.0" text="Status" />
+            <TableColumn fx:id="columnAge" prefWidth="75.0" text="Age" />
+            <TableColumn fx:id="columnGenre" prefWidth="75.0" text="Genre" />
+            <TableColumn fx:id="columnGoal" prefWidth="75.0" text="Goal" />
+            <TableColumn fx:id="columnHeight" prefWidth="75.0" text="Height" />
         </columns>
          <contextMenu>
             <ContextMenu fx:id="menuTable">
@@ -183,6 +182,7 @@
                   </ImageView>
                </graphic>
             </MenuItem>
+            <MenuItem fx:id="itemAll" mnemonicParsing="false" text="All" />
          </items>
          <font>
             <Font name="CircularStd-Book" size="18.0" />
