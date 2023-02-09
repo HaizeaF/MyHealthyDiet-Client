@@ -48,9 +48,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javax.ws.rs.core.GenericType;
@@ -125,6 +128,9 @@ public class IngredientControlVController {
 
     @FXML
     private MenuButton menuButtonFilters;
+    
+    @FXML
+    private MenuItem menuItemAll;
 
     @FXML
     private MenuItem menuItemVegetable;
@@ -215,8 +221,19 @@ public class IngredientControlVController {
 
             // Confirmar el cierre de la aplicación
             stage.setOnCloseRequest(this::handleExitAction);
+            
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    if (event.getCode() == KeyCode.F1) {
+                        // Código que se ejecutará cuando se pulse la tecla F1
+                        handleHelpWindowAction(null);
+                    }
+                }
+            });
 
             // Filtro a buscar por FoodTypeEnum
+            menuItemAll.setOnAction(this::handleFilterAction);
             menuItemVegetable.setOnAction(this::handleFilterAction);
             menuItemSeafood.setOnAction(this::handleFilterAction);
             menuItemPorultry.setOnAction(this::handleFilterAction);
@@ -269,6 +286,7 @@ public class IngredientControlVController {
                             }
                             ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
                             tableIngredient.refresh();
+                            LOGGER.log(Level.INFO,"Ingrediente editado correctamente.");
                         } catch (BusinessLogicException ex) {
                             //If there is an error in the business class, shows an alert.
                             String msg = "Window can not be loaded:\n" + ex.getMessage();
@@ -287,12 +305,13 @@ public class IngredientControlVController {
                             ((Ingredient) t.getTableView().getItems().get(
                                     t.getTablePosition().getRow())).setFoodType(t.getNewValue());
                             ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
+                            LOGGER.log(Level.INFO,"Ingrediente editado correctamente.");
                         } catch (BusinessLogicException ex) {
                             //If there is an error in the business class, shows an alert.
                             String msg = "Window can not be loaded:\n" + ex.getMessage();
                             Alert alert = new Alert(AlertType.ERROR, msg);
                             alert.show();
-                            LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+                            LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage()+ " BackEnd error: try again later or contact your help desk.");
                         }
                     });
 
@@ -310,13 +329,16 @@ public class IngredientControlVController {
                             if (t.getNewValue() <= 100 && t.getNewValue() >= 0) {
                                 ((Ingredient) t.getTableView().getItems().get(
                                         t.getTablePosition().getRow())).setWaterIndex(t.getNewValue());
+                                LOGGER.log(Level.INFO,"Ingrediente editado correctamente.");
                             } else {
                                 if (t.getNewValue() > 100) {
                                     Alert alert = new Alert(AlertType.ERROR, "Maximum number is 100, you cannot exceed it.");
                                     alert.show();
+                                    LOGGER.log(Level.SEVERE, "Maximum number is 100, you cannot exceed it.");
                                 } else if (t.getNewValue() < 0) {
                                     Alert alert = new Alert(AlertType.ERROR, "Minimum  number is 0, you cannot put less than the minimum.");
                                     alert.show();
+                                    LOGGER.log(Level.SEVERE, "Minimum  number is 0, you cannot put less than the minimum.");
                                 }
                             }
                             ingredientModel.edit_XML((Ingredient) t.getTableView().getSelectionModel().getSelectedItem());
@@ -331,7 +353,7 @@ public class IngredientControlVController {
                             String msg = "Window can not be loaded:\n" + ex.getMessage();
                             Alert alert = new Alert(AlertType.ERROR, msg);
                             alert.show();
-                            LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+                            LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage()+ " BackEnd error: try again later or contact your help desk.");
                         }
                     }
             );
@@ -349,12 +371,13 @@ public class IngredientControlVController {
                         ingredient -> ingredient.getIsInSeasonProperty().addListener((observable, oldValue, newValue) -> {
                             try {
                                 ingredientModel.edit_XML(ingredient);
+                                LOGGER.log(Level.INFO,"Ingrediente editado correctamente.");
                             } catch (BusinessLogicException ex) {
                                 //If there is an error in the business class, shows an alert.
                                 String msg = "Window can not be loaded:\n" + ex.getMessage();
                                 Alert alert = new Alert(AlertType.ERROR, msg);
                                 alert.show();
-                                LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+                                LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage()+ " BackEnd error: try again later or contact your help desk.");
                             }
                         })
                 );
@@ -416,12 +439,13 @@ public class IngredientControlVController {
 
                 tableIngredient.getItems().remove(tableIngredient.getSelectionModel().getSelectedItem());
                 tableIngredient.refresh();
+                LOGGER.log(Level.INFO,"Ingrediente eliminado correctamente.");
             }
         } catch (Exception e) {
             String msg = "Error deleting an ingredient";
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
-            LOGGER.log(Level.SEVERE, msg);
+            LOGGER.log(Level.SEVERE, msg+ " BackEnd error: try again later or contact your help desk.");
         }
     }
 
@@ -432,18 +456,19 @@ public class IngredientControlVController {
      */
     private void handleCreateAction(ActionEvent e) {
         try {
-            Float num = Float.parseFloat("20.5");
-            Ingredient newIngredient = new Ingredient("aa", FoodTypeEnum.NUT, false, num);
+            Float num = Float.parseFloat("0.0");
+            Ingredient newIngredient = new Ingredient("XXXXXXXX", FoodTypeEnum.VEGETABLE, false, num);
             IngredientFactory.getModel().create_XML(newIngredient);
             ingredientsData = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>>() {
             }));
             tableIngredient.setItems(ingredientsData);
             tableIngredient.refresh();
-        } catch (Exception ex) {
+            LOGGER.log(Level.INFO,"Ingrediente creado correctamente.");
+        } catch (BusinessLogicException ex) {
             String msg = "Error creating an ingredient";
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
-            LOGGER.log(Level.SEVERE, msg);
+            LOGGER.log(Level.SEVERE, msg+ " BackEnd error: try again later or contact your help desk.");
         }
     }
 
@@ -492,7 +517,7 @@ public class IngredientControlVController {
                 String msg = "Window can not be loaded:\n" + ex.getMessage();
                 Alert alert = new Alert(AlertType.ERROR, msg);
                 alert.show();
-                LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+                LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage()+ " BackEnd error: try again later or contact your help desk.");
             }
         } else {
             try {
@@ -505,7 +530,7 @@ public class IngredientControlVController {
                 String msg = "Window can not be loaded:\n" + ex.getMessage();
                 Alert alert = new Alert(AlertType.ERROR, msg);
                 alert.show();
-                LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+                LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage()+ " BackEnd error: try again later or contact your help desk.");
             }
         }
     }
@@ -524,19 +549,24 @@ public class IngredientControlVController {
             ingredientsData = FXCollections.observableArrayList(IngredientFactory.getModel().findAll_XML(new GenericType<List<Ingredient>>() {
             }));
             ingredientsDataFiltered.clear();
-            for (int i = 0; i < ingredientsData.size(); i++) {
-                if (ingredientsData.get(i).getFoodType().toString().equalsIgnoreCase(foodTypeSelected)) {
-                    ingredientsDataFiltered.add(ingredientsData.get(i));
+            if(foodTypeSelected.equalsIgnoreCase("ALL")){
+                tableIngredient.setItems(ingredientsData);
+            } else {
+                for (int i = 0; i < ingredientsData.size(); i++) {
+                    if (ingredientsData.get(i).getFoodType().toString().equalsIgnoreCase(foodTypeSelected)) {
+                        ingredientsDataFiltered.add(ingredientsData.get(i));
+                    }
                 }
+                tableIngredient.setItems(ingredientsDataFiltered);
             }
-            tableIngredient.setItems(ingredientsDataFiltered);
+            
             tableIngredient.refresh();
         } catch (BusinessLogicException ex) {
             //If there is an error in the business class, shows an alert.
             String msg = "Window can not be loaded:\n" + ex.getMessage();
             Alert alert = new Alert(AlertType.ERROR, msg);
             alert.show();
-            LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage());
+            LOGGER.log(Level.SEVERE, "IngredientControlVController: Error at setOnEditCommit in tableColumnLipids, {0}", ex.getMessage()+ " BackEnd error: try again later or contact your help desk.");
         }
     }
 

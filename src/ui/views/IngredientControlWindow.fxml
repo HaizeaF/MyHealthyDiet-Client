@@ -112,10 +112,10 @@
       </Pane>
       <TableView fx:id="tableIngredient" layoutX="394.0" layoutY="300.0" prefHeight="428.0" prefWidth="935.0">
         <columns>
-          <TableColumn fx:id="columnIngredientName" prefWidth="231.0" text="ingredientName" />
-          <TableColumn fx:id="columnFoodType" minWidth="2.0" prefWidth="239.0" text="foodType" />
-            <TableColumn fx:id="columnIsInSeason" minWidth="0.0" prefWidth="223.0" text="isInSeason" />
-            <TableColumn fx:id="columnWaterIndex" minWidth="0.0" prefWidth="241.0" text="waterIndex" />
+          <TableColumn fx:id="columnIngredientName" prefWidth="231.0" text="Name" />
+          <TableColumn fx:id="columnFoodType" minWidth="2.0" prefWidth="239.0" text="Type" />
+            <TableColumn fx:id="columnIsInSeason" minWidth="0.0" prefWidth="223.0" text="On season" />
+            <TableColumn fx:id="columnWaterIndex" minWidth="0.0" prefWidth="241.0" text="Water Index" />
         </columns>
          <contextMenu>
             <ContextMenu fx:id="contextMenu">
@@ -142,6 +142,7 @@
       </Button>
       <MenuButton fx:id="menuButtonFilters" alignment="BASELINE_LEFT" contentDisplay="BOTTOM" layoutX="1213.0" layoutY="148.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="44.0" prefWidth="116.0" stylesheets="@../resources/DietsCSS.css" text="Filters" textFill="WHITE">
          <items>
+            <MenuItem fx:id="menuItemAll" mnemonicParsing="false" text="ALL" />
             <MenuItem fx:id="menuItemVegetable" mnemonicParsing="false" text="Vegetable" />
             <MenuItem fx:id="menuItemFruit" mnemonicParsing="false" text="Fruit" />
             <MenuItem fx:id="menuItemNut" mnemonicParsing="false" text="Nut" />
